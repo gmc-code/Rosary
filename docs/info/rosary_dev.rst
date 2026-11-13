@@ -336,6 +336,7 @@ defaults:
     rosary_default_read = "step"             # step, both, scripture
     rosary_default_extra_prayers = "on"      # off, on, full
     rosary_default_fatima = True             # O my Jesus after each Glory Be
+    rosary_default_read_titles = False       # say each opening/closing prayer's name first
 
 A picture style whose folder is missing falls back to ``classic``. A
 reader's own choices from the **Options** menus are kept in their browser

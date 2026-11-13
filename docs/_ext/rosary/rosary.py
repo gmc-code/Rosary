@@ -451,6 +451,7 @@ class RosaryDirective(SphinxDirective):
             'extra': self.options.get('extra-prayers') or self.config.rosary_default_extra_prayers,
             'fatima': (self.options['fatima'] == 'yes') if 'fatima' in self.options
                       else bool(self.config.rosary_default_fatima),
+            'readTitles': bool(self.config.rosary_default_read_titles),
             'hideTitle': 'hide-title' in self.options,
         }
         photo_styles = [ps['style'] for ps in self.photosets]
@@ -588,6 +589,7 @@ def setup(app):
     app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture
     app.add_config_value('rosary_default_extra_prayers', 'on', 'env')    # off, on, full
     app.add_config_value('rosary_default_fatima', True, 'env')           # O my Jesus after each Glory Be
+    app.add_config_value('rosary_default_read_titles', False, 'env')     # say each opening/closing prayer's name
     app.connect('env-purge-doc', _purge)
     app.connect('env-merge-info', _merge)
     app.connect('build-finished', _copy_images)

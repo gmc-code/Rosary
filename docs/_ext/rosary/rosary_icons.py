@@ -166,23 +166,32 @@ def svg(body, label):
 # ---------------------------------------------------------------- joyful
 
 def annunciation():
-    lily = (
-        '<path class="ri-green-line" d="M50,96 L50,52"/>'
-        '<path class="ri-green ri-outline" d="M50,84 C40,80 34,72 34,64 C42,68 48,74 50,84 Z"/>'
-        '<path class="ri-green ri-outline" d="M50,76 C60,72 66,64 66,56 C58,60 52,66 50,76 Z"/>'
+    """The angel Gabriel greets Mary; the dove of the Holy Spirit above her."""
+    # Gabriel, left: wings behind, one hand raised in greeting
+    gx, gtop = 29, 34
+    wings = (
+        '<path class="ri-white ri-outline" d="M%s,%s C%s,%s %s,%s %s,%s C%s,%s %s,%s %s,%s Z"/>'
+        % (gx - 3, gtop + 20, gx - 14, gtop + 6, gx - 22, gtop - 10, gx - 20, gtop - 18,
+           gx - 26, gtop + 2, gx - 24, gtop + 26, gx - 8, gtop + 40)
+        + '<path class="ri-line-thin" d="M%s,%s C%s,%s %s,%s %s,%s M%s,%s C%s,%s %s,%s %s,%s"/>'
+        % (gx - 6, gtop + 22, gx - 14, gtop + 14, gx - 18, gtop + 4, gx - 19, gtop - 8,
+           gx - 7, gtop + 30, gx - 17, gtop + 24, gx - 22, gtop + 14, gx - 23, gtop + 2)
     )
-    blooms = ''
-    for x, y, r in ((50, 52, 0), (40, 62, -30), (60, 62, 30)):
-        blooms += (
-            '<g transform="rotate(%s %s %s)">'
-            '<path class="ri-white ri-outline" d="M%s,%s C%s,%s %s,%s %s,%s '
-            'C%s,%s %s,%s %s,%s C%s,%s %s,%s %s,%s C%s,%s %s,%s %s,%s Z"/>'
-            '</g>' % (r, x, y,
-                      x, y, x - 7, y - 3, x - 10, y - 12, x - 7, y - 17,
-                      x - 4, y - 11, x - 2, y - 15, x, y - 19,
-                      x + 2, y - 15, x + 4, y - 11, x + 7, y - 17,
-                      x + 10, y - 12, x + 7, y - 3, x, y))
-    return rays(50, 16, 8, 42, 7, 60, 120) + dove(50, 16, 0.9) + lily + blooms
+    arm = ('<path class="ri-soft-strong ri-outline" d="M%s,%s L%s,%s L%s,%s L%s,%s Z"/>'
+           % (gx + 4, gtop + 19, gx + 15, gtop + 3, gx + 19, gtop + 6, gx + 9, gtop + 23))
+    gabriel = wings + figure(gx, gtop, 0.92, 'ri-soft-strong') + arm
+    # Mary, right
+    mary = figure(70, 38, 0.92, 'ri-fill')
+    # the dove above Mary, its rays falling on her
+    dove_rays = rays(64, 14, 7, 26, 5, 70, 130)
+    lily = (
+        '<path class="ri-green-line" d="M50,92 L50,72"/>'
+        '<path class="ri-green ri-outline" d="M50,86 C45,84 42,80 42,76 C46,78 49,81 50,86 Z"/>'
+        '<path class="ri-white ri-outline" d="M50,72 C46,70 44,65 46,62 C48,65 49,64 50,61 '
+        'C51,64 52,65 54,62 C56,65 54,70 50,72 Z"/>'
+    )
+    floor = '<path class="ri-line" d="M6,93 L94,93"/>'
+    return dove_rays + dove(64, 14, 0.55) + gabriel + mary + lily + floor
 
 
 def visitation():

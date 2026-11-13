@@ -148,7 +148,8 @@
             auto: false,            // praying aloud, bead after bead
             speaking: null,         // mystery element being read
             read: ['step', 'both', 'scripture'].indexOf(config.read) !== -1 ? config.read : 'both',
-            fatima: config.fatima !== false      // O my Jesus after each Glory Be
+            fatima: config.fatima !== false,     // O my Jesus after each Glory Be
+            readTitles: !!config.readTitles      // announce each opening / closing prayer
         };
         var refreshers = [];
         function refreshAll() { refreshers.forEach(function (f) { f(); }); }
@@ -466,6 +467,24 @@
                 store('rosary-read', state.read);
             });
             readLabel.appendChild(readSelect);
+
+            // announce the opening and closing prayers by name before reading them
+            var titlesLabel = null;
+            if (block.querySelector('.rosary-prayers-card')) {
+                var savedTitles = store('rosary-read-titles');
+                if (savedTitles === '1' || savedTitles === '0') state.readTitles = savedTitles === '1';
+                titlesLabel = el('label', 'rosary-audio-field rosary-prayers-field');
+                titlesLabel.title = 'Say the name of each opening and closing prayer (and its intention) before reading it';
+                var titlesBox = el('input');
+                titlesBox.type = 'checkbox';
+                titlesBox.checked = state.readTitles;
+                titlesLabel.appendChild(titlesBox);
+                titlesLabel.appendChild(document.createTextNode(' Read prayer names'));
+                titlesBox.addEventListener('change', function () {
+                    state.readTitles = titlesBox.checked;
+                    store('rosary-read-titles', state.readTitles ? '1' : '0');
+                });
+            }
             var rateLabel = el('label', 'rosary-audio-field', 'Speed ');
             var rateSelect = el('select', 'rosary-select');
             [['0.75', 'Slow'], ['0.9', 'Calm'], ['1', 'Normal'], ['1.15', 'Quick']].forEach(function (r) {
@@ -479,6 +498,7 @@
             rateLabel.appendChild(rateSelect);
             bar.appendChild(voiceLabel);
             bar.appendChild(readLabel);
+            if (titlesLabel) bar.appendChild(titlesLabel);
             bar.appendChild(rateLabel);
 
             var fillVoices = function () {
@@ -693,8 +713,10 @@
                 if (!li) return;
                 state.speaking = card;
                 refreshAll();
+                // the prayer's name (and intention) only with "Read prayer names"
                 var intent = li.getAttribute('data-intent');
-                speak([intent ? li.getAttribute('data-name') + ', ' + intent + '.' : '', li.getAttribute('data-text')], function () {
+                var title = state.readTitles ? li.getAttribute('data-name') + (intent ? ', ' + intent : '') + '.' : '';
+                speak([title, li.getAttribute('data-text')], function () {
                     if (!state.auto) { state.speaking = null; refreshAll(); }
                     if (done) done();
                 });

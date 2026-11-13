@@ -59,8 +59,9 @@ prayers, so a whole set can be prayed from start to finish:
   Apostles' Creed, the Our Father for the intentions of the Holy Father, three
   Hail Marys for an increase in faith, hope and charity, and the Glory Be.
 * **Closing prayers**, after the fifth mystery: the Hail, Holy Queen, "Pray
-  for us, O holy Mother of God", the closing prayer ("O God, whose
-  only-begotten Son...") and the Sign of the Cross.
+  for us, O holy Mother of God" (the versicle and response), the Rosary Prayer
+  ("Let us pray. O God, whose only-begotten Son...") and the Sign of the
+  Cross.
 * **On, with St Michael and Memorare** also adds the Prayer to St Michael
   and the Memorare to the closing prayers.
 
@@ -68,6 +69,11 @@ They appear as **Opening prayers** and **Closing prayers** at each end of the
 mystery picker, each with its own beads and the words of every prayer.
 **Pray aloud** runs straight through: opening prayers, the five mysteries,
 then the closing prayers.
+
+Listen and **Pray aloud** read only the words of each opening and closing
+prayer. Tick **Read prayer names** (under **Options**) to have each one
+announced first, with its intention, e.g. "Hail Mary, for an increase in
+faith".
 
 **Fatima prayer** (under **Options**, ticked to start with) adds "O my
 Jesus, forgive us our sins..." after the Glory Be at the end of each decade.

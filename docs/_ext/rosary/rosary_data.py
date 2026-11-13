@@ -417,8 +417,8 @@ PRAYERS.update({
     'versicle': ('Pray for us',
                  'Pray for us, O holy Mother of God, that we may be made worthy of '
                  'the promises of Christ.'),
-    'rosary-prayer': ('Let us pray',
-                      'O God, whose only-begotten Son, by his life, death and '
+    'rosary-prayer': ('The Rosary Prayer',
+                      'Let us pray. O God, whose only-begotten Son, by his life, death and '
                       'resurrection, has purchased for us the rewards of eternal '
                       'life, grant, we beseech thee, that meditating upon these '
                       'mysteries of the most holy Rosary of the Blessed Virgin '
@@ -455,7 +455,7 @@ OPENING = [
 CLOSING = [
     ('Salve', 'Hail, Holy Queen', '', ['hail-holy-queen'], 'glory', False),
     ('\u2123', 'Pray for us', '', ['versicle'], '', False),
-    ('Prayer', 'Let us pray', '', ['rosary-prayer'], 'glory', False),
+    ('Prayer', 'The Rosary Prayer', '', ['rosary-prayer'], 'glory', False),
     ('Michael', 'Prayer to St Michael', '', ['st-michael'], 'glory', True),
     ('Memorare', 'The Memorare', '', ['memorare'], 'glory', True),
     ('\u271D', 'The Sign of the Cross', '', ['sign-of-cross'], 'cross', False),
