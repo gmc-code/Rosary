@@ -19,9 +19,12 @@ Introduction
        :doc:`Sorrowful </tools/sorrowful>`, :doc:`Glorious </tools/glorious>`
      - One set of five mysteries per page
    * - :doc:`User guide </info/rosary_info>`
-     - How to pray a decade with the beads
+     - Praying with the beads, the opening and closing prayers, the Options
+       panel, Present mode, reading aloud and printing
+   * - :doc:`Traditional paintings </info/rosary_artworks>`
+     - The public-domain painting used for each mystery
    * - :doc:`Developer reference </info/rosary_dev>`
-     - Installing the directive and its options
+     - Installing the directive, its options and the site's starting choices
 
 
 ----
@@ -52,6 +55,9 @@ The four sets of mysteries
      - Resurrection, Ascension, Descent of the Holy Spirit, Assumption,
        Coronation of Mary
 
-Each mystery has ten scripture passages, one for each Hail Mary of the
-decade, printed in full from the Catholic Public Domain Version. Each passage
-can be read aloud, or the whole decade prayed aloud bead by bead.
+Each mystery has its own picture and ten scripture passages, one for each
+Hail Mary of the decade, from the Catholic Public Domain Version. The opening
+prayers (Sign of the Cross, Apostles' Creed, Our Father, three Hail Marys and
+Glory Be) and the closing prayers (Hail, Holy Queen and the Rosary Prayer)
+are included, so a whole set can be prayed from start to finish. Any bead
+can be read aloud, or the whole Rosary prayed aloud bead by bead.

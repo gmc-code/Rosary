@@ -4,7 +4,9 @@ Rosary: user guide
 
 The rosary tool shows the mysteries of the Rosary. Each mystery has its own
 picture, its *fruit* (the grace prayed for) and ten scripture passages, one to
-think about during each Hail Mary.
+think about during each Hail Mary. The opening and closing prayers are
+included, so a whole set can be prayed from start to finish, on screen or
+read aloud.
 
 
 Choosing the mysteries
@@ -12,8 +14,9 @@ Choosing the mysteries
 
 * **Tabs.** On a page with all four sets, click a tab to change set. The set
   for today has a gold *Today* label, and the page opens on it.
-* **Pictures.** Under the set's heading, click one of the five pictures to
-  choose a mystery.
+* **Mystery picker.** Under the set's heading, click one of the five
+  pictures to choose a mystery. **Opening prayers** and **Closing prayers**
+  sit at each end of the row when they are switched on.
 
 .. list-table::
    :header-rows: 1
@@ -45,8 +48,11 @@ Click **Begin**, then **Next** for each prayer, or click any bead to jump to
 it. After the Glory Be, **Finish decade** moves on to the next mystery of the
 set, so all five decades can be prayed in order.
 
-Tick **Show the prayers** (under **Options**) to see the words of the Our Father, Hail Mary, Glory
-Be and O my Jesus on each bead. This is useful when leading a class.
+Click a step in the list to go to its bead.
+
+Tick **Show the prayers** (under **Options**) to see the words of the Our
+Father, Hail Mary and Glory Be (and the Fatima prayer, if it is on) on each
+bead. This is useful when leading a class.
 
 
 Opening and closing prayers
@@ -97,8 +103,8 @@ and goes back to these starting choices.
 Choosing the pictures
 =====================
 
-Use **Pictures** in the bar at the top to change how the mysteries are drawn.
-The page remembers the choice.
+Use **Pictures** (under **Options**) to change the picture shown for each
+mystery. The page remembers the choice.
 
 .. list-table::
    :header-rows: 1
@@ -106,6 +112,8 @@ The page remembers the choice.
 
    * - Pictures
      - Look
+   * - Stained glass windows (the starting choice)
+     - Photographs of real stained-glass windows, flattened to face the front
    * - Classic
      - Soft colours in a circle, in each set's colour
    * - Stained glass (drawn)
@@ -118,9 +126,11 @@ The page remembers the choice.
        *Annunciation* or Raphael's *Transfiguration*, with the artist and
        title underneath. Click a painting to see all of it (see
        :doc:`traditional paintings </info/rosary_artworks>`)
-   * - Stained glass windows
-     - Photographs of real stained-glass windows, when they have been added
-       to the site
+
+The opening and closing prayers have their own pictures too: in the
+paintings, Masaccio's *Holy Trinity* and Piero della Francesca's *Madonna
+della Misericordia*, and a stained-glass window of each. In the drawn styles
+they show a rosary and a crowned M.
 
 
 Layout and presenting
@@ -140,13 +150,14 @@ The top row holds the four sets (hover over one to see its days), then:
 
   At the bottom, **Reset to starting choices** forgets the choices saved in
   this browser, and **Done** closes the panel.
-* **Mystery picker** sets the small pictures in the row of five mysteries.
-  *Same as pictures* matches the main pictures; choose another style to
-  mix them, e.g. simple **Classic** icons in the picker with **Stained glass
-  windows** as the main pictures.
 * **Hide menus** hides the top row, the mystery picker, the page title and
   the site's header bar, leaving just the picture and its details. **Menus**
   brings them back.
+
+**Mystery picker** (under **Options**) sets the small pictures in the row of
+mysteries. *Same as pictures* matches the main pictures; choose another style
+to mix them, e.g. simple **Classic** icons (the starting choice) in the picker
+with **Stained glass windows** as the main pictures.
 
 **Layout** (under **Options**) arranges each mystery:
 
@@ -156,12 +167,11 @@ The top row holds the four sets (hover over one to see its days), then:
 * **Compact**: a small picture beside the title, with everything else below.
 * **Large picture beside details**: the picture on the left, as large as the
   screen allows, with the details in a column on the right.
-* **Large picture above details**: the picture on top, up to three-quarters
-  of the screen's height, with the details below it.
 
 On a narrow screen the details always go under the picture.
 
-**Scripture verses** (under **Options**) sets the scripture shown under the ten steps:
+**Scripture verses** (under **Options**) sets where the scripture passages
+are shown:
 
 * **All, under each step**: every step's passage, under its line in the
   list.
@@ -172,7 +182,8 @@ On a narrow screen the details always go under the picture.
   the words of the prayer being said appear in the panel.
 * **Hidden**: no passages, only the summaries.
 
-Click a step in the list to go to its bead.
+This only changes what is shown. What is read aloud is set by **Read aloud**
+(see *Listening*).
 
 **Present** shows the current mystery full screen, for projecting to a class:
 the picture fills three-quarters of the screen, with the title, beads and the
@@ -204,9 +215,10 @@ Use **Hide menus** as well to remove the page title and menus.
 Reading the passages
 ====================
 
-Under each reference is the passage itself, from the **Catholic Public Domain
-Version** (CPDV), a modern English translation of the Latin Vulgate. The
-current bead's passage is also shown in large type above the list.
+The passages are from the **Catholic Public Domain Version** (CPDV), a
+modern English translation of the Latin Vulgate. Where they appear is set by
+**Scripture verses** (see *Layout and presenting*): under each step, in the
+panel at the top for the current bead only, or not at all.
 
 * The short line after each reference is a summary of the passage.
 * Each reference is also a link to the passage on BibleGateway (NRSV Catholic
@@ -222,7 +234,8 @@ The rosary can be read aloud by the computer's own voice. Nothing has to be
 downloaded, but sound must be on.
 
 * **Listen** reads the current bead once: the mystery on the Our Father bead,
-  or the passage on a Hail Mary bead.
+  the step (and its passage, if chosen) on a Hail Mary bead, or the prayer on
+  an opening or closing bead.
 * **Pray aloud** reads the whole decade bead by bead, moving on by itself,
   then carries on to the next mystery of the set. Click **Stop** at any time.
   Clicking a bead while it is praying aloud carries on from that bead.
@@ -232,8 +245,9 @@ downloaded, but sound must be on.
 * Tick **Show the prayers** (under **Options**) to have the Our Father, Hail Mary, Glory Be and
   O my Jesus read aloud too. Leave it unticked to hear only the scripture, as a
   quiet meditation.
-* Choose the **Voice** and **Speed** in the bar at the top. The page picks an
-  Australian voice if the computer has one, and remembers your choice.
+* Choose the **Voice** and **Speed** under **Options** (in *Reading aloud*).
+  The page picks an Australian voice if the computer has one, and remembers
+  your choice.
 
 Voices differ between computers. On Windows, the Microsoft Edge browser has
 the most natural voices (those marked *Natural* or *Online*). Chrome on any
@@ -245,6 +259,7 @@ Printing
 
 Printing the page prints every mystery shown on it, with its picture, fruit,
 ten references and their passages, in the picture style chosen, always in the
-compact layout. The tabs,
-beads and buttons are left out. On the *All the
-mysteries* page, all four sets print.
+compact layout. The opening and closing prayers print too, with their words,
+when they are switched on. The tabs, beads, buttons and options are left out.
+On the *All the mysteries* page, all four sets print. Choose **Hidden** in
+**Scripture verses** first to print the references without the passages.

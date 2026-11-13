@@ -311,14 +311,15 @@
 
             var layLabel = el('label', 'rosary-audio-field', 'Layout ');
             var laySelect = el('select', 'rosary-select');
-            [['phone', 'Phone-size picture'], ['compact', 'Compact'], ['side', 'Large picture beside details'],
-             ['large', 'Large picture above details']].forEach(function (l) {
+            [['phone', 'Phone-size picture'], ['compact', 'Compact'], ['side', 'Large picture beside details']].forEach(function (l) {
                 var o = el('option', '', l[1]);
                 o.value = l[0];
                 laySelect.appendChild(o);
             });
             var savedLayout = store(STORE_LAYOUT);
-            if (['phone', 'compact', 'side', 'large'].indexOf(savedLayout) !== -1) block.setAttribute('data-layout', savedLayout);
+            if (['phone', 'compact', 'side'].indexOf(savedLayout) !== -1) block.setAttribute('data-layout', savedLayout);
+            // the old "Large picture above details" layout has been removed
+            if (['phone', 'compact', 'side'].indexOf(block.getAttribute('data-layout')) === -1) block.setAttribute('data-layout', 'phone');
             laySelect.value = block.getAttribute('data-layout') || 'phone';
             laySelect.addEventListener('change', function () {
                 block.setAttribute('data-layout', laySelect.value);
@@ -412,7 +413,7 @@
             });
         }
 
-        /* large layout and Present mode show the whole painting, not the crop */
+        /* the larger layouts and Present mode show the whole painting, not the crop */
         function updatePhotos() {
             var big = block.getAttribute('data-layout') !== 'compact' ||
                       !!block.querySelector('.rosary-presenting');

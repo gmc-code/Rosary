@@ -2,7 +2,8 @@
 Rosary: traditional paintings
 ===============================
 
-The rosary can show a traditional painting for each mystery instead of the
+The rosary can show a traditional painting for each mystery, and for the
+opening and closing prayers, instead of the stained-glass windows or the
 drawn icons. The paintings below are all centuries old, so the artworks are in
 the public domain, and Wikimedia Commons has free photographs of them.
 
@@ -25,7 +26,13 @@ To open a page on the paintings, add ``:icons: photo``:
 
 To change a painting, replace its file (e.g. ``joyful-1.jpg``, square, about
 640 pixels) and its line in ``credits.txt``, and put the uncropped painting in
-``full`` with the same name.
+``full`` with the same name. After changing a picture, do a clean build and
+refresh the page with Ctrl+F5.
+
+The site starts on **Stained glass windows**, the photographs in
+``docs\_static\rosary-images_sg``. They are named the same way
+(``joyful-1.webp`` ... ``glorious-5.webp``, ``opening.webp``,
+``closing.webp``).
 
 
 The paintings
@@ -39,6 +46,10 @@ The paintings
      - Painting
      - File
      - Source
+   * - Opening prayers
+     - Masaccio, *The Holy Trinity*, c. 1427
+     - ``opening.jpg``
+     - `Commons <https://commons.wikimedia.org/w/index.php?search=Masaccio+Holy+Trinity+Santa+Maria+Novella&title=Special:MediaSearch&type=image>`__
    * - The Annunciation
      - Fra Angelico, *The Annunciation*, c. 1426
      - ``joyful-1.jpg``
@@ -119,6 +130,10 @@ The paintings
      - Diego Velázquez, *The Coronation of the Virgin*, c. 1635
      - ``glorious-5.jpg``
      - `Commons <https://commons.wikimedia.org/w/index.php?search=Velazquez+Coronation+of+the+Virgin&title=Special:MediaSearch&type=image>`__
+   * - Closing prayers
+     - Piero della Francesca, *Madonna della Misericordia*, c. 1445-62
+     - ``closing.jpg``
+     - `Commons <https://commons.wikimedia.org/w/index.php?search=Piero+della+Francesca+Madonna+della+Misericordia&title=Special:MediaSearch&type=image>`__
 
 Other painters with many public-domain scenes of the mysteries are Fra
 Angelico (the San Marco frescoes), Duccio (the *Maestà*), Murillo, Carl Bloch and Heinrich Hofmann. Any painting by an artist who died
@@ -153,3 +168,5 @@ credits.txt
     glorious-3: El Greco, Pentecost (c. 1600), Museo del Prado, Madrid
     glorious-4: Titian, The Assumption of the Virgin (1516-18), Basilica dei Frari, Venice
     glorious-5: Diego Velázquez, The Coronation of the Virgin (c. 1635), Museo del Prado, Madrid
+    opening: Masaccio, The Holy Trinity (c. 1427), Santa Maria Novella, Florence
+    closing: Piero della Francesca, Madonna della Misericordia (c. 1445-62), Museo Civico, Sansepolcro

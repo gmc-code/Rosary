@@ -2,8 +2,9 @@
 Rosary: developer reference
 ===============================
 
-``rosary`` is a Sphinx directive. All twenty mysteries, their icons and their
-scripture references are built in, so a page needs only one line.
+``rosary`` is a Sphinx directive. All twenty mysteries, their icons, their
+scripture references and the opening and closing prayers are built in, so a
+page needs only one line.
 
 
 Installing
@@ -21,7 +22,10 @@ Installing
            "rosary",
        ]
 
-The extension adds its own ``rosary.css`` and ``rosary.js``.
+The extension adds its own ``rosary.css`` and ``rosary.js``, and copies the
+picture folders and the Home Screen icon into the built site. Nothing else
+is needed in ``conf.py``: the starting choices are built in (see
+*Site-wide starting choices*).
 
 
 Folder contents
@@ -45,12 +49,18 @@ Folder contents
      - Rebuilds ``rosary_scripture.py`` from the CPDV text file. Not used by
        Sphinx.
    * - ``rosary_icons.py``
-     - The 20 icons, drawn as inline SVG, plus the stained-glass background.
+     - The 20 icons and the opening and closing icons, drawn as inline SVG,
+       plus the stained-glass background.
    * - ``_static/rosary.css``
-     - Layout, set colours, icon colours, dark mode and print styles.
+     - Picture styles, layouts, Present mode, the Options panel, set colours,
+       dark mode and print styles.
    * - ``_static/rosary.js``
-     - Tabs, today's set, the mystery picker, the decade of beads and
+     - Tabs, today's set, the mystery picker, the decade of beads, the
+       opening and closing prayers, the Options panel, Present mode and
        read-aloud.
+   * - ``_static/rosary-touch-icon.png``, ``rosary-icon-512.png``,
+       ``rosary-manifest.json``
+     - The Home Screen icon and web app manifest.
 
 
 Usage
@@ -69,7 +79,8 @@ Usage
    * - ``.. rosary:: joyful``
      - One set (``joyful``, ``luminous``, ``sorrowful`` or ``glorious``)
    * - ``.. rosary:: glorious`` with ``:mystery: 3``
-     - One mystery (here, the Descent of the Holy Spirit)
+     - One mystery (here, the Descent of the Holy Spirit), without the
+       opening and closing prayers
 
 The page reads and prints without JavaScript. ``today`` is worked out in the
 reader's browser, so it is correct on a static site.
@@ -97,59 +108,61 @@ Options
    * - ``:prayers:``
      - Show the words of the prayers on each bead from the start.
    * - ``:no-beads:``
-     - Leave out the beads and buttons. Reference lists only.
+     - Leave out the beads, buttons and opening and closing prayers.
+       Reference lists only.
    * - ``:no-captions:``
      - References only, without the one-line summary of each passage.
    * - ``:no-scripture:``
      - Leave out the verse text under each reference (a shorter page to print).
    * - ``:no-audio:``
-     - Leave out the voice bar and the **Listen** / **Pray aloud** buttons.
+     - Leave out the **Reading aloud** options and the **Listen** / **Pray
+       aloud** buttons.
    * - ``:icons:``
-     - Picture style to start with: ``classic`` (default), ``stained``,
-       ``gold``, ``photo`` (Traditional paintings) or ``photo-sg`` (Stained
-       glass windows); ``photo-<key>`` for any other picture folder. A reader's own choice from the
-       **Pictures** menu takes over on later visits.
+     - Picture style to start with: ``classic``, ``stained``, ``gold``,
+       ``photo`` (Traditional paintings) or ``photo-sg`` (Stained glass
+       windows); ``photo-<key>`` for any other picture folder.
    * - ``:images:``
      - Folder of pictures for this rosary instead of the site's
        ``rosary_images`` folder (see below). Starts on them unless
        ``:icons:`` says otherwise. ``none`` turns pictures off.
    * - ``:no-picker:``
-     - Leave out the **Pictures** and **Layout** menus, so the page always uses
-       ``:icons:`` and ``:layout:``.
+     - Leave out the **Pictures**, **Mystery picker**, **Layout**,
+       **Scripture verses** and **Opening & closing** menus, so the page
+       always uses the directive's (or the site's) choices for these.
    * - ``:extra-prayers:``
      - The opening and closing prayers: ``off``, ``on`` (Sign of the Cross,
        Apostles' Creed, Our Father, three Hail Marys, Glory Be; Hail Holy
        Queen, versicle, closing prayer, Sign of the Cross) or ``full`` (also
-       the Prayer to St Michael and the Memorare). Readers can change it in
-       the **Opening & closing** menu.
+       the Prayer to St Michael and the Memorare).
    * - ``:fatima:``
-     - ``yes`` (default) or ``no``: the Fatima prayer (O my Jesus) after the
-       Glory Be at the end of each decade. Readers can change it with the
-       **Fatima prayer** checkbox.
+     - ``yes`` or ``no``: the Fatima prayer (O my Jesus) after the Glory Be
+       at the end of each decade.
    * - ``:hide-title:``
      - Hide the page's main heading. It still names the page in the menu
        and the browser tab.
    * - ``:nav-icons:``
-     - Picture style for the mystery picker's small pictures: ``same``
-       (default, as the main pictures), ``classic``, ``stained``, ``gold``,
-       ``photo`` or ``photo-sg``. A reader's own choice from the **Mystery
-       picker** menu takes over on later visits.
+     - Picture style for the mystery picker's small pictures: ``same`` (as
+       the main pictures), ``classic``, ``stained``, ``gold``, ``photo`` or
+       ``photo-sg``.
    * - ``:layout:``
-     - ``phone`` (default): a phone-sized picture on the left, with the
+     - ``phone``: a phone-sized picture on the left, with the
        title, beads and the ten steps beside it. ``compact``: a small picture
        beside the title. ``side``: a large picture on the left, about 75% of
        the width (on wide screens the rosary widens into empty space right of
-       the page). ``large``: the picture above, up to 75% of the screen
-       height. A reader's own choice from the **Layout** menu takes over on
-       later visits.
+       the page). A page that still says ``large`` (a layout that has been
+       removed) gets ``phone``.
    * - ``:verses:``
-     - Scripture under the steps: ``all`` (default), ``current`` (only the
-       step being prayed) or ``none``. Readers can change it in the
-       **Scripture verses** menu.
+     - Where the scripture is shown: ``all`` (under each step), ``current``
+       (only the step being prayed, in the panel at the top) or ``none``.
    * - ``:read:``
      - What **Listen** and **Pray aloud** read on each Hail Mary bead:
-       ``step`` (the summary), ``both`` (default) or ``scripture``. Readers
-       can change it in the **Read aloud** menu.
+       ``step`` (the summary), ``both`` or ``scripture``.
+
+Options that match a menu in the Options panel (``:icons:``, ``:nav-icons:``,
+``:layout:``, ``:verses:``, ``:read:``, ``:extra-prayers:``, ``:fatima:``)
+set the page's starting choice; when one is left out, the site's starting
+choice is used (see *Site-wide starting choices*). A reader's own choice from
+the Options panel takes over on later visits.
 
 
 Examples
@@ -227,8 +240,10 @@ nothing is sent to a server. ``rosary.js``:
   voice and speed in the browser (``localStorage``);
 * reads each bead in short sentence-sized pieces, because some browsers cut
   off long speech;
-* on each bead reads the passage, plus the prayer when **Show the prayers** is
-  ticked.
+* on each Hail Mary bead reads the step, the passage or both (``:read:``),
+  plus the prayer when **Show the prayers** is ticked;
+* on the opening and closing beads reads the prayer, announced by name and
+  intention first when **Read prayer names** is ticked.
 
 If the browser has no speech support, the audio controls are not shown.
 
@@ -266,7 +281,8 @@ It holds 20 public-domain paintings (see
 A second folder, ``/_static/rosary-images_sg``, is offered as **Stained
 glass windows**, for photographs of stained-glass windows. It works the same
 way: pictures named ``joyful-1.jpg`` ... ``glorious-5.jpg``, an optional
-``credits.txt`` and an optional ``full`` folder. Each folder becomes its own
+``credits.txt`` and an optional ``full`` folder. Its pictures are
+perspective-corrected photographs saved as ``.webp``. Each folder becomes its own
 entry in the **Pictures** menu; a folder that is missing or empty is left
 out, and a mystery without a picture in the chosen folder uses its drawn
 icon.
@@ -312,6 +328,12 @@ picture:
 .. code-block:: text
 
     joyful-1: Fra Angelico, The Annunciation (c. 1426), Museo del Prado, Madrid
+    opening: Masaccio, The Holy Trinity (c. 1427), Santa Maria Novella, Florence
+
+Pictures named ``opening`` and ``closing`` (with any of the same extensions)
+are shown for the opening and closing prayers, with ``opening:`` and
+``closing:`` lines in ``credits.txt``. Without them, the drawn opening and
+closing icons are used.
 
 :doc:`Traditional paintings </info/rosary_artworks>` lists a public-domain
 painting for every mystery, with a ready-made ``credits.txt``. The pictures are copied into
@@ -324,20 +346,22 @@ Site-wide starting choices
 ==========================
 
 Each option above can be set for one page in its directive. The starting
-choices for every rosary on the site are set in ``conf.py``; these are the
-defaults:
+choices for every rosary on the site are built into ``rosary.py``, so
+``conf.py`` doesn't need to mention them. To change one, add its line to
+``conf.py``; these are the built-in values:
 
 .. code-block:: python
 
     rosary_default_icons = "photo-sg"        # classic, stained, gold, photo, photo-sg
     rosary_default_nav_icons = "classic"     # same, classic, stained, gold, photo, photo-sg
-    rosary_default_layout = "phone"          # phone, compact, side, large
+    rosary_default_layout = "phone"          # phone, compact, side
     rosary_default_verses = "current"        # all, current, none
     rosary_default_read = "step"             # step, both, scripture
     rosary_default_extra_prayers = "on"      # off, on, full
     rosary_default_fatima = True             # O my Jesus after each Glory Be
     rosary_default_read_titles = False       # say each opening/closing prayer's name first
 
+After changing one, do a clean build (``make clean``, then ``make html``).
 A picture style whose folder is missing falls back to ``classic``. A
 reader's own choices from the **Options** menus are kept in their browser
 (``localStorage`` keys starting ``rosary-``) and take over from these.
@@ -346,7 +370,26 @@ reloads the page.
 
 The opening and closing prayers are ``OPENING`` and ``CLOSING`` in
 ``rosary_data.py``: one entry per bead, with its label, name, intention and
-prayers (keys of ``PRAYERS``).
+prayers (keys of ``PRAYERS``). After editing ``rosary_data.py``,
+``rosary_icons.py`` or ``rosary_scripture.py``, do a clean build so Sphinx
+doesn't reuse its cached pages.
+
+
+The Options panel
+=================
+
+``rosary.js`` builds each menu, then groups them in the panel as three
+``fieldset`` cards (*Pictures*, *Prayers*, *Reading aloud*), with the
+**Reset to starting choices** and **Done** buttons underneath. A new menu
+added to the panel's ``bar`` is put in a final *Other* group unless it is
+added to one of the three lists in the grouping code. The cards sit side by
+side in a CSS grid (``.rosary-opt-groups``) and stack on a narrow screen.
+
+Each reader's choices are saved in ``localStorage``: ``rosary-icons``,
+``rosary-nav-icons``, ``rosary-layout``, ``rosary-verses``,
+``rosary-extra``, ``rosary-prayers``, ``rosary-fatima``, ``rosary-read``,
+``rosary-read-titles``, ``rosary-voice``, ``rosary-rate``,
+``rosary-options-open`` and ``rosary-menus-hidden``.
 
 
 Home Screen app

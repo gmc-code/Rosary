@@ -3,7 +3,8 @@ Rosary
 ===============================
 
 These pages pray and explain the Rosary: all twenty mysteries, in four sets of
-five, each with its own icon and ten scripture references, one for each Hail Mary.
+five, each with its own picture and ten scripture references, one for each Hail Mary,
+with the opening and closing prayers.
 
 
 .. toctree::

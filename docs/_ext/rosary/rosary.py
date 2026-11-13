@@ -14,58 +14,69 @@ scripture references, one for each Hail Mary of the decade.
         :mystery: 3                 one mystery (Pentecost)
 
 Options
+    Options that match a menu in the reader's Options panel (icons, nav-icons,
+    layout, verses, read, extra-prayers, fatima) set this page's starting
+    choice.  When one is left out, the site's starting choice from conf.py is
+    used; those are built in (see setup() at the end of this file) and are
+    shown in [brackets] below.  A reader's own choices, saved in their
+    browser, take over on later visits.
+
     :title:          heading above the block
-    :mystery:        1-5, show only that mystery of the named set
+    :mystery:        1-5, show only that mystery of the named set (without
+                     the opening and closing prayers)
     :open:           set to open first when all four are shown (default: today)
     :bible-version:  BibleGateway version code for the reference links
                      (default NRSVCE); "none" for plain text references
     :prayers:        show the words of the prayers on each bead from the start
-    :no-beads:       leave out the decade of beads (reference lists only)
+    :no-beads:       leave out the beads, buttons and opening and closing
+                     prayers (reference lists only)
     :no-captions:    references only, without the short summary of each passage
     :no-scripture:   leave out the verse text under each reference
-    :no-audio:       leave out the read-aloud buttons
-    :icons:          picture style to start with: classic (default), stained,
-                     gold, photo (the first picture folder) or photo-<key> for
-                     another folder in rosary_image_sets, e.g. photo-sg
+    :no-audio:       leave out the read-aloud buttons and options
+    :icons:          picture style: classic, stained, gold, photo (the first
+                     picture folder) or photo-<key> for another folder in
+                     rosary_image_sets, e.g. photo-sg  [photo-sg]
     :images:         folder of pictures for this rosary, instead of the site's
                      rosary_images folder (default /_static/rosary-images,
                      which holds the traditional paintings); "none" to turn
                      pictures off.  Pictures are named joyful-1.png ...
-                     glorious-5.png (.png, .jpg, .jpeg, .webp or .svg); any
-                     that are missing use the drawn icon.  The pictures are
-                     offered as "Traditional paintings" in the Pictures menu;
-                     a page with :images: starts on them unless :icons: says
-                     otherwise.  Optional full/joyful-1.jpg ... are the whole
-                     paintings, shown when a picture is clicked.
-                     A credits.txt in the folder (lines such as
-                     "joyful-1: Fra Angelico, The Annunciation") adds a
-                     caption under each mystery's title
-    :no-picker:      leave out the reader's choice of picture style and layout
-    :extra-prayers:  the opening and closing prayers: off (default), on (Sign of
-                     the Cross, Creed, Our Father, three Hail Marys, Glory Be;
-                     Hail Holy Queen and the closing prayer) or full (also the
-                     Prayer to St Michael and the Memorare)
-    :fatima:         yes (default) or no: the Fatima prayer (O my Jesus) after
-                     the Glory Be at the end of each decade
+                     glorious-5.png, opening and closing (.png, .jpg, .jpeg,
+                     .webp, .gif or .svg); any that are missing use the drawn
+                     icon.  A page with :images: starts on them unless
+                     :icons: says otherwise.  Optional full/joyful-1.jpg ...
+                     are the whole paintings, shown when a picture is
+                     clicked.  A credits.txt in the folder (lines such as
+                     "joyful-1: Fra Angelico, The Annunciation", or
+                     "opening: ...") adds a caption under each title
+    :no-picker:      leave out the Pictures, Mystery picker, Layout,
+                     Scripture verses and Opening & closing menus
+    :extra-prayers:  the opening and closing prayers: off, on (Sign of the
+                     Cross, Creed, Our Father, three Hail Marys, Glory Be;
+                     Hail Holy Queen, versicle, Rosary Prayer, Sign of the
+                     Cross) or full (also the Prayer to St Michael and the
+                     Memorare)  [on]
+    :fatima:         yes or no: the Fatima prayer (O my Jesus) after the
+                     Glory Be at the end of each decade  [yes]
     :hide-title:     hide the page's main heading (it still names the page in
                      the menu and the browser tab)
     :nav-icons:      style of the small pictures in the mystery picker: same
-                     (default, as the main pictures), classic, stained, gold,
-                     photo or photo-<key>, e.g. classic icons in the picker
-                     with stained-glass windows as the main pictures
-    :layout:         phone (default: a phone-sized picture on the left, with
-                     the title, beads and the ten steps listed beside it),
-                     compact (small picture beside the title), side (a large
-                     picture on the left, about 75% of the width) or large
-                     (the picture above, up to 75% of the screen height)
-    :verses:         scripture under the steps: all (default), current (only
-                     the step being prayed) or none
+                     (as the main pictures), classic, stained, gold, photo or
+                     photo-<key>  [classic]
+    :layout:         phone (a phone-sized picture on the left, with the
+                     title, beads and the ten steps listed beside it),
+                     compact (small picture beside the title) or side (a
+                     large picture on the left, about 75% of the width)
+                     [phone]
+    :verses:         where the scripture is shown: all (under each step),
+                     current (only the step being prayed, in the panel at
+                     the top) or none  [current]
     :read:           what Listen / Pray aloud read for each Hail Mary: step
-                     (the one-line summary), both (default: summary then
-                     scripture) or scripture
+                     (the one-line summary), both (summary then scripture)
+                     or scripture  [step]
 
 The page is fully readable (and prints) without JavaScript: _static/rosary.js
-adds the tabs, the mystery picker and the clickable decade of beads.
+adds the tabs, the mystery picker, the clickable beads, the Options panel,
+Present mode and read-aloud.
 """
 
 import html
@@ -121,6 +132,14 @@ def days_text(days):
     return names[0] if len(names) == 1 else ' and '.join(names)
 
 
+LAYOUTS = ('phone', 'compact', 'side')
+
+
+def _layout(value):
+    """A layout name; the old 'large' layout has been removed, so it becomes 'phone'."""
+    return value if value in LAYOUTS else 'phone'
+
+
 class RosaryDirective(SphinxDirective):
     has_content = False
     optional_arguments = 1
@@ -139,7 +158,7 @@ class RosaryDirective(SphinxDirective):
         'icons': directives.unchanged,
         'images': directives.unchanged_required,
         'no-picker': directives.flag,
-        'layout': lambda a: directives.choice(a, ('phone', 'compact', 'side', 'large')),
+        'layout': lambda a: _layout(directives.choice(a, ('phone', 'compact', 'side', 'large'))),
         'verses': lambda a: directives.choice(a, ('all', 'current', 'none')),
         'read': lambda a: directives.choice(a, ('step', 'both', 'scripture')),
         'nav-icons': directives.unchanged,
@@ -505,7 +524,7 @@ class RosaryDirective(SphinxDirective):
                   if scripture or config['audio'] else '')
         html_output = (
             '<div class="rosary-block" data-icons="%s" data-photoset="%s" data-layout="%s" data-verses="%s" data-extra="%s" data-config="%s"%s>%s%s%s%s</div>'
-            % (data_icons, photoset, self.options.get('layout') or self.config.rosary_default_layout,
+            % (data_icons, photoset, self.options.get('layout') or _layout(self.config.rosary_default_layout),
                self.options.get('verses') or self.config.rosary_default_verses, config['extra'],
                _esc(json.dumps(config)),
                prayers_attr, title_html, tabs, sets, credit))
@@ -584,7 +603,7 @@ def setup(app):
     # own menu choices take over from these
     app.add_config_value('rosary_default_icons', 'photo-sg', 'env')      # classic, stained, gold, photo, photo-sg
     app.add_config_value('rosary_default_nav_icons', 'classic', 'env')   # same, classic, stained, gold, photo...
-    app.add_config_value('rosary_default_layout', 'phone', 'env')        # phone, compact, side, large
+    app.add_config_value('rosary_default_layout', 'phone', 'env')        # phone, compact, side
     app.add_config_value('rosary_default_verses', 'current', 'env')      # all, current, none
     app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture
     app.add_config_value('rosary_default_extra_prayers', 'on', 'env')    # off, on, full

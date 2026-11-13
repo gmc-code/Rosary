@@ -600,57 +600,6 @@ a.rosary-ref { text-decoration: underline dotted; }
 @media print { .rosary-lightbox { display: none !important; } }
 
 
-/* large layout (default) -------------------------------------------------
- * The picture sits above the title and beads, up to 75% of the screen's
- * height.  Screen only: printing keeps the compact layout.
- */
-@media screen {
-    .rosary-block[data-layout="large"] .rosary-head {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        gap: 0.7em;
-        margin-bottom: 0.9em;
-    }
-    .rosary-block[data-layout="large"] .rosary-icon {
-        width: min(100%, 75vh);
-        height: auto;
-        aspect-ratio: 1 / 1;
-        border-width: 5px;
-        padding: 0.4em;
-    }
-    .rosary-block[data-layout="large"][data-icons="stained"] .rosary-icon {
-        width: min(100%, 62vh);
-        height: auto;
-        aspect-ratio: 5 / 6;
-        border-width: 7px;
-        padding: 0;
-    }
-    .rosary-block[data-layout="large"][data-icons="gold"] .rosary-icon {
-        border-width: 9px;
-        border-radius: 0.8em;
-    }
-    /* a painting is shown whole, on a dark gallery wall */
-    .rosary-block[data-layout="large"][data-icons="photo"] .rosary-icon.rosary-has-photo {
-        width: 100%;
-        height: 75vh;
-        aspect-ratio: auto;
-        padding: 0;
-        border: 0;
-        border-radius: 0.8em;
-        background: #1a1613;
-        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
-    }
-    .rosary-block[data-layout="large"][data-icons="photo"] .rosary-icon.rosary-has-photo .rosary-photo {
-        object-fit: contain;
-        border-radius: 0;
-        padding: 1.2em;
-        box-sizing: border-box;
-    }
-    .rosary-block[data-layout="large"] .rosary-mystery-title { font-size: 1.55em; }
-    .rosary-block[data-layout="large"] .rosary-head > div:last-child { max-width: 46em; }
-}
-
 /* Present mode: one mystery full screen, picture 75%, prayer below -------- */
 .rosary-set.rosary-presenting {
     --r-paper: #141210;
