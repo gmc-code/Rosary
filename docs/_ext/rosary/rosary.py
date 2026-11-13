@@ -208,12 +208,17 @@ class RosaryDirective(SphinxDirective):
                     _esc(data['mysteries'][i]['title'].replace('The ', '', 1)))
                 for i in range(5))
             if beads:
-                extra_btn = ('<button type="button" class="rosary-nav-btn rosary-extra" data-index="%d">'
+                extra_btn = ('<button type="button" class="rosary-nav-btn rosary-extra%s" data-index="%d">'
                              '%s<span>%s</span></button>')
                 nav = nav.replace('aria-label="Choose a mystery">',
                                   'aria-label="Choose a mystery">' + extra_btn % (
-                                      -1, extra_icon('opening', ''), 'Opening prayers'), 1)
-                nav = nav[:-len('</div>')] + extra_btn % (5, extra_icon('closing', ''), 'Closing prayers') + '</div>'
+                                      ' rosary-has-photo' if self._photo('opening', 0) else '', -1,
+                                      extra_icon('opening', '') + self._photo_html('opening', 0, ''),
+                                      'Opening prayers'), 1)
+                nav = nav[:-len('</div>')] + extra_btn % (
+                    ' rosary-has-photo' if self._photo('closing', 0) else '', 5,
+                    extra_icon('closing', '') + self._photo_html('closing', 0, ''),
+                    'Closing prayers') + '</div>'
         body = ''.join(self._mystery_html(key, i, version, captions, scripture, beads, i == indices[0])
                        for i in indices)
         if beads and not only:
@@ -249,15 +254,17 @@ class RosaryDirective(SphinxDirective):
         return (
             '<article class="rosary-mystery rosary-prayers-card rosary-extra" data-index="%d" data-kind="%s">'
             '<div class="rosary-head">'
-            '<div class="rosary-icon">%s</div>'
+            '<div class="rosary-icon%s">%s</div>'
             '<div><p class="rosary-num">%s</p>'
-            '<h4 class="rosary-mystery-title">%s</h4></div>'
+            '<h4 class="rosary-mystery-title">%s</h4>%s</div>'
             '</div>'
             '<div class="rosary-decade" aria-label="Beads"></div>'
             '<div class="rosary-controls"></div>'
             '<div class="rosary-now" aria-live="polite"></div>'
             '<ol class="rosary-refs rosary-prayer-list">%s</ol>'
-            '</article>' % (index, kind, extra_icon(kind, _esc(title)), _esc(sub), _esc(title), ''.join(items)))
+            '</article>' % (index, kind, ' rosary-has-photo' if self._photo(kind, 0) else '',
+                            extra_icon(kind, _esc(title)) + self._photo_html(kind, 0, title),
+                            _esc(sub), _esc(title), self._credit_html(kind, 0), ''.join(items)))
 
     # ------------------------------------------------------------ pictures
 
@@ -302,21 +309,26 @@ class RosaryDirective(SphinxDirective):
                     if not sep:
                         name, sep, text = line.partition('=')
                     name = name.strip().lower()
+                    if name in ('opening', 'closing'):
+                        found_set['credits'][(name, 0)] = text.strip()
                     for skey in SET_ORDER:
                         for i in range(5):
                             if name == '%s-%d' % (skey, i + 1):
                                 found_set['credits'][(skey, i)] = text.strip()
         missing = []
-        for skey in SET_ORDER:
-            for i in range(5):
+        wanted = [(skey, i, '%s-%d' % (skey, i + 1)) for skey in SET_ORDER for i in range(5)]
+        wanted += [('opening', 0, 'opening'), ('closing', 0, 'closing')]
+        for skey, i, stem in wanted:
+            if True:
                 found = None
                 for ext in IMAGE_EXTS + tuple(e.upper() for e in IMAGE_EXTS):
-                    name = '%s-%d%s' % (skey, i + 1, ext)
+                    name = stem + ext
                     if os.path.isfile(os.path.join(abs_path, name)):
                         found = name
                         break
                 if not found:
-                    missing.append('%s-%d' % (skey, i + 1))
+                    if skey in SETS:
+                        missing.append(stem)
                     continue
                 src_rel = (Path(rel) / found).as_posix()
                 images.add(src_rel)
@@ -324,7 +336,7 @@ class RosaryDirective(SphinxDirective):
                 found_set['photos'][(skey, i)] = '../' * depth + src_rel
                 # the whole picture, shown when it is clicked
                 for ext in IMAGE_EXTS:
-                    full = os.path.join(abs_path, 'full', '%s-%d%s' % (skey, i + 1, ext))
+                    full = os.path.join(abs_path, 'full', stem + ext)
                     if os.path.isfile(full):
                         full_rel = (Path(rel) / 'full' / os.path.basename(full)).as_posix()
                         images.add(full_rel)

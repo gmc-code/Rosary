@@ -19,3 +19,5 @@ glorious-2: Giotto, The Ascension (c. 1305), Scrovegni Chapel, Padua
 glorious-3: El Greco, Pentecost (c. 1600), Museo del Prado, Madrid
 glorious-4: Titian, The Assumption of the Virgin (1516-18), Basilica dei Frari, Venice
 glorious-5: Diego Velázquez, The Coronation of the Virgin (c. 1635), Museo del Prado, Madrid
+opening: Masaccio, The Holy Trinity (c. 1427), Santa Maria Novella, Florence
+closing: Piero della Francesca, Madonna della Misericordia (c. 1445-62), Museo Civico, Sansepolcro
