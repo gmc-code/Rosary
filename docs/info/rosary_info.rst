@@ -49,6 +49,43 @@ Tick **Show the prayers** (under **Options**) to see the words of the Our Father
 Be and O my Jesus on each bead. This is useful when leading a class.
 
 
+Opening and closing prayers
+===========================
+
+**Opening & closing** (under **Options**) adds the rest of the Rosary's
+prayers, so a whole set can be prayed from start to finish:
+
+* **Opening prayers**, before the first mystery: the Sign of the Cross and
+  the Apostles' Creed (on the crucifix), the Our Father, three Hail Marys for
+  an increase in faith, hope and charity, and the Glory Be.
+* **Closing prayers**, after the fifth mystery: the Hail, Holy Queen, "Pray
+  for us, O holy Mother of God", the closing prayer ("O God, whose
+  only-begotten Son...") and the Sign of the Cross.
+* **On, with St Michael and Memorare** also adds the Prayer to St Michael
+  and the Memorare to the closing prayers.
+
+They appear as **Opening prayers** and **Closing prayers** at each end of the
+mystery picker, each with its own beads and the words of every prayer.
+**Pray aloud** runs straight through: opening prayers, the five mysteries,
+then the closing prayers.
+
+**Fatima prayer** (under **Options**, ticked to start with) adds "O my
+Jesus, forgive us our sins..." after the Glory Be at the end of each decade.
+It is read aloud with the Glory Be, and shown when **Show the prayers** is
+ticked. Untick it to leave it out.
+
+
+Starting choices
+================
+
+The first time someone opens the site, it starts on **Stained glass
+windows** pictures, **Classic** icons in the mystery picker, the
+**Phone-size picture** layout, **Current step only** verses and **Step
+only** read aloud, with the opening and closing prayers and the Fatima
+prayer on. After that, the
+page remembers each reader's own choices from the **Options** menus.
+
+
 Choosing the pictures
 =====================
 
@@ -84,14 +121,16 @@ Layout and presenting
 The top row holds the four sets (hover over one to see its days), then:
 
 * **Options** opens the **Pictures**, **Mystery picker**, **Layout**,
-  **Verses**, **Voice**, **Read aloud** and **Speed** menus and the **Show
-  the prayers** checkbox, and closes them again.
+  **Verses**, **Opening & closing**, **Voice**, **Read aloud** and **Speed**
+  menus and the **Show the prayers** and **Fatima prayer** checkboxes, and
+  closes them again.
 * **Mystery picker** sets the small pictures in the row of five mysteries.
   *Same as pictures* matches the main pictures; choose another style to
   mix them, e.g. simple **Classic** icons in the picker with **Stained glass
   windows** as the main pictures.
-* **Hide menus** hides the top row and the mystery picker, leaving just the
-  picture and its details. **Menus** brings them back.
+* **Hide menus** hides the top row, the mystery picker, the page title and
+  the site's header bar, leaving just the picture and its details. **Menus**
+  brings them back.
 
 **Layout** (under **Options**) arranges each mystery:
 
@@ -123,7 +162,23 @@ current passage beside it (below it on a tall, narrow screen).
   the **left arrow** goes back. A presentation clicker that sends Page Down
   and Page Up works too.
 * After the Glory Be it carries on to the next mystery of the set.
-* **Esc** ends the presentation.
+* **Esc** or the **Exit** button (top right) ends the presentation.
+* On a phone or tablet, swipe left for the next bead and right to go back.
+
+
+iPhone and iPad
+===============
+
+Safari on iPhone does not let web pages go truly full screen, so **Present**
+fills the Safari window instead, with an **Exit** button. For a real
+full-screen rosary with no Safari bars:
+
+#. Open the site in **Safari**.
+#. Tap the **Share** button, then **Add to Home Screen**, then **Add**.
+#. Open **Rosary** from the Home Screen. It opens full screen, like an app,
+   with the rosary as its icon.
+
+Use **Hide menus** as well to remove the page title and menus.
 
 
 Reading the passages

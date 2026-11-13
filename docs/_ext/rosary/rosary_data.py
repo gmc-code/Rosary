@@ -389,6 +389,78 @@ PRAYERS = {
 }
 
 
+# More traditional prayers (public domain wording) for the opening and
+# closing of the Rosary.
+PRAYERS.update({
+    'sign-of-cross': ('The Sign of the Cross',
+                      'In the name of the Father, and of the Son, and of the Holy '
+                      'Spirit. Amen.'),
+    'creed': ("The Apostles' Creed",
+              'I believe in God, the Father Almighty, Creator of heaven and earth; '
+              'and in Jesus Christ, his only Son, our Lord, who was conceived by '
+              'the Holy Spirit, born of the Virgin Mary, suffered under Pontius '
+              'Pilate, was crucified, died, and was buried. He descended into '
+              'hell; the third day he rose again from the dead; he ascended into '
+              'heaven, and sits at the right hand of God, the Father Almighty; '
+              'from thence he shall come to judge the living and the dead. I '
+              'believe in the Holy Spirit, the holy Catholic Church, the communion '
+              'of saints, the forgiveness of sins, the resurrection of the body, '
+              'and life everlasting. Amen.'),
+    'hail-holy-queen': ('Hail, Holy Queen',
+                        'Hail, holy Queen, Mother of mercy, our life, our sweetness '
+                        'and our hope. To thee do we cry, poor banished children of '
+                        'Eve. To thee do we send up our sighs, mourning and weeping '
+                        'in this valley of tears. Turn then, most gracious advocate, '
+                        'thine eyes of mercy toward us, and after this our exile, '
+                        'show unto us the blessed fruit of thy womb, Jesus. O '
+                        'clement, O loving, O sweet Virgin Mary.'),
+    'versicle': ('Pray for us',
+                 'Pray for us, O holy Mother of God, that we may be made worthy of '
+                 'the promises of Christ.'),
+    'rosary-prayer': ('Let us pray',
+                      'O God, whose only-begotten Son, by his life, death and '
+                      'resurrection, has purchased for us the rewards of eternal '
+                      'life, grant, we beseech thee, that meditating upon these '
+                      'mysteries of the most holy Rosary of the Blessed Virgin '
+                      'Mary, we may imitate what they contain and obtain what they '
+                      'promise, through the same Christ our Lord. Amen.'),
+    'st-michael': ('Prayer to St Michael',
+                   'Saint Michael the Archangel, defend us in battle. Be our '
+                   'protection against the wickedness and snares of the devil. '
+                   'May God rebuke him, we humbly pray; and do thou, O Prince of '
+                   'the heavenly host, by the power of God, thrust into hell Satan '
+                   'and all the evil spirits who prowl about the world seeking the '
+                   'ruin of souls. Amen.'),
+    'memorare': ('The Memorare',
+                 'Remember, O most gracious Virgin Mary, that never was it known '
+                 'that anyone who fled to thy protection, implored thy help, or '
+                 'sought thine intercession was left unaided. Inspired by this '
+                 'confidence, I fly unto thee, O Virgin of virgins, my Mother. To '
+                 'thee do I come, before thee I stand, sinful and sorrowful. O '
+                 'Mother of the Word Incarnate, despise not my petitions, but in '
+                 'thy mercy hear and answer me. Amen.'),
+})
+
+# The beads of the opening and closing prayers, in order:
+# (bead label, name, intention, [prayer keys], bead style, only with "St Michael and Memorare")
+OPENING = [
+    ('\u271D', "The Sign of the Cross and the Apostles' Creed", '', ['sign-of-cross', 'creed'], 'cross', False),
+    ('', 'Our Father', '', ['our-father'], 'large', False),
+    ('1', 'Hail Mary', 'for an increase in faith', ['hail-mary'], '', False),
+    ('2', 'Hail Mary', 'for an increase in hope', ['hail-mary'], '', False),
+    ('3', 'Hail Mary', 'for an increase in charity', ['hail-mary'], '', False),
+    ('Glory Be', 'Glory Be', '', ['glory-be'], 'glory', False),
+]
+CLOSING = [
+    ('Salve', 'Hail, Holy Queen', '', ['hail-holy-queen'], 'glory', False),
+    ('\u2123', 'Pray for us', '', ['versicle'], '', False),
+    ('Prayer', 'Let us pray', '', ['rosary-prayer'], 'glory', False),
+    ('Michael', 'Prayer to St Michael', '', ['st-michael'], 'glory', True),
+    ('Memorare', 'The Memorare', '', ['memorare'], 'glory', True),
+    ('\u271D', 'The Sign of the Cross', '', ['sign-of-cross'], 'cross', False),
+]
+
+
 def _check():
     assert tuple(SETS) and set(SETS) == set(SET_ORDER)
     for key, data in SETS.items():

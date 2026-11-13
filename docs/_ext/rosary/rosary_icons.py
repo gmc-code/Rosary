@@ -451,6 +451,41 @@ def coronation():
     )
 
 
+# ---------------------------------------------------------------- opening / closing
+
+def opening():
+    """A rosary: loop of beads, centre bead and crucifix."""
+    cx, cy, R = 50, 40, 25
+    out = ['<circle class="ri-soft ri-outline" cx="50" cy="50" r="46"/>',
+           '<circle cx="%d" cy="%d" r="%d" fill="none" class="ri-line-thin"/>' % (cx, cy, R)]
+    for i in range(12):
+        a = math.radians(90 + 30 + 300 * i / 11)
+        out.append('<circle class="ri-fill ri-outline" cx="%s" cy="%s" r="4.6"/>'
+                   % (_f(cx + R * math.cos(a)), _f(cy + R * math.sin(a))))
+    out.append('<circle class="ri-gold ri-outline" cx="50" cy="%d" r="5.6"/>' % (cy + R))
+    out.append(cross(50, cy + R + 6, 22, 15, 4.5, 'ri-fill'))
+    return ''.join(out)
+
+
+def closing():
+    """Hail, Holy Queen: a crowned M with stars."""
+    stars = ''.join(star(50 + 38 * math.cos(math.radians(a)), 52 + 38 * math.sin(math.radians(a)), 4, 1.6)
+                    for a in (200, 230, 260, 280, 310, 340))
+    return (
+        '<circle class="ri-soft ri-outline" cx="50" cy="50" r="46"/>' + stars
+        + '<path class="ri-gold ri-outline" d="M34,40 L32,24 L41,32 L50,20 L59,32 L68,24 L66,40 Z"/>'
+        + '<path class="ri-fill ri-outline" d="M27,80 L27,47 L37,47 L50,66 L63,47 L73,47 L73,80 L64,80 '
+          'L64,62 L52,78 L48,78 L36,62 L36,80 Z"/>'
+    )
+
+
+EXTRA_ICONS = {'opening': opening, 'closing': closing}
+
+
+def extra_icon(kind, label):
+    return svg(EXTRA_ICONS[kind](), label)
+
+
 ICONS = {
     'joyful': (annunciation, visitation, nativity, presentation, finding),
     'luminous': (baptism, cana, proclamation, transfiguration, eucharist),

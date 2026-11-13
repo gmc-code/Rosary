@@ -29,28 +29,8 @@ from docutils.parsers.rst import roles
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx_copybutton",
-    "sphinx.ext.todo",
-    "sphinx.ext.autodoc",
-    "sphinx_togglebutton",
-    "sphinx_design",
     "rosary.rosary",
 ]
-
-
-# "sphinx.ext.doctest",
-#     "sphinx.ext.napoleon",
-
-
-# for copybutton to allow use of :class: no-copybutton  in code blocks
-# copybutton_selector = "div:not(.no-copybutton) > div.highlight > pre"
-
-copybutton_exclude = ".no-copybutton"
-
-# copybutton_exclude = ".highlight.no-copybutton, .highlight-python.no-copybutton, .no-copybutton"
-# Only add copy buttons to code blocks that are NOT inside Parsons puzzles
-copybutton_selector = "div.highlight pre:not(.no-copybutton)"
-
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -68,9 +48,6 @@ source_suffix = ".rst"
 
 # The master toctree document.
 master_doc = "index"
-
-# if using To Dos and want them to showup
-todo_include_todos = True
 
 # default python Pygments (syntax highlighting) style to use.
 # for other styles see https://pygments.org/docs/lexers/#lexers-for-python-and-related-languages
@@ -100,6 +77,8 @@ html_theme_options = {
 # "<project> v<release> documentation".
 # html_title = None
 html_title = "Rosary"
+
+rosary_web_app_title = "Rosary"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

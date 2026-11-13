@@ -41,6 +41,14 @@ Options
                      "joyful-1: Fra Angelico, The Annunciation") adds a
                      caption under each mystery's title
     :no-picker:      leave out the reader's choice of picture style and layout
+    :extra-prayers:  the opening and closing prayers: off (default), on (Sign of
+                     the Cross, Creed, Our Father, three Hail Marys, Glory Be;
+                     Hail Holy Queen and the closing prayer) or full (also the
+                     Prayer to St Michael and the Memorare)
+    :fatima:         yes (default) or no: the Fatima prayer (O my Jesus) after
+                     the Glory Be at the end of each decade
+    :hide-title:     hide the page's main heading (it still names the page in
+                     the menu and the browser tab)
     :nav-icons:      style of the small pictures in the mystery picker: same
                      (default, as the main pictures), classic, stained, gold,
                      photo or photo-<key>, e.g. classic icons in the picker
@@ -72,8 +80,8 @@ from docutils.parsers.rst import directives
 from sphinx.util import logging
 from sphinx.util.docutils import SphinxDirective
 
-from .rosary_data import DAY_NAMES, ORDINALS, PRAYERS, SET_ORDER, SETS
-from .rosary_icons import icon
+from .rosary_data import CLOSING, DAY_NAMES, OPENING, ORDINALS, PRAYERS, SET_ORDER, SETS
+from .rosary_icons import extra_icon, icon
 from .rosary_scripture import TEXT, TRANSLATION, TRANSLATION_SHORT
 
 logger = logging.getLogger(__name__)
@@ -135,6 +143,9 @@ class RosaryDirective(SphinxDirective):
         'verses': lambda a: directives.choice(a, ('all', 'current', 'none')),
         'read': lambda a: directives.choice(a, ('step', 'both', 'scripture')),
         'nav-icons': directives.unchanged,
+        'hide-title': directives.flag,
+        'extra-prayers': lambda a: directives.choice(a, ('off', 'on', 'full')),
+        'fatima': lambda a: directives.choice(a, ('yes', 'no')),
     }
 
     def _warn(self, message, *args):
@@ -196,8 +207,17 @@ class RosaryDirective(SphinxDirective):
                     icon(key, i, '') + self._photo_html(key, i, ''), i + 1,
                     _esc(data['mysteries'][i]['title'].replace('The ', '', 1)))
                 for i in range(5))
+            if beads:
+                extra_btn = ('<button type="button" class="rosary-nav-btn rosary-extra" data-index="%d">'
+                             '%s<span>%s</span></button>')
+                nav = nav.replace('aria-label="Choose a mystery">',
+                                  'aria-label="Choose a mystery">' + extra_btn % (
+                                      -1, extra_icon('opening', ''), 'Opening prayers'), 1)
+                nav = nav[:-len('</div>')] + extra_btn % (5, extra_icon('closing', ''), 'Closing prayers') + '</div>'
         body = ''.join(self._mystery_html(key, i, version, captions, scripture, beads, i == indices[0])
                        for i in indices)
+        if beads and not only:
+            body = self._prayers_card('opening', -1) + body + self._prayers_card('closing', 5)
         heading = ('<h3 class="rosary-set-title">The %s Mysteries'
                    '<span class="rosary-days">prayed on %s</span></h3>'
                    % (data['name'], days_text(data['days'])))
@@ -208,6 +228,36 @@ class RosaryDirective(SphinxDirective):
                 ','.join(str(d) for d in data['days']),
                 ' data-hidden="1"' if hidden else '',
                 heading, nav, body))
+
+    def _prayers_card(self, kind, index):
+        """The opening or closing prayers, as a card with its own beads."""
+        plan = OPENING if kind == 'opening' else CLOSING
+        title = 'The Opening Prayers' if kind == 'opening' else 'The Closing Prayers'
+        sub = ('Before the first mystery' if kind == 'opening' else 'After the fifth mystery')
+        items = []
+        for label, name, intent, keys, style, full_only in plan:
+            texts = [PRAYERS[k][1] for k in keys]
+            shown = ''.join('<span class="rosary-prayer-text">%s%s</span>' % (
+                ('<em>%s.</em> ' % _esc(PRAYERS[k][0])) if len(keys) > 1 else '', _esc(PRAYERS[k][1]))
+                for k in keys)
+            items.append(
+                '<li class="rosary-prayer-item%s" data-label="%s" data-style="%s" data-name="%s" '
+                'data-intent="%s" data-text="%s"><strong class="rosary-prayer-name">%s</strong>%s%s</li>' % (
+                    ' rosary-extra-full' if full_only else '', _esc(label), style, _esc(name),
+                    _esc(intent), _esc(' '.join(texts)), _esc(name),
+                    (' <span class="rosary-cap">%s</span>' % _esc(intent)) if intent else '', shown))
+        return (
+            '<article class="rosary-mystery rosary-prayers-card rosary-extra" data-index="%d" data-kind="%s">'
+            '<div class="rosary-head">'
+            '<div class="rosary-icon">%s</div>'
+            '<div><p class="rosary-num">%s</p>'
+            '<h4 class="rosary-mystery-title">%s</h4></div>'
+            '</div>'
+            '<div class="rosary-decade" aria-label="Beads"></div>'
+            '<div class="rosary-controls"></div>'
+            '<div class="rosary-now" aria-live="polite"></div>'
+            '<ol class="rosary-refs rosary-prayer-list">%s</ol>'
+            '</article>' % (index, kind, extra_icon(kind, _esc(title)), _esc(sub), _esc(title), ''.join(items)))
 
     # ------------------------------------------------------------ pictures
 
@@ -385,11 +435,20 @@ class RosaryDirective(SphinxDirective):
             'picker': 'no-picker' not in self.options,
             'photos': bool(self.photosets),
             'photosets': [[ps['style'], ps['label']] for ps in self.photosets],
-            'read': self.options.get('read', 'both'),
+            'read': self.options.get('read') or self.config.rosary_default_read,
+            'extra': self.options.get('extra-prayers') or self.config.rosary_default_extra_prayers,
+            'fatima': (self.options['fatima'] == 'yes') if 'fatima' in self.options
+                      else bool(self.config.rosary_default_fatima),
+            'hideTitle': 'hide-title' in self.options,
         }
         photo_styles = [ps['style'] for ps in self.photosets]
-        style = (self.options.get('icons') or '').strip().lower() or (
-            'photo' if self.photos and 'images' in self.options else 'classic')
+        style = (self.options.get('icons') or '').strip().lower()
+        if not style:
+            # site default (conf.py rosary_default_icons); quietly classic if missing
+            style = 'photo' if self.photos and 'images' in self.options else (
+                self.config.rosary_default_icons or 'classic').strip().lower()
+            if style.startswith('photo') and style not in photo_styles and style != 'photo':
+                style = 'classic'
         if style.startswith('photo') and style not in photo_styles:
             if photo_styles and style == 'photo':
                 style = photo_styles[0]
@@ -405,10 +464,12 @@ class RosaryDirective(SphinxDirective):
                                 (style, photo_styles[0] if photo_styles else ''))
 
         # the mystery picker can have its own picture style
-        nav_style = (self.options.get('nav-icons') or 'same').strip().lower()
+        nav_style = (self.options.get('nav-icons') or self.config.rosary_default_nav_icons
+                     or 'same').strip().lower()
         if nav_style != 'same' and not (nav_style in ICON_STYLES[:-1] or nav_style in photo_styles):
-            self._warn(':nav-icons: %s is not a picture style here - the picker matches the '
-                       'main pictures.', nav_style)
+            if 'nav-icons' in self.options:
+                self._warn(':nav-icons: %s is not a picture style here - the picker matches the '
+                           'main pictures.', nav_style)
             nav_style = 'same'
         config['navIcons'] = nav_style
         if nav_style == 'same':
@@ -430,8 +491,10 @@ class RosaryDirective(SphinxDirective):
         credit = ('<p class="rosary-credit">Scripture: %s (public domain).</p>' % TRANSLATION
                   if scripture or config['audio'] else '')
         html_output = (
-            '<div class="rosary-block" data-icons="%s" data-photoset="%s" data-layout="%s" data-verses="%s" data-config="%s"%s>%s%s%s%s</div>'
-            % (data_icons, photoset, self.options.get('layout', 'phone'), self.options.get('verses', 'all'), _esc(json.dumps(config)),
+            '<div class="rosary-block" data-icons="%s" data-photoset="%s" data-layout="%s" data-verses="%s" data-extra="%s" data-config="%s"%s>%s%s%s%s</div>'
+            % (data_icons, photoset, self.options.get('layout') or self.config.rosary_default_layout,
+               self.options.get('verses') or self.config.rosary_default_verses, config['extra'],
+               _esc(json.dumps(config)),
                prayers_attr, title_html, tabs, sets, credit))
         return [nodes.raw('', html_output, format='html')]
 
@@ -463,14 +526,56 @@ def _copy_images(app, exception):
             shutil.copy2(src, dst)
 
 
+def _web_app_tags(app, exception):
+    """Let phones save the site to the Home Screen as a full-screen app.
+
+    Adds the tags to the <head> of every built page after the build, so it
+    works whatever the theme does with Sphinx's metatags.
+    """
+    if exception or not app.config.rosary_web_app or app.builder.format != 'html':
+        return
+    title = html.escape(app.config.rosary_web_app_title or app.config.project or 'Rosary', quote=True)
+    outdir = Path(app.outdir)
+    for page in outdir.rglob('*.html'):
+        try:
+            text = page.read_text(encoding='utf-8')
+        except (OSError, UnicodeDecodeError):
+            continue
+        if 'apple-mobile-web-app-capable' in text or '</head>' not in text:
+            continue
+        up = os.path.relpath(outdir / '_static', page.parent).replace(os.sep, '/')
+        tags = (
+            '<meta name="apple-mobile-web-app-capable" content="yes">\n'
+            '<meta name="mobile-web-app-capable" content="yes">\n'
+            '<meta name="apple-mobile-web-app-status-bar-style" content="default">\n'
+            '<meta name="apple-mobile-web-app-title" content="%s">\n'
+            '<meta name="theme-color" content="#02024e">\n'
+            '<link rel="apple-touch-icon" href="%s/rosary-touch-icon.png">\n'
+            '<link rel="manifest" href="%s/rosary-manifest.json">\n' % (title, up, up))
+        page.write_text(text.replace('</head>', tags + '</head>', 1), encoding='utf-8')
+
+
 def setup(app):
     app.add_directive('rosary', RosaryDirective)
+    # Home Screen app support (full screen on iPhone, no Safari bars)
+    app.add_config_value('rosary_web_app', True, 'html')
+    app.add_config_value('rosary_web_app_title', '', 'html')
+    app.connect('build-finished', _web_app_tags)
     # folder of traditional paintings offered on every rosary ("" to turn off)
     app.add_config_value('rosary_images', '/_static/rosary-images', 'env')
     # every picture folder offered in the Pictures menu: [(key, label, folder), ...]
     # None = Traditional paintings (rosary_images) + Stained glass windows
     # (/_static/rosary-images_sg); folders that are missing or empty are skipped
     app.add_config_value('rosary_image_sets', None, 'env')
+    # site-wide starting choices; a page's directive options and each reader's
+    # own menu choices take over from these
+    app.add_config_value('rosary_default_icons', 'photo-sg', 'env')      # classic, stained, gold, photo, photo-sg
+    app.add_config_value('rosary_default_nav_icons', 'classic', 'env')   # same, classic, stained, gold, photo...
+    app.add_config_value('rosary_default_layout', 'phone', 'env')        # phone, compact, side, large
+    app.add_config_value('rosary_default_verses', 'current', 'env')      # all, current, none
+    app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture
+    app.add_config_value('rosary_default_extra_prayers', 'on', 'env')    # off, on, full
+    app.add_config_value('rosary_default_fatima', True, 'env')           # O my Jesus after each Glory Be
     app.connect('env-purge-doc', _purge)
     app.connect('env-merge-info', _merge)
     app.connect('build-finished', _copy_images)

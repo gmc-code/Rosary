@@ -147,7 +147,8 @@
             showPrayers: !!config.prayers,
             auto: false,            // praying aloud, bead after bead
             speaking: null,         // mystery element being read
-            read: ['step', 'both', 'scripture'].indexOf(config.read) !== -1 ? config.read : 'both'
+            read: ['step', 'both', 'scripture'].indexOf(config.read) !== -1 ? config.read : 'both',
+            fatima: config.fatima !== false      // O my Jesus after each Glory Be
         };
         var refreshers = [];
         function refreshAll() { refreshers.forEach(function (f) { f(); }); }
@@ -211,6 +212,15 @@
         }
         applyPhotoset();
 
+        function extraOn() {
+            var x = block.getAttribute('data-extra');
+            return x === 'on' || x === 'full';
+        }
+        var savedExtra = store('rosary-extra');
+        if (['off', 'on', 'full'].indexOf(savedExtra) !== -1 && block.querySelector('.rosary-prayers-card')) {
+            block.setAttribute('data-extra', savedExtra);
+        }
+
         /* ---------------- toolbar: picture style, voice and speed */
         var bar = null;
 
@@ -244,11 +254,18 @@
         topbar.appendChild(hideBtn);
         var showBtn = button('rosary-show-menus', '\u2630 Menus', 'Show the menus again');
         block.insertBefore(showBtn, topbar);
+        // Hide menus also hides the page title and the site's header bar
         var setMenus = function (hidden) {
             block.classList.toggle('rosary-menus-hidden', hidden);
+            document.documentElement.classList.toggle('rosary-page-focus', hidden);
             store('rosary-menus-hidden', hidden ? '1' : '0');
+            if (block.rosaryWiden) block.rosaryWiden();
         };
-        if (store('rosary-menus-hidden') === '1') block.classList.add('rosary-menus-hidden');
+        if (store('rosary-menus-hidden') === '1') {
+            block.classList.add('rosary-menus-hidden');
+            document.documentElement.classList.add('rosary-page-focus');
+        }
+        if (config.hideTitle) document.documentElement.classList.add('rosary-hide-title');
         hideBtn.addEventListener('click', function () { setMenus(true); });
         showBtn.addEventListener('click', function () { setMenus(false); });
         if (config.picker) {
@@ -330,6 +347,33 @@
                 verLabel.appendChild(verSelect);
                 bar.appendChild(verLabel);
             }
+
+            /* the opening and closing prayers of the rosary */
+            if (block.querySelector('.rosary-prayers-card')) {
+                var exLabel = el('label', 'rosary-audio-field', 'Opening & closing ');
+                var exSelect = el('select', 'rosary-select');
+                [['off', 'Off'], ['on', 'On'], ['full', 'On, with St Michael and Memorare']].forEach(function (v) {
+                    var o = el('option', '', v[1]);
+                    o.value = v[0];
+                    exSelect.appendChild(o);
+                });
+                exSelect.value = block.getAttribute('data-extra') || 'off';
+                exSelect.addEventListener('change', function () {
+                    var wasOn = extraOn();
+                    block.setAttribute('data-extra', exSelect.value);
+                    store('rosary-extra', exSelect.value);
+                    stopAuto();
+                    sets.forEach(function (set) {
+                        if (!set.rosaryShowMystery) return;
+                        var act = set.querySelector('.rosary-mystery.rosary-active');
+                        if (!extraOn() && act && act.classList.contains('rosary-extra')) set.rosaryShowMystery(0);
+                        else if (extraOn() && !wasOn && !set.querySelector('.rosary-bead.rosary-here')) set.rosaryShowMystery(-1);
+                    });
+                    refreshAll();
+                });
+                exLabel.appendChild(exSelect);
+                bar.appendChild(exLabel);
+            }
         }
 
         /* Show the prayers: one checkbox for the whole rosary, in the Options panel */
@@ -347,6 +391,22 @@
             prayersBox.addEventListener('change', function () {
                 state.showPrayers = prayersBox.checked;
                 store('rosary-prayers', state.showPrayers ? '1' : '0');
+                refreshAll();
+            });
+
+            var savedFatima = store('rosary-fatima');
+            if (savedFatima === '1' || savedFatima === '0') state.fatima = savedFatima === '1';
+            var faLabel = el('label', 'rosary-audio-field rosary-prayers-field');
+            faLabel.title = 'O my Jesus, after the Glory Be at the end of each decade';
+            var fatimaBox = el('input');
+            fatimaBox.type = 'checkbox';
+            fatimaBox.checked = state.fatima;
+            faLabel.appendChild(fatimaBox);
+            faLabel.appendChild(document.createTextNode(' Fatima prayer'));
+            bar.appendChild(faLabel);
+            fatimaBox.addEventListener('change', function () {
+                state.fatima = fatimaBox.checked;
+                store('rosary-fatima', state.fatima ? '1' : '0');
                 refreshAll();
             });
         }
@@ -496,6 +556,7 @@
 
         /* ---------------- each set: mystery picker */
         sets.forEach(function (set) {
+            if (config.beads) addPresentControls(set);
             var mysteries = Array.prototype.slice.call(set.querySelectorAll('.rosary-mystery'));
             var navButtons = Array.prototype.slice.call(set.querySelectorAll('.rosary-nav-btn'));
 
@@ -515,19 +576,168 @@
                 });
             });
 
+            // cards that are switched on: the opening and closing prayers only with
+            // the Opening & closing option
+            function enabled(m) { return !m.classList.contains('rosary-extra') || extraOn(); }
             mysteries.forEach(function (m, mi) {
-                if (config.beads) initDecade(m, function () {
-                    // after the Glory Be: on to the next mystery of the set
-                    if (mi + 1 < mysteries.length && navButtons.length) {
-                        showMystery(Number(mysteries[mi + 1].getAttribute('data-index')));
-                        mysteries[mi + 1].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                        mysteries[mi + 1].rosaryGo(0);
+                if (!config.beads) return;
+                var onFinish = function () {
+                    // after the last bead: on to the next card of the set
+                    if (!navButtons.length) return false;
+                    for (var j = mi + 1; j < mysteries.length; j++) {
+                        if (!enabled(mysteries[j])) continue;
+                        showMystery(Number(mysteries[j].getAttribute('data-index')));
+                        mysteries[j].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        mysteries[j].rosaryGo(0);
                         return true;
                     }
                     return false;
+                };
+                if (m.classList.contains('rosary-prayers-card')) initPrayers(m, onFinish);
+                else initDecade(m, onFinish);
+            });
+            set.rosaryShowMystery = showMystery;
+        });
+        if (extraOn()) sets.forEach(function (set) { if (set.rosaryShowMystery) set.rosaryShowMystery(-1); });
+
+        /* ---------------- the opening or closing prayers: one bead per prayer */
+        function initPrayers(card, onFinish) {
+            var decade = card.querySelector('.rosary-decade');
+            var controls = card.querySelector('.rosary-controls');
+            var now = card.querySelector('.rosary-now');
+            var items = Array.prototype.slice.call(card.querySelectorAll('.rosary-prayer-list > li'));
+            var beads = [];
+            var pos = -1;
+
+            function active(i) {
+                return !items[i].classList.contains('rosary-extra-full') ||
+                       block.getAttribute('data-extra') === 'full';
+            }
+            function nextIndex(from) { for (var j = from + 1; j < items.length; j++) if (active(j)) return j; return -1; }
+            function prevIndex(from) { for (var j = from - 1; j >= 0; j--) if (active(j)) return j; return -1; }
+
+            items.forEach(function (li, i) {
+                var st = li.getAttribute('data-style');
+                if (i > 0) decade.appendChild(el('span', 'rosary-chain' + (li.classList.contains('rosary-extra-full') ? ' rosary-extra-full' : '')));
+                var cls = st === 'large' ? 'rosary-bead--large' : (st === 'glory' || st === 'cross') ? 'rosary-bead--glory' : '';
+                var b = button('rosary-bead ' + cls, li.getAttribute('data-label'));
+                b.setAttribute('aria-label', li.getAttribute('data-name'));
+                if (li.classList.contains('rosary-extra-full')) b.classList.add('rosary-extra-full');
+                b.addEventListener('click', function () { go(i, true); });
+                beads.push(b);
+                decade.appendChild(b);
+                li.classList.add('rosary-step');
+                li.addEventListener('click', function (e) {
+                    if (e.target.closest && e.target.closest('a')) return;
+                    go(i, true);
                 });
             });
-        });
+
+            var prev = button('rosary-btn', '\u25C0 Back');
+            var next = button('rosary-btn rosary-btn--primary', 'Begin \u25B6');
+            controls.appendChild(prev);
+            controls.appendChild(next);
+            var listen = null, auto = null;
+            if (audio) {
+                listen = button('rosary-btn rosary-btn--audio', '\uD83D\uDD0A Listen', 'Read this prayer aloud');
+                auto = button('rosary-btn rosary-btn--audio', '\u25B6 Pray aloud', 'Read the prayers aloud, one after another');
+                controls.appendChild(listen);
+                controls.appendChild(auto);
+            }
+            var present = button('rosary-btn rosary-btn--present', '\u26F6 Present', 'Show full screen');
+            controls.appendChild(present);
+            present.addEventListener('click', function () {
+                var set = card.closest('.rosary-set');
+                if (set.classList.contains('rosary-presenting')) { endPresent(set); return; }
+                var start = function () {
+                    set.classList.add('rosary-presenting');
+                    updatePhotos();
+                    if (pos < 0) go(0, true);
+                };
+                if (FULLSCREEN) set.requestFullscreen().then(start).catch(function () { pseudoPresent(set, start); });
+                else pseudoPresent(set, start);
+            });
+
+            prev.addEventListener('click', function () { var p = prevIndex(pos); if (p !== -1) go(p, true); });
+            next.addEventListener('click', function () { advance(true); });
+            if (listen) listen.addEventListener('click', function () {
+                if (state.speaking === card && !state.auto) { stopAuto(); return; }
+                state.auto = false;
+                if (pos < 0) go(0, false);
+                speakBead(null);
+            });
+            if (auto) auto.addEventListener('click', function () {
+                if (state.auto && state.speaking === card) { stopAuto(); return; }
+                state.auto = true;
+                if (pos < 0 || nextIndex(pos) === -1) go(0, false);
+                else speakBead(autoNext);
+            });
+
+            function advance(manual) {
+                var n = nextIndex(pos);
+                if (n === -1) {
+                    if (!onFinish()) {
+                        if (manual) go(-1, true);
+                        else stopAuto();
+                    }
+                } else {
+                    go(n, manual);
+                }
+            }
+            function autoNext() {
+                if (!state.auto) return;
+                setTimeout(function () { if (state.auto) advance(false); }, 700);
+            }
+            function speakBead(done) {
+                var li = items[pos];
+                if (!li) return;
+                state.speaking = card;
+                refreshAll();
+                var intent = li.getAttribute('data-intent');
+                speak([intent ? li.getAttribute('data-name') + ', ' + intent + '.' : '', li.getAttribute('data-text')], function () {
+                    if (!state.auto) { state.speaking = null; refreshAll(); }
+                    if (done) done();
+                });
+            }
+            function render() {
+                beads.forEach(function (b, i) {
+                    b.classList.toggle('rosary-here', i === pos);
+                    b.classList.toggle('rosary-done', pos >= 0 && i < pos);
+                });
+                items.forEach(function (li, i) { li.classList.toggle('rosary-here', i === pos); });
+                prev.disabled = prevIndex(pos) === -1;
+                next.textContent = pos < 0 ? 'Begin \u25B6' : (nextIndex(pos) === -1 ? 'Finish \u2714' : 'Next \u25B6');
+                var speakingHere = state.speaking === card;
+                if (listen) {
+                    listen.textContent = speakingHere && !state.auto ? '\u25A0 Stop' : '\uD83D\uDD0A Listen';
+                    listen.classList.toggle('rosary-on', speakingHere && !state.auto);
+                }
+                if (auto) {
+                    auto.textContent = state.auto && speakingHere ? '\u25A0 Stop' : '\u25B6 Pray aloud';
+                    auto.classList.toggle('rosary-on', state.auto && speakingHere);
+                }
+                now.classList.toggle('rosary-speaking', speakingHere);
+                now.textContent = '';
+                var li = items[pos];
+                if (!li) return;
+                var intent = li.getAttribute('data-intent');
+                now.appendChild(el('span', 'rosary-now-label', li.getAttribute('data-name') + (intent ? ' \u2013 ' + intent : '')));
+                li.querySelectorAll('.rosary-prayer-text').forEach(function (t) {
+                    now.appendChild(el('p', 'rosary-now-prayer rosary-now-prayer-always', t.textContent));
+                });
+            }
+            function go(index, manual) {
+                pos = Math.max(-1, Math.min(items.length - 1, index));
+                if (pos >= 0 && !active(pos)) pos = nextIndex(pos) === -1 ? prevIndex(pos) : nextIndex(pos);
+                if (manual && state.speaking && !state.auto) { state.speaking = null; stopSpeech(); }
+                render();
+                if (state.auto && pos >= 0) speakBead(autoNext);
+                else if (manual && state.speaking === null) refreshAll();
+            }
+            card.rosaryGo = function (index) { go(index, false); };
+            refreshers.push(render);
+            render();
+        }
 
         /* ---------------- one decade */
         function initDecade(mystery, onFinish) {
@@ -572,20 +782,23 @@
                 controls.appendChild(auto);
             }
 
-            if (FULLSCREEN) {
-                var present = button('rosary-btn rosary-btn--present', '\u26F6 Present',
-                                     'Show this mystery full screen (arrow keys move through the beads, Esc to finish)');
-                controls.appendChild(present);
-                present.addEventListener('click', function () {
-                    var set = mystery.closest('.rosary-set');
-                    if (document.fullscreenElement) { document.exitFullscreen(); return; }
-                    set.requestFullscreen().then(function () {
-                        set.classList.add('rosary-presenting');
-                        updatePhotos();
-                        if (pos < 0) go(0, true);
-                    }).catch(function () { /* refused */ });
-                });
-            }
+            var present = button('rosary-btn rosary-btn--present', '\u26F6 Present',
+                                 'Show this mystery full screen (arrow keys or swipes move through the beads)');
+            controls.appendChild(present);
+            present.addEventListener('click', function () {
+                var set = mystery.closest('.rosary-set');
+                if (set.classList.contains('rosary-presenting')) { endPresent(set); return; }
+                var start = function () {
+                    set.classList.add('rosary-presenting');
+                    updatePhotos();
+                    if (pos < 0) go(0, true);
+                };
+                if (FULLSCREEN) {
+                    set.requestFullscreen().then(start).catch(function () { pseudoPresent(set, start); });
+                } else {
+                    pseudoPresent(set, start);     // iPhone: fill the browser window instead
+                }
+            });
 
             var toggle = null;
             if (!prayersBox) {     // no Options panel on this rosary: keep a checkbox here
@@ -651,8 +864,9 @@
                     return read.concat([p && prayers['hail-mary'] ? prayers['hail-mary'][1] : '']);
                 }
                 if (pos === 11) {
-                    return p ? [prayers['glory-be'] ? prayers['glory-be'][1] : '', prayers.fatima ? prayers.fatima[1] : '']
-                             : ['Glory be to the Father, and to the Son, and to the Holy Spirit.'];
+                    var fatima = state.fatima && prayers.fatima ? prayers.fatima[1] : '';
+                    return p ? [prayers['glory-be'] ? prayers['glory-be'][1] : '', fatima]
+                             : ['Glory be to the Father, and to the Son, and to the Holy Spirit.', fatima];
                 }
                 return [];
             }
@@ -712,7 +926,10 @@
                 } else {
                     label = 'Glory Be';
                     line = el('div', '', 'End of the ' + ordinal.toLowerCase() + '.');
-                    if (state.showPrayers) { extra.push(prayer('glory-be')); extra.push(prayer('fatima')); }
+                    if (state.showPrayers) {
+                        extra.push(prayer('glory-be'));
+                        if (state.fatima) extra.push(prayer('fatima'));
+                    }
                 }
                 now.appendChild(el('span', 'rosary-now-label', label));
                 now.appendChild(line);
@@ -771,35 +988,83 @@
     }
 
     document.addEventListener('click', function (e) {
-        if (document.fullscreenElement) return;
+        if (presentingSet()) return;
         var img = e.target.closest && e.target.closest('.rosary-icon .rosary-photo[data-full]');
         if (img) showPainting(img);
     });
 
-    /* Present mode: leaving full screen, and keys to move through the beads */
-    document.addEventListener('fullscreenchange', function () {
-        if (document.fullscreenElement) return;
-        document.querySelectorAll('.rosary-presenting').forEach(function (set) {
-            set.classList.remove('rosary-presenting');
-            var block = set.closest('.rosary-block');
-            if (block && block.rosaryUpdatePhotos) block.rosaryUpdatePhotos();
-        });
-    });
-    document.addEventListener('keydown', function (e) {
-        var set = document.fullscreenElement;
-        if (!set || !set.classList.contains('rosary-presenting')) return;
-        if (e.target.closest && e.target.closest('select, input')) return;
+    /* Present mode -------------------------------------------------------
+     * Real full screen where the browser allows it; otherwise (iPhone Safari)
+     * the set fills the browser window. An Exit button, Esc, the arrow keys
+     * and left/right swipes work in both. */
+    function stopPresent(set) {
+        set.classList.remove('rosary-presenting', 'rosary-pseudo-fs');
+        document.documentElement.classList.remove('rosary-noscroll');
+        var block = set.closest('.rosary-block');
+        if (block && block.rosaryUpdatePhotos) block.rosaryUpdatePhotos();
+    }
+    function endPresent(set) {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else stopPresent(set);
+    }
+    function pseudoPresent(set, start) {
+        set.classList.add('rosary-pseudo-fs');
+        document.documentElement.classList.add('rosary-noscroll');
+        start();
+        set.scrollTop = 0;
+    }
+    function presentingSet() {
+        var fs = document.fullscreenElement;
+        if (fs && fs.classList.contains('rosary-presenting')) return fs;
+        return document.querySelector('.rosary-set.rosary-pseudo-fs.rosary-presenting');
+    }
+    function step(set, forward) {
         var m = set.querySelector('.rosary-mystery.rosary-active');
         if (!m) return;
+        if (forward) {
+            m.querySelector('.rosary-btn--primary').click();
+        } else {
+            var back = m.querySelector('.rosary-controls .rosary-btn:not(.rosary-btn--primary)');
+            if (back && !back.disabled) back.click();
+        }
+    }
+    // an Exit button inside each set, shown only while presenting, and swipes
+    function addPresentControls(set) {
+        {
+            var exit = button('rosary-exit-present', '\u2715 Exit', 'Finish presenting');
+            exit.addEventListener('click', function () { endPresent(set); });
+            set.insertBefore(exit, set.firstChild);
+            // swipe left = next bead, swipe right = back
+            var x0 = null, y0 = null;
+            set.addEventListener('touchstart', function (e) {
+                if (!set.classList.contains('rosary-presenting') || e.touches.length !== 1) return;
+                x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+            }, { passive: true });
+            set.addEventListener('touchend', function (e) {
+                if (x0 === null) return;
+                var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+                x0 = null;
+                if (Math.abs(dx) > 60 && Math.abs(dx) > 2 * Math.abs(dy)) step(set, dx < 0);
+            }, { passive: true });
+        }
+    }
+    document.addEventListener('fullscreenchange', function () {
+        if (document.fullscreenElement) return;
+        document.querySelectorAll('.rosary-presenting:not(.rosary-pseudo-fs)').forEach(stopPresent);
+    });
+    document.addEventListener('keydown', function (e) {
+        var set = presentingSet();
+        if (!set) return;
+        if (e.key === 'Escape' && set.classList.contains('rosary-pseudo-fs')) { stopPresent(set); return; }
+        if (e.target.closest && e.target.closest('select, input')) return;
         var nextKeys = ['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'];
         var prevKeys = ['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'];
         if (nextKeys.indexOf(e.key) !== -1) {
             e.preventDefault();
-            m.querySelector('.rosary-btn--primary').click();
+            step(set, true);
         } else if (prevKeys.indexOf(e.key) !== -1) {
             e.preventDefault();
-            var back = m.querySelector('.rosary-controls .rosary-btn:not(.rosary-btn--primary)');
-            if (back && !back.disabled) back.click();
+            step(set, false);
         }
     });
 

@@ -116,6 +116,19 @@ Options
    * - ``:no-picker:``
      - Leave out the **Pictures** and **Layout** menus, so the page always uses
        ``:icons:`` and ``:layout:``.
+   * - ``:extra-prayers:``
+     - The opening and closing prayers: ``off``, ``on`` (Sign of the Cross,
+       Apostles' Creed, Our Father, three Hail Marys, Glory Be; Hail Holy
+       Queen, versicle, closing prayer, Sign of the Cross) or ``full`` (also
+       the Prayer to St Michael and the Memorare). Readers can change it in
+       the **Opening & closing** menu.
+   * - ``:fatima:``
+     - ``yes`` (default) or ``no``: the Fatima prayer (O my Jesus) after the
+       Glory Be at the end of each decade. Readers can change it with the
+       **Fatima prayer** checkbox.
+   * - ``:hide-title:``
+     - Hide the page's main heading. It still names the page in the menu
+       and the browser tab.
    * - ``:nav-icons:``
      - Picture style for the mystery picker's small pictures: ``same``
        (default, as the main pictures), ``classic``, ``stained``, ``gold``,
@@ -305,6 +318,48 @@ painting for every mystery, with a ready-made ``credits.txt``. The pictures are 
 the built site automatically. Square pictures work best: they are cropped to
 fill the frame. Use only pictures you have the right to publish, such as your
 own photos.
+
+
+Site-wide starting choices
+==========================
+
+Each option above can be set for one page in its directive. The starting
+choices for every rosary on the site are set in ``conf.py``; these are the
+defaults:
+
+.. code-block:: python
+
+    rosary_default_icons = "photo-sg"        # classic, stained, gold, photo, photo-sg
+    rosary_default_nav_icons = "classic"     # same, classic, stained, gold, photo, photo-sg
+    rosary_default_layout = "phone"          # phone, compact, side, large
+    rosary_default_verses = "current"        # all, current, none
+    rosary_default_read = "step"             # step, both, scripture
+    rosary_default_extra_prayers = "on"      # off, on, full
+    rosary_default_fatima = True             # O my Jesus after each Glory Be
+
+A picture style whose folder is missing falls back to ``classic``. A
+reader's own choices from the **Options** menus are kept in their browser
+and take over from these.
+
+The opening and closing prayers are ``OPENING`` and ``CLOSING`` in
+``rosary_data.py``: one entry per bead, with its label, name, intention and
+prayers (keys of ``PRAYERS``).
+
+
+Home Screen app
+===============
+
+So the site can be saved to a phone's Home Screen and open full screen, the
+extension adds these to the ``<head>`` of every page after the build: the
+``apple-mobile-web-app-capable`` and ``mobile-web-app-capable`` tags, an
+``apple-touch-icon`` (``_static/rosary-touch-icon.png``) and a web app
+manifest (``_static/rosary-manifest.json``). They are added to the built
+pages themselves, so they work with any theme. In ``conf.py``:
+
+.. code-block:: python
+
+    rosary_web_app = True            # False to leave the tags out
+    rosary_web_app_title = "Rosary"  # name under the icon (default: project)
 
 
 Changing the references

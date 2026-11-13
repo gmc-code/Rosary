@@ -753,7 +753,7 @@ a.rosary-ref { text-decoration: underline dotted; }
         align-self: start;
         justify-self: center;
         position: sticky;
-        top: 4.5rem;
+        top: var(--rosary-sticky-top, 4.5rem);
         height: auto;
         width: min(100%, calc(100vh - 6rem));
         aspect-ratio: 1 / 1;
@@ -839,7 +839,7 @@ ol.rosary-refs > li.rosary-step:hover:not(.rosary-here) { background: rgba(127, 
         grid-column: 1;
         grid-row: 1 / span 5;
         position: sticky;
-        top: 4.5rem;
+        top: var(--rosary-sticky-top, 4.5rem);
         width: 100%;
         height: auto;
         aspect-ratio: 1 / 1;
@@ -879,6 +879,92 @@ ol.rosary-refs > li.rosary-step:hover:not(.rosary-here) { background: rgba(127, 
     .rosary-block[data-layout="phone"] .rosary-icon { width: min(100%, 22em); height: auto; aspect-ratio: 1 / 1; }
     .rosary-block[data-layout="phone"][data-icons="photo"] .rosary-icon.rosary-has-photo { aspect-ratio: 9 / 16; padding: 0; border: 6px solid #2b2724; border-radius: 1.6em; background: #1a1613; }
     .rosary-block[data-layout="phone"][data-icons="photo"] .rosary-icon.rosary-has-photo .rosary-photo { object-fit: contain; border-radius: 0; }
+}
+
+
+/* Hide menus: also the page title and the site header bar; :hide-title: ---- */
+html.rosary-page-focus .sy-head,
+html.rosary-page-focus .sy-breadcrumbs,
+html.rosary-page-focus header.bd-header,
+html.rosary-page-focus .wy-nav-top,
+html.rosary-page-focus article h1,
+html.rosary-hide-title article h1 { display: none !important; }
+html.rosary-page-focus { --rosary-sticky-top: 0.6rem; }
+/* the space Shibuya leaves for its fixed header bar */
+html.rosary-page-focus main, html.rosary-page-focus .sy-main { padding-top: 0 !important; margin-top: 0 !important; }
+html.rosary-page-focus article { padding-top: 0 !important; }
+
+/* Present without full screen (iPhone): the set fills the browser window --- */
+html.rosary-noscroll, html.rosary-noscroll body { overflow: hidden; }
+.rosary-set.rosary-pseudo-fs {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: max(2vh, env(safe-area-inset-top));
+    padding-bottom: max(2vh, env(safe-area-inset-bottom));
+}
+.rosary-pseudo-fs .rosary-mystery.rosary-active { height: auto; min-height: 94dvh; }
+.rosary-exit-present { display: none; }
+.rosary-presenting .rosary-exit-present {
+    display: block;
+    position: fixed;
+    top: max(0.6em, env(safe-area-inset-top));
+    right: 0.8em;
+    z-index: 10001;
+    padding: 0.3em 0.9em;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 2em;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font: inherit;
+    font-size: 0.9em;
+    cursor: pointer;
+}
+/* phones in Present: picture on top, then title, beads and verse */
+@media (max-width: 699px) {
+    .rosary-presenting .rosary-mystery.rosary-active {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto auto;
+    }
+    .rosary-presenting .rosary-icon,
+    .rosary-block[data-icons] .rosary-presenting .rosary-icon.rosary-has-photo {
+        grid-column: 1; grid-row: 1; height: 58vh; height: 58dvh; position: static;
+    }
+    .rosary-presenting .rosary-head > div:last-child { grid-column: 1; grid-row: 2; padding-top: 0.6em; text-align: center; }
+    .rosary-presenting .rosary-decade { grid-column: 1; grid-row: 3; justify-content: center; }
+    .rosary-presenting .rosary-controls { grid-column: 1; grid-row: 4; justify-content: center; }
+    .rosary-presenting .rosary-now { grid-column: 1; grid-row: 5; max-height: none; }
+    .rosary-presenting .rosary-mystery-title { font-size: 1.3em; }
+    .rosary-presenting .rosary-btn--present { display: none; }
+}
+
+
+/* opening and closing prayers: data-extra = off | on | full --------------- */
+.rosary-block:not([data-extra="on"]):not([data-extra="full"]) .rosary-extra { display: none !important; }
+.rosary-block:not([data-extra="full"]) .rosary-extra-full { display: none !important; }
+.rosary-block[data-extra="on"] .rosary-nav,
+.rosary-block[data-extra="full"] .rosary-nav { grid-template-columns: repeat(7, 1fr); }
+.rosary-prayer-name { color: var(--r-ink); }
+.rosary-prayer-text {
+    display: block;
+    margin: 0.2em 0 0.35em;
+    padding-left: 0.7em;
+    border-left: 3px solid var(--r-soft2);
+    font-style: italic;
+    line-height: 1.45;
+    color: var(--r-text);
+}
+.rosary-prayer-text em { font-style: normal; font-weight: 700; }
+/* with "Current step only", only the prayer being said shows its words */
+.rosary-block[data-verses="current"] .rosary-prayer-list > li:not(.rosary-here) .rosary-prayer-text { display: none; }
+.rosary-block[data-verses="current"] .rosary-prayers-card .rosary-now-prayer-always { display: none; }
+.rosary-prayers-card .rosary-bead--glory { font-size: 0.72em; }
+@media print {
+    .rosary-block[data-verses="current"] .rosary-prayer-list .rosary-prayer-text { display: block !important; }
 }
 
 /* dark mode (Shibuya adds class "dark" to <html>) */
