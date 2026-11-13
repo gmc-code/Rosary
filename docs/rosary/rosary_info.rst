@@ -92,7 +92,8 @@ Starting choices
 
 The first time someone opens the site, it starts on **Stained glass
 windows** pictures, **Classic** icons in the mystery picker, the
-**Phone-size picture** layout, **Current step, in the panel** verses and **Step
+**Automatic** layout (which picks Desktop, iPad or iPhone to fit the
+screen), with pictures shown, **Current step, in the panel** verses and **Step
 only** read aloud, with the opening and closing prayers and the Fatima
 prayer on. After that, the
 page remembers each reader's own choices from the **Options** menus.
@@ -133,8 +134,8 @@ della Misericordia*, and a stained-glass window of each. In the drawn styles
 they show a rosary and a crowned M.
 
 
-Layout and presenting
-=====================
+Layout and full screen
+======================
 
 The top row holds the four sets (hover over one to see its days), then:
 
@@ -142,7 +143,8 @@ The top row holds the four sets (hover over one to see its days), then:
   three groups, side by side on a wide screen and one above another on a
   phone:
 
-  * **Pictures:** **Pictures**, **Mystery picker** and **Layout**.
+  * **Pictures:** **Pictures**, **Mystery picker**, **Layout** and **Show
+    pictures**.
   * **Prayers:** **Opening & closing**, **Scripture verses**, **Show the prayers** and
     **Fatima prayer**.
   * **Reading aloud:** **Voice**, **Read aloud**, **Speed** and **Read prayer
@@ -159,16 +161,31 @@ mysteries. *Same as pictures* matches the main pictures; choose another style
 to mix them, e.g. simple **Classic** icons (the starting choice) in the picker
 with **Stained glass windows** as the main pictures.
 
-**Layout** (under **Options**) arranges each mystery:
+**Layout** (under **Options**) arranges each mystery for the size of
+screen:
 
-* **Phone-size picture** (the usual layout): the picture on the left, about
-  the size of a phone screen, with the title, beads and the ten steps listed
-  beside it. The picture stays in view while the steps are scrolled.
-* **Compact**: a small picture beside the title, with everything else below.
-* **Large picture beside details**: the picture on the left, as large as the
-  screen allows, with the details in a column on the right.
+* **Automatic (fits the screen)** (the starting choice): chooses iPhone on a
+  narrow screen, iPad on a medium one and Desktop on a wide one, and changes
+  if the window is resized or a tablet is turned.
+* **Desktop**: for a computer or large screen. The picture is as large as the
+  screen allows on the left, shown whole, with the title, beads, buttons,
+  current passage and the ten steps in a column on the right. On a wide
+  screen the rosary also spreads into the empty space beside the page.
+* **iPad**: the picture on the left, about the size of a tablet, with the
+  title, beads and the ten steps beside it. The picture stays in view while
+  the steps are scrolled.
+* **iPhone**: the picture across the top, as large as fits, then the title,
+  smaller beads and buttons in one row (**Full screen** shows as just its ⛶
+  icon), the current passage and the steps. The set tabs shorten to
+  *Joyful*, *Luminous* and so on, and the mystery picker becomes one row that
+  scrolls sideways.
 
-On a narrow screen the details always go under the picture.
+On a narrow screen, Desktop and iPad put the details under the picture.
+
+Untick **Show pictures** (under **Options**) to hide the main picture of
+each mystery in any layout, so the text has the whole width. The small
+pictures in the mystery picker stay. In **Full screen** the prayer then
+shows large and centred.
 
 **Scripture verses** (under **Options**) sets where the scripture passages
 are shown:
@@ -185,23 +202,24 @@ are shown:
 This only changes what is shown. What is read aloud is set by **Read aloud**
 (see *Listening*).
 
-**Present** shows the current mystery full screen, for projecting to a class:
-the picture fills three-quarters of the screen, with the title, beads and the
-current passage beside it (below it on a tall, narrow screen).
+**Full screen** (with the buttons under each mystery) fills the screen with
+the current mystery, for projecting to a class. The picture takes up
+three-quarters of the screen, with the title, beads and current passage
+beside it (below it on a tall, narrow screen).
 
 * The **right arrow**, **space bar** or **Enter** moves to the next bead;
   the **left arrow** goes back. A presentation clicker that sends Page Down
   and Page Up works too.
 * After the Glory Be it carries on to the next mystery of the set.
-* **Esc** or the **Exit** button (top right) ends the presentation.
+* **Esc** or the **Exit** button (top right) leaves full screen.
 * On a phone or tablet, swipe left for the next bead and right to go back.
 
 
 iPhone and iPad
 ===============
 
-Safari on iPhone does not let web pages go truly full screen, so **Present**
-fills the Safari window instead, with an **Exit** button. For a real
+Safari on iPhone does not let web pages go truly full screen, so **Full
+screen** fills the Safari window instead, with an **Exit** button. For a real
 full-screen rosary with no Safari bars:
 
 #. Open the site in **Safari**.
@@ -217,7 +235,7 @@ Reading the passages
 
 The passages are from the **Catholic Public Domain Version** (CPDV), a
 modern English translation of the Latin Vulgate. Where they appear is set by
-**Scripture verses** (see *Layout and presenting*): under each step, in the
+**Scripture verses** (see *Layout and full screen*): under each step, in the
 panel at the top for the current bead only, or not at all.
 
 * The short line after each reference is a summary of the passage.
@@ -258,8 +276,8 @@ Printing
 ========
 
 Printing the page prints every mystery shown on it, with its picture, fruit,
-ten references and their passages, in the picture style chosen, always in the
-compact layout. The opening and closing prayers print too, with their words,
+ten references and their passages, in the picture style chosen, always in a
+plain layout with a small picture. The opening and closing prayers print too, with their words,
 when they are switched on. The tabs, beads, buttons and options are left out.
 On the *All the mysteries* page, all four sets print. Choose **Hidden** in
 **Scripture verses** first to print the references without the passages.

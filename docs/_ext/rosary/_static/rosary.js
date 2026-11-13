@@ -29,6 +29,13 @@
         return node;
     }
 
+    // the Full screen button: on the iPhone layout only its icon shows
+    function fullLabel(b) {
+        b.textContent = '\u26F6';
+        b.appendChild(el('span', 'rosary-btn-word', ' Full screen'));
+        b.setAttribute('aria-label', 'Full screen');
+    }
+
     function button(cls, text, title) {
         var b = el('button', cls, text);
         b.type = 'button';
@@ -222,6 +229,30 @@
             block.setAttribute('data-extra', savedExtra);
         }
 
+        /* ---------------- layout: desktop, ipad or iphone; "auto" picks one
+         * from the width of the screen.  data-layout-choice holds the
+         * reader's choice, data-layout the layout in use. */
+        function oldLayout(v) {
+            // layouts from earlier versions map to the nearest new one
+            var map = { phone: 'ipad', large: 'ipad', side: 'desktop', compact: 'iphone' };
+            if (map[v]) return map[v];
+            return ['auto', 'desktop', 'ipad', 'iphone'].indexOf(v) !== -1 ? v : null;
+        }
+        var layoutChoice = oldLayout(block.getAttribute('data-layout-choice')) ||
+                           oldLayout(block.getAttribute('data-layout')) || 'auto';
+        function applyLayout() {
+            var use = layoutChoice;
+            if (use === 'auto') {
+                var w = window.innerWidth;
+                use = w < 700 ? 'iphone' : (w < 1200 ? 'ipad' : 'desktop');
+            }
+            block.setAttribute('data-layout-choice', layoutChoice);
+            if (block.getAttribute('data-layout') !== use) block.setAttribute('data-layout', use);
+            if (block.rosaryWiden) block.rosaryWiden();
+        }
+        applyLayout();
+        window.addEventListener('resize', function () { if (layoutChoice === 'auto') applyLayout(); });
+
         /* ---------------- toolbar: picture style, voice and speed */
         var bar = null;
 
@@ -311,24 +342,39 @@
 
             var layLabel = el('label', 'rosary-audio-field', 'Layout ');
             var laySelect = el('select', 'rosary-select');
-            [['phone', 'Phone-size picture'], ['compact', 'Compact'], ['side', 'Large picture beside details']].forEach(function (l) {
+            [['auto', 'Automatic (fits the screen)'], ['desktop', 'Desktop'], ['ipad', 'iPad'],
+             ['iphone', 'iPhone']].forEach(function (l) {
                 var o = el('option', '', l[1]);
                 o.value = l[0];
                 laySelect.appendChild(o);
             });
-            var savedLayout = store(STORE_LAYOUT);
-            if (['phone', 'compact', 'side'].indexOf(savedLayout) !== -1) block.setAttribute('data-layout', savedLayout);
-            // the old "Large picture above details" layout has been removed
-            if (['phone', 'compact', 'side'].indexOf(block.getAttribute('data-layout')) === -1) block.setAttribute('data-layout', 'phone');
-            laySelect.value = block.getAttribute('data-layout') || 'phone';
+            var savedLayout = oldLayout(store(STORE_LAYOUT));
+            if (savedLayout) { layoutChoice = savedLayout; applyLayout(); }
+            laySelect.value = layoutChoice;
             laySelect.addEventListener('change', function () {
-                block.setAttribute('data-layout', laySelect.value);
-                store(STORE_LAYOUT, laySelect.value);
-                updatePhotos();
-                if (block.rosaryWiden) block.rosaryWiden();
+                layoutChoice = laySelect.value;
+                store(STORE_LAYOUT, layoutChoice);
+                applyLayout();
             });
             layLabel.appendChild(laySelect);
             bar.appendChild(layLabel);
+
+            /* the main pictures can be hidden, in every layout */
+            var spLabel = el('label', 'rosary-audio-field rosary-prayers-field');
+            spLabel.title = 'Untick to hide the main picture of each mystery and give the text more room';
+            var spBox = el('input');
+            spBox.type = 'checkbox';
+            var savedPics = store('rosary-pictures');
+            if (savedPics === '1' || savedPics === '0') block.setAttribute('data-pictures', savedPics === '1' ? 'on' : 'off');
+            spBox.checked = block.getAttribute('data-pictures') !== 'off';
+            spLabel.appendChild(spBox);
+            spLabel.appendChild(document.createTextNode(' Show pictures'));
+            bar.appendChild(spLabel);
+            spBox.addEventListener('change', function () {
+                block.setAttribute('data-pictures', spBox.checked ? 'on' : 'off');
+                store('rosary-pictures', spBox.checked ? '1' : '0');
+                if (block.rosaryWiden) block.rosaryWiden();
+            });
 
             /* scripture under the steps: all, the current step only, or none */
             if (block.querySelector('.rosary-verse')) {
@@ -413,10 +459,9 @@
             });
         }
 
-        /* the larger layouts and Present mode show the whole painting, not the crop */
+        /* the layouts and full screen show the whole painting, not the crop */
         function updatePhotos() {
-            var big = block.getAttribute('data-layout') !== 'compact' ||
-                      !!block.querySelector('.rosary-presenting');
+            var big = true;
             block.querySelectorAll('.rosary-mystery .rosary-icon .rosary-photo[data-full]').forEach(function (img) {
                 if (!img.getAttribute('data-crop')) img.setAttribute('data-crop', img.getAttribute('src'));
                 var want = big ? img.getAttribute('data-full') : img.getAttribute('data-crop');
@@ -426,12 +471,12 @@
         updatePhotos();
         block.rosaryUpdatePhotos = updatePhotos;
 
-        /* side-by-side: widen the block into empty space right of the page's
+        /* desktop: widen the block into empty space right of the page's
          * column, so the picture can be as large as the screen allows */
         function widen() {
             block.style.removeProperty('--rosary-widen');
             block.removeAttribute('data-widen');
-            if (block.getAttribute('data-layout') !== 'side' || window.innerWidth < 1100) return;
+            if (block.getAttribute('data-layout') !== 'desktop' || window.innerWidth < 1100) return;
             var r = block.getBoundingClientRect();
             var spare = window.innerWidth - r.right - 24;
             // leave room for a table-of-contents sidebar if the page has one
@@ -552,7 +597,7 @@
                 if (checks.children.length) g.appendChild(checks);
                 groups.appendChild(g);
             };
-            addGroup('🖼 Pictures', [picLabel, navLabel, layLabel]);
+            addGroup('🖼 Pictures', [picLabel, navLabel, layLabel, spLabel]);
             addGroup('✝ Prayers', [exLabel, verLabel, prLabel, faLabel]);
             addGroup('🔊 Reading aloud', [voiceLabel, readLabel, rateLabel, titlesLabel]);
             // anything not placed above stays, in a final group
@@ -720,7 +765,8 @@
                 controls.appendChild(listen);
                 controls.appendChild(auto);
             }
-            var present = button('rosary-btn rosary-btn--present', '\u26F6 Present', 'Show full screen');
+            var present = button('rosary-btn rosary-btn--present', '\u26F6 Full screen', 'Show this prayer full screen');
+            fullLabel(present);
             controls.appendChild(present);
             present.addEventListener('click', function () {
                 var set = card.closest('.rosary-set');
@@ -860,8 +906,9 @@
                 controls.appendChild(auto);
             }
 
-            var present = button('rosary-btn rosary-btn--present', '\u26F6 Present',
+            var present = button('rosary-btn rosary-btn--present', '\u26F6 Full screen',
                                  'Show this mystery full screen (arrow keys or swipes move through the beads)');
+            fullLabel(present);
             controls.appendChild(present);
             present.addEventListener('click', function () {
                 var set = mystery.closest('.rosary-set');
@@ -1071,7 +1118,7 @@
         if (img) showPainting(img);
     });
 
-    /* Present mode -------------------------------------------------------
+    /* Full screen -------------------------------------------------------
      * Real full screen where the browser allows it; otherwise (iPhone Safari)
      * the set fills the browser window. An Exit button, Esc, the arrow keys
      * and left/right swipes work in both. */
@@ -1109,7 +1156,7 @@
     // an Exit button inside each set, shown only while presenting, and swipes
     function addPresentControls(set) {
         {
-            var exit = button('rosary-exit-present', '\u2715 Exit', 'Finish presenting');
+            var exit = button('rosary-exit-present', '\u2715 Exit', 'Leave full screen');
             exit.addEventListener('click', function () { endPresent(set); });
             set.insertBefore(exit, set.firstChild);
             // swipe left = next bead, swipe right = back

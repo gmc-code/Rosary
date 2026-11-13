@@ -236,6 +236,7 @@
     cursor: pointer;
 }
 .rosary-btn--primary { background: var(--r-c); color: #fff; }
+.rosary-tab-word { margin-left: 0.28em; }
 .rosary-toggle {
     margin-left: auto;
     font-size: 0.88em;
@@ -600,7 +601,7 @@ a.rosary-ref { text-decoration: underline dotted; }
 @media print { .rosary-lightbox { display: none !important; } }
 
 
-/* Present mode: one mystery full screen, picture 75%, prayer below -------- */
+/* Full screen: one mystery, picture 75%, prayer below -------- */
 .rosary-set.rosary-presenting {
     --r-paper: #141210;
     --r-text: #f1ece3;
@@ -763,20 +764,20 @@ a.rosary-ref { text-decoration: underline dotted; }
 .rosary-nav-btn .rosary-svg, .rosary-nav-btn .rosary-photo { width: 3.4em !important; height: 3.4em !important; }
 .rosary-nav[data-icons="stained"] .rosary-nav-btn .rosary-svg { width: 3em !important; height: 3.6em !important; }
 
-/* side-by-side layout (default): picture left, details right ------------- */
+/* desktop layout: the picture as large as the screen allows, details beside it */
 @media screen and (min-width: 800px) {
-    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-mystery {
+    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-mystery {
         display: grid;
-        grid-template-columns: minmax(0, 3fr) minmax(15em, 1fr);
+        grid-template-columns: minmax(0, 1fr) minmax(17em, 25em);
         grid-template-rows: auto auto auto auto 1fr;
         column-gap: 1.4em;
         align-items: start;
         padding: 0.8em;
     }
-    .rosary-js .rosary-block[data-layout="side"] .rosary-set:not(.rosary-single) .rosary-mystery:not(.rosary-active),
-    .rosary-block[data-layout="side"].rosary-js .rosary-set:not(.rosary-single) .rosary-mystery:not(.rosary-active) { display: none; }
-    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-head { display: contents; }
-    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-icon {
+    .rosary-js .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-single) .rosary-mystery:not(.rosary-active),
+    .rosary-block[data-layout="desktop"].rosary-js .rosary-set:not(.rosary-single) .rosary-mystery:not(.rosary-active) { display: none; }
+    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-head { display: contents; }
+    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-icon {
         grid-column: 1;
         grid-row: 1 / span 5;
         align-self: start;
@@ -789,52 +790,57 @@ a.rosary-ref { text-decoration: underline dotted; }
         border-width: 5px;
         padding: 0.4em;
     }
-    .rosary-block[data-layout="side"][data-icons="stained"] .rosary-set:not(.rosary-presenting) .rosary-icon {
+    .rosary-block[data-layout="desktop"][data-icons="stained"] .rosary-set:not(.rosary-presenting) .rosary-icon {
         aspect-ratio: 5 / 6;
         width: min(100%, calc((100vh - 6rem) * 0.83));
         border-width: 7px;
         padding: 0;
     }
-    .rosary-block[data-layout="side"][data-icons="gold"] .rosary-set:not(.rosary-presenting) .rosary-icon { border-width: 9px; border-radius: 0.8em; }
-    .rosary-block[data-layout="side"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo {
+    .rosary-block[data-layout="desktop"][data-icons="gold"] .rosary-set:not(.rosary-presenting) .rosary-icon { border-width: 9px; border-radius: 0.8em; }
+    /* photographs: shown whole, at their own shape, as large as fits */
+    .rosary-block[data-layout="desktop"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo {
+        display: flex;
+        justify-content: center;
         width: 100%;
-        height: calc(100vh - 6rem);
+        height: auto;
         aspect-ratio: auto;
         padding: 0;
         border: 0;
-        border-radius: 0.6em;
-        background: #1a1613;
-        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
-    }
-    .rosary-block[data-layout="side"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo .rosary-photo {
-        object-fit: contain;
         border-radius: 0;
-        padding: 0.8em;
-        box-sizing: border-box;
+        background: transparent;
     }
-    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-head > div:last-child { grid-column: 2; grid-row: 1; }
-    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-decade { grid-column: 2; grid-row: 2; margin-top: 0.8em; }
-    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-controls { grid-column: 2; grid-row: 3; }
-    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-now { grid-column: 2; grid-row: 4; margin-bottom: 0.4em; }
-    .rosary-block[data-layout="side"] ol.rosary-refs {
+    .rosary-block[data-layout="desktop"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo .rosary-photo {
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: calc(100vh - 6rem);
+        object-fit: contain;
+        border-radius: 0.5em;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+    }
+    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-head > div:last-child { grid-column: 2; grid-row: 1; }
+    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-decade { grid-column: 2; grid-row: 2; margin-top: 0.8em; }
+    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-controls { grid-column: 2; grid-row: 3; }
+    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-now { grid-column: 2; grid-row: 4; margin-bottom: 0.4em; }
+    .rosary-block[data-layout="desktop"] ol.rosary-refs {
         grid-column: 2;
         grid-row: 5;
     }
-    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-mystery-title { font-size: 1.3em; }
-    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-btn { padding: 0.25em 0.7em; }
-    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-toggle { margin-left: 0; }
-    .rosary-block[data-layout="side"] .rosary-set { padding: 0.6em 0.7em 0.7em; }
+    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-mystery-title { font-size: 1.3em; }
+    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-btn { padding: 0.25em 0.7em; }
+    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-toggle { margin-left: 0; }
+    .rosary-block[data-layout="desktop"] .rosary-set { padding: 0.6em 0.7em 0.7em; }
 }
-/* narrow screens: side-by-side falls back to picture above */
+/* narrow screens: desktop falls back to the picture above */
 @media screen and (max-width: 799px) {
-    .rosary-block[data-layout="side"] .rosary-head { flex-direction: column; align-items: center; text-align: center; }
-    .rosary-block[data-layout="side"] .rosary-icon { width: min(100%, 70vh); height: auto; aspect-ratio: 1 / 1; }
-    .rosary-block[data-layout="side"][data-icons="photo"] .rosary-icon.rosary-has-photo { width: 100%; height: 70vh; aspect-ratio: auto; padding: 0; border: 0; background: #1a1613; }
-    .rosary-block[data-layout="side"][data-icons="photo"] .rosary-icon.rosary-has-photo .rosary-photo { object-fit: contain; border-radius: 0; }
+    .rosary-block[data-layout="desktop"] .rosary-head { flex-direction: column; align-items: center; text-align: center; }
+    .rosary-block[data-layout="desktop"] .rosary-icon { width: min(100%, 70vh); height: auto; aspect-ratio: 1 / 1; }
+    .rosary-block[data-layout="desktop"][data-icons="photo"] .rosary-icon.rosary-has-photo { width: 100%; height: 70vh; aspect-ratio: auto; padding: 0; border: 0; background: #1a1613; }
+    .rosary-block[data-layout="desktop"][data-icons="photo"] .rosary-icon.rosary-has-photo .rosary-photo { object-fit: contain; border-radius: 0; }
 }
-/* side-by-side: widen into the empty space right of the page (set by rosary.js) */
+/* desktop: widen into the empty space right of the page (set by rosary.js) */
 @media screen and (min-width: 800px) {
-    .rosary-block[data-layout="side"][data-widen] {
+    .rosary-block[data-layout="desktop"][data-widen] {
         width: calc(100% + var(--rosary-widen, 0px));
         max-width: none;
     }
@@ -854,18 +860,18 @@ a.rosary-ref { text-decoration: underline dotted; }
 ol.rosary-refs > li.rosary-step { cursor: pointer; }
 ol.rosary-refs > li.rosary-step:hover:not(.rosary-here) { background: rgba(127, 127, 127, 0.07); }
 
-/* phone-size layout (default): phone-sized picture left, steps right ------ */
+/* iPad layout: a tablet-sized picture on the left, steps beside it ------- */
 @media screen and (min-width: 700px) {
-    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-mystery {
+    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-mystery {
         display: grid;
         grid-template-columns: minmax(12em, 19em) minmax(0, 1fr);
         grid-template-rows: auto auto auto auto 1fr;
         column-gap: 1.3em;
         align-items: start;
     }
-    .rosary-block[data-layout="phone"].rosary-js .rosary-set:not(.rosary-single) .rosary-mystery:not(.rosary-active) { display: none; }
-    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-head { display: contents; }
-    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-icon {
+    .rosary-block[data-layout="ipad"].rosary-js .rosary-set:not(.rosary-single) .rosary-mystery:not(.rosary-active) { display: none; }
+    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-head { display: contents; }
+    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-icon {
         grid-column: 1;
         grid-row: 1 / span 5;
         position: sticky;
@@ -876,14 +882,14 @@ ol.rosary-refs > li.rosary-step:hover:not(.rosary-here) { background: rgba(127, 
         border-width: 4px;
         padding: 0.3em;
     }
-    .rosary-block[data-layout="phone"][data-icons="stained"] .rosary-set:not(.rosary-presenting) .rosary-icon {
+    .rosary-block[data-layout="ipad"][data-icons="stained"] .rosary-set:not(.rosary-presenting) .rosary-icon {
         aspect-ratio: 5 / 6;
         border-width: 5px;
         padding: 0;
     }
-    .rosary-block[data-layout="phone"][data-icons="gold"] .rosary-set:not(.rosary-presenting) .rosary-icon { border-width: 7px; border-radius: 0.8em; }
+    .rosary-block[data-layout="ipad"][data-icons="gold"] .rosary-set:not(.rosary-presenting) .rosary-icon { border-width: 7px; border-radius: 0.8em; }
     /* pictures: a phone-shaped portrait panel, the whole picture inside */
-    .rosary-block[data-layout="phone"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo {
+    .rosary-block[data-layout="ipad"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo {
         width: 100%;
         height: auto;
         aspect-ratio: 9 / 16;
@@ -894,23 +900,163 @@ ol.rosary-refs > li.rosary-step:hover:not(.rosary-here) { background: rgba(127, 
         background: #1a1613;
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     }
-    .rosary-block[data-layout="phone"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo .rosary-photo {
+    .rosary-block[data-layout="ipad"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo .rosary-photo {
         object-fit: contain;
         border-radius: 0;
     }
-    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-head > div:last-child { grid-column: 2; grid-row: 1; }
-    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-decade { grid-column: 2; grid-row: 2; }
-    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-controls { grid-column: 2; grid-row: 3; }
-    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-now { grid-column: 2; grid-row: 4; }
-    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) ol.rosary-refs { grid-column: 2; grid-row: 5; }
+    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-head > div:last-child { grid-column: 2; grid-row: 1; }
+    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-decade { grid-column: 2; grid-row: 2; }
+    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-controls { grid-column: 2; grid-row: 3; }
+    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-now { grid-column: 2; grid-row: 4; }
+    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) ol.rosary-refs { grid-column: 2; grid-row: 5; }
 }
 @media screen and (max-width: 699px) {
-    .rosary-block[data-layout="phone"] .rosary-head { flex-direction: column; align-items: center; text-align: center; }
-    .rosary-block[data-layout="phone"] .rosary-icon { width: min(100%, 22em); height: auto; aspect-ratio: 1 / 1; }
-    .rosary-block[data-layout="phone"][data-icons="photo"] .rosary-icon.rosary-has-photo { aspect-ratio: 9 / 16; padding: 0; border: 6px solid #2b2724; border-radius: 1.6em; background: #1a1613; }
-    .rosary-block[data-layout="phone"][data-icons="photo"] .rosary-icon.rosary-has-photo .rosary-photo { object-fit: contain; border-radius: 0; }
+    .rosary-block[data-layout="ipad"] .rosary-head { flex-direction: column; align-items: center; text-align: center; }
+    .rosary-block[data-layout="ipad"] .rosary-icon { width: min(100%, 22em); height: auto; aspect-ratio: 1 / 1; }
+    .rosary-block[data-layout="ipad"][data-icons="photo"] .rosary-icon.rosary-has-photo { aspect-ratio: 9 / 16; padding: 0; border: 6px solid #2b2724; border-radius: 1.6em; background: #1a1613; }
+    .rosary-block[data-layout="ipad"][data-icons="photo"] .rosary-icon.rosary-has-photo .rosary-photo { object-fit: contain; border-radius: 0; }
 }
 
+
+
+/* iPhone layout: picture on top, as large as fits, then small controls
+   (screen only: printing keeps the plain layout) ------------------------- */
+@media screen {
+.rosary-block[data-layout="iphone"] .rosary-set { padding: 0.5em 0.45em 0.6em; border-width: 1px; border-radius: 0.7em; }
+.rosary-block[data-layout="iphone"] .rosary-set-title { font-size: 0.95em; text-align: center; }
+.rosary-block[data-layout="iphone"] .rosary-days { display: block; margin: 0; }
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-mystery {
+    padding: 0.5em 0.55em 0.6em;
+    border-radius: 0.6em;
+}
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-head {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.45em;
+    margin-bottom: 0.3em;
+}
+/* the picture: full width, up to about 55% of the screen's height */
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-icon {
+    width: min(100%, 55vh);
+    width: min(100%, 55svh);
+    height: auto;
+    aspect-ratio: 1 / 1;
+    border-width: 3px;
+    padding: 0.2em;
+}
+.rosary-block[data-layout="iphone"][data-icons="stained"] .rosary-set:not(.rosary-presenting) .rosary-icon {
+    width: min(100%, 46svh);
+    aspect-ratio: 5 / 6;
+    border-width: 4px;
+    padding: 0;
+}
+.rosary-block[data-layout="iphone"][data-icons="gold"] .rosary-set:not(.rosary-presenting) .rosary-icon { border-width: 5px; border-radius: 0.7em; }
+/* photographs: shown whole, at their own shape, full width */
+.rosary-block[data-layout="iphone"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    aspect-ratio: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+.rosary-block[data-layout="iphone"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo .rosary-photo {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 60vh;
+    max-height: 60svh;
+    object-fit: contain;
+    border-radius: 0.5em;
+}
+.rosary-block[data-layout="iphone"] .rosary-num { font-size: 0.7em; }
+.rosary-block[data-layout="iphone"] .rosary-mystery-title { font-size: 1.08em; margin: 0 !important; }
+.rosary-block[data-layout="iphone"] .rosary-fruit { font-size: 0.85em; }
+.rosary-block[data-layout="iphone"] .rosary-photo-credit,
+.rosary-block[data-layout="iphone"] .rosary-head .rosary-credit { font-size: 0.72em; }
+/* beads and buttons: smaller, centred, in one or two rows */
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-decade {
+    justify-content: center;
+    gap: 0.22em;
+    margin: 0.3em 0 0.35em;
+    font-size: 0.78em;
+}
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-chain { width: 0.5em; }
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-controls {
+    justify-content: center;
+    gap: 0.25em;
+    margin: 0.2em 0 0.45em;
+}
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-btn {
+    padding: 0.2em 0.45em;
+    border-width: 1.5px;
+    border-radius: 0.45em;
+    font-size: 0.72em;
+}
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-toggle { margin-left: 0; font-size: 0.78em; }
+/* the passage panel and the list of steps: tighter */
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-now {
+    padding: 0.45em 0.6em;
+    border-left-width: 4px;
+    font-size: 0.92em;
+}
+.rosary-block[data-layout="iphone"] .rosary-now-verse { font-size: 1.02em; }
+.rosary-block[data-layout="iphone"] ol.rosary-refs { padding-left: 1.6em !important; font-size: 0.9em; }
+.rosary-block[data-layout="iphone"] ol.rosary-refs > li { padding: 0.12em 0.3em; }
+.rosary-block[data-layout="iphone"] .rosary-ref { white-space: normal; }
+/* mystery picker: one row that scrolls sideways, names kept */
+.rosary-block[data-layout="iphone"] .rosary-nav,
+.rosary-block[data-layout="iphone"][data-extra] .rosary-nav {
+    display: flex;
+    gap: 0.25em;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 0.2em;
+    margin-bottom: 0.45em;
+}
+.rosary-block[data-layout="iphone"] .rosary-nav-btn {
+    flex: 0 0 6.2em;
+    scroll-snap-align: start;
+    padding: 0.2em 0.15em;
+    font-size: 0.66em;
+}
+.rosary-block[data-layout="iphone"] .rosary-nav-btn span { display: block; }
+.rosary-block[data-layout="iphone"] .rosary-nav-btn .rosary-svg,
+.rosary-block[data-layout="iphone"] .rosary-nav-btn .rosary-photo { width: 3em !important; height: 3em !important; }
+/* top row and options: smaller */
+.rosary-block[data-layout="iphone"] .rosary-topbar { gap: 0.25em; }
+.rosary-block[data-layout="iphone"] .rosary-topbar .rosary-tab { padding: 0.18em 0.55em; font-size: 0.78em; }
+.rosary-block[data-layout="iphone"] .rosary-tab-word { display: none; }
+.rosary-block[data-layout="iphone"] .rosary-btn-word { display: none; }
+.rosary-block[data-layout="iphone"] .rosary-top-btn { padding: 0.18em 0.6em; font-size: 0.76em; }
+}
+
+
+/* Show pictures unticked: no main picture, the text takes the whole width -- */
+.rosary-block[data-pictures="off"] .rosary-mystery .rosary-icon { display: none !important; }
+.rosary-block[data-pictures="off"] .rosary-set .rosary-mystery.rosary-active,
+.rosary-block[data-pictures="off"] .rosary-set.rosary-single .rosary-mystery { display: block !important; }
+.rosary-block[data-pictures="off"] .rosary-set:not(.rosary-presenting) .rosary-head { display: flex; }
+.rosary-block[data-pictures="off"][data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-head { display: flex; }
+.rosary-block[data-pictures="off"] .rosary-set:not(.rosary-presenting) .rosary-mystery { max-width: 52em; }
+/* full screen without a picture: the text, large and centred */
+.rosary-block[data-pictures="off"] .rosary-presenting .rosary-mystery.rosary-active {
+    max-width: 50em;
+    height: auto;
+    min-height: 92vh;
+    margin: 0 auto;
+    padding-top: 6vh;
+    font-size: 1.25em;
+}
+.rosary-block[data-pictures="off"] .rosary-presenting .rosary-head { display: block; text-align: center; }
+.rosary-block[data-pictures="off"] .rosary-presenting .rosary-decade,
+.rosary-block[data-pictures="off"] .rosary-presenting .rosary-controls { justify-content: center; }
+.rosary-block[data-pictures="off"] .rosary-presenting .rosary-now { max-height: none; }
 
 /* Hide menus: also the page title and the site header bar; :hide-title: ---- */
 html.rosary-page-focus .sy-head,
@@ -924,7 +1070,7 @@ html.rosary-page-focus { --rosary-sticky-top: 0.6rem; }
 html.rosary-page-focus main, html.rosary-page-focus .sy-main { padding-top: 0 !important; margin-top: 0 !important; }
 html.rosary-page-focus article { padding-top: 0 !important; }
 
-/* Present without full screen (iPhone): the set fills the browser window --- */
+/* Full screen without the Fullscreen API (iPhone): the set fills the browser window --- */
 html.rosary-noscroll, html.rosary-noscroll body { overflow: hidden; }
 .rosary-set.rosary-pseudo-fs {
     position: fixed;
@@ -954,7 +1100,7 @@ html.rosary-noscroll, html.rosary-noscroll body { overflow: hidden; }
     font-size: 0.9em;
     cursor: pointer;
 }
-/* phones in Present: picture on top, then title, beads and verse */
+/* phones in full screen: picture on top, then title, beads and verse */
 @media (max-width: 699px) {
     .rosary-presenting .rosary-mystery.rosary-active {
         grid-template-columns: 1fr;

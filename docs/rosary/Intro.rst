@@ -15,7 +15,7 @@ Introduction
      - All four sets, with a tab for each set, opening on today's set
    * - :doc:`User guide </rosary/rosary_info>`
      - Praying with the beads, the opening and closing prayers, the Options
-       panel, Present mode, reading aloud and printing
+       panel, full screen, reading aloud and printing
    * - :doc:`Traditional paintings </rosary/rosary_artworks>`
      - The public-domain painting used for each mystery
    * - :doc:`Developer reference </rosary/rosary_dev>`

@@ -52,11 +52,11 @@ Folder contents
      - The 20 icons and the opening and closing icons, drawn as inline SVG,
        plus the stained-glass background.
    * - ``_static/rosary.css``
-     - Picture styles, layouts, Present mode, the Options panel, set colours,
+     - Picture styles, layouts, full screen, the Options panel, set colours,
        dark mode and print styles.
    * - ``_static/rosary.js``
      - Tabs, today's set, the mystery picker, the decade of beads, the
-       opening and closing prayers, the Options panel, Present mode and
+       opening and closing prayers, the Options panel, full screen and
        read-aloud.
    * - ``_static/rosary-touch-icon.png``, ``rosary-icon-512.png``,
        ``rosary-manifest.json``
@@ -145,12 +145,18 @@ Options
        the main pictures), ``classic``, ``stained``, ``gold``, ``photo`` or
        ``photo-sg``.
    * - ``:layout:``
-     - ``phone``: a phone-sized picture on the left, with the
-       title, beads and the ten steps beside it. ``compact``: a small picture
-       beside the title. ``side``: a large picture on the left, about 75% of
-       the width (on wide screens the rosary widens into empty space right of
-       the page). A page that still says ``large`` (a layout that has been
-       removed) gets ``phone``.
+     - ``auto``: picks ``iphone`` below 700 pixels wide, ``ipad`` up to 1200
+       and ``desktop`` above, in the reader's browser. ``desktop``: the
+       picture as large as the screen allows on the left, with the details
+       in a column on the right (on wide screens the rosary widens into empty
+       space right of the page). ``ipad``: a tablet-sized picture on the
+       left, with the title, beads and the ten steps beside it. ``iphone``:
+       the picture on top, then smaller beads and buttons and the details.
+       The old names still work: ``phone`` and ``large`` give ``ipad``,
+       ``side`` gives ``desktop`` and ``compact`` gives ``iphone``.
+   * - ``:pictures:``
+     - ``yes`` or ``no``: show the main picture of each mystery. Readers can
+       change it with the **Show pictures** checkbox.
    * - ``:verses:``
      - Where the scripture is shown: ``all`` (under each step), ``current``
        (only the step being prayed, in the panel at the top) or ``none``.
@@ -159,7 +165,8 @@ Options
        ``step`` (the summary), ``both`` or ``scripture``.
 
 Options that match a menu in the Options panel (``:icons:``, ``:nav-icons:``,
-``:layout:``, ``:verses:``, ``:read:``, ``:extra-prayers:``, ``:fatima:``)
+``:layout:``, ``:pictures:``, ``:verses:``, ``:read:``, ``:extra-prayers:``,
+``:fatima:``)
 set the page's starting choice; when one is left out, the site's starting
 choice is used (see *Site-wide starting choices*). A reader's own choice from
 the Options panel takes over on later visits.
@@ -354,7 +361,8 @@ choices for every rosary on the site are built into ``rosary.py``, so
 
     rosary_default_icons = "photo-sg"        # classic, stained, gold, photo, photo-sg
     rosary_default_nav_icons = "classic"     # same, classic, stained, gold, photo, photo-sg
-    rosary_default_layout = "phone"          # phone, compact, side
+    rosary_default_layout = "auto"           # auto, desktop, ipad, iphone
+    rosary_default_pictures = True           # False to start with the pictures hidden
     rosary_default_verses = "current"        # all, current, none
     rosary_default_read = "step"             # step, both, scripture
     rosary_default_extra_prayers = "on"      # off, on, full
@@ -385,8 +393,14 @@ added to the panel's ``bar`` is put in a final *Other* group unless it is
 added to one of the three lists in the grouping code. The cards sit side by
 side in a CSS grid (``.rosary-opt-groups``) and stack on a narrow screen.
 
+The block keeps the reader's layout choice in ``data-layout-choice``
+(``auto``, ``desktop``, ``ipad`` or ``iphone``) and the layout in use in
+``data-layout``; with ``auto``, ``rosary.js`` updates ``data-layout`` when
+the window is resized. Each layout's styles in ``rosary.css`` are keyed off
+``data-layout``, and **Show pictures** sets ``data-pictures="off"``.
+
 Each reader's choices are saved in ``localStorage``: ``rosary-icons``,
-``rosary-nav-icons``, ``rosary-layout``, ``rosary-verses``,
+``rosary-nav-icons``, ``rosary-layout``, ``rosary-pictures``, ``rosary-verses``,
 ``rosary-extra``, ``rosary-prayers``, ``rosary-fatima``, ``rosary-read``,
 ``rosary-read-titles``, ``rosary-voice``, ``rosary-rate``,
 ``rosary-options-open`` and ``rosary-menus-hidden``.

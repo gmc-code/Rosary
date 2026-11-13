@@ -15,7 +15,7 @@ scripture references, one for each Hail Mary of the decade.
 
 Options
     Options that match a menu in the reader's Options panel (icons, nav-icons,
-    layout, verses, read, extra-prayers, fatima) set this page's starting
+    layout, pictures, verses, read, extra-prayers, fatima) set this page's starting
     choice.  When one is left out, the site's starting choice from conf.py is
     used; those are built in (see setup() at the end of this file) and are
     shown in [brackets] below.  A reader's own choices, saved in their
@@ -62,11 +62,13 @@ Options
     :nav-icons:      style of the small pictures in the mystery picker: same
                      (as the main pictures), classic, stained, gold, photo or
                      photo-<key>  [classic]
-    :layout:         phone (a phone-sized picture on the left, with the
-                     title, beads and the ten steps listed beside it),
-                     compact (small picture beside the title) or side (a
-                     large picture on the left, about 75% of the width)
-                     [phone]
+    :layout:         auto (picks desktop, ipad or iphone from the width of
+                     the screen), desktop (a large picture on the left, with
+                     the details in a column beside it), ipad (a
+                     tablet-sized picture on the left, with the title, beads
+                     and the ten steps beside it) or iphone (the picture on
+                     top, with smaller buttons and the details below)  [auto]
+    :pictures:       yes or no: show the main picture of each mystery  [yes]
     :verses:         where the scripture is shown: all (under each step),
                      current (only the step being prayed, in the panel at
                      the top) or none  [current]
@@ -76,7 +78,7 @@ Options
 
 The page is fully readable (and prints) without JavaScript: _static/rosary.js
 adds the tabs, the mystery picker, the clickable beads, the Options panel,
-Present mode and read-aloud.
+full screen and read-aloud.
 """
 
 import html
@@ -132,12 +134,16 @@ def days_text(days):
     return names[0] if len(names) == 1 else ' and '.join(names)
 
 
-LAYOUTS = ('phone', 'compact', 'side')
+LAYOUTS = ('auto', 'desktop', 'ipad', 'iphone')
+# layouts from earlier versions, mapped to the nearest new one
+OLD_LAYOUTS = {'phone': 'ipad', 'large': 'ipad', 'side': 'desktop', 'compact': 'iphone'}
 
 
 def _layout(value):
-    """A layout name; the old 'large' layout has been removed, so it becomes 'phone'."""
-    return value if value in LAYOUTS else 'phone'
+    """A layout name: auto, desktop, ipad or iphone (older names are mapped)."""
+    value = (value or '').strip().lower()
+    value = OLD_LAYOUTS.get(value, value)
+    return value if value in LAYOUTS else 'auto'
 
 
 class RosaryDirective(SphinxDirective):
@@ -158,7 +164,8 @@ class RosaryDirective(SphinxDirective):
         'icons': directives.unchanged,
         'images': directives.unchanged_required,
         'no-picker': directives.flag,
-        'layout': lambda a: _layout(directives.choice(a, ('phone', 'compact', 'side', 'large'))),
+        'layout': lambda a: _layout(directives.choice(a, LAYOUTS + tuple(OLD_LAYOUTS))),
+        'pictures': lambda a: directives.choice(a, ('yes', 'no')),
         'verses': lambda a: directives.choice(a, ('all', 'current', 'none')),
         'read': lambda a: directives.choice(a, ('step', 'both', 'scripture')),
         'nav-icons': directives.unchanged,
@@ -452,7 +459,7 @@ class RosaryDirective(SphinxDirective):
         if mode == 'all':
             tabs = '<div class="rosary-tabs" role="tablist">%s</div>' % ''.join(
                 '<button type="button" class="rosary-tab rosary-set--%s" role="tab" '
-                'data-set="%s" aria-selected="false">%s Mysteries'
+                'data-set="%s" aria-selected="false">%s<span class="rosary-tab-word">Mysteries</span>'
                 '<small>%s</small></button>' % (
                     k, k, SETS[k]['name'], days_text(SETS[k]['days']))
                 for k in keys)
@@ -522,9 +529,17 @@ class RosaryDirective(SphinxDirective):
 
         credit = ('<p class="rosary-credit">Scripture: %s (public domain).</p>' % TRANSLATION
                   if scripture or config['audio'] else '')
+        layout = self.options.get('layout') or _layout(self.config.rosary_default_layout)
+        if 'pictures' in self.options:
+            pictures = self.options['pictures'] == 'yes'
+        else:
+            pictures = bool(self.config.rosary_default_pictures)
         html_output = (
-            '<div class="rosary-block" data-icons="%s" data-photoset="%s" data-layout="%s" data-verses="%s" data-extra="%s" data-config="%s"%s>%s%s%s%s</div>'
-            % (data_icons, photoset, self.options.get('layout') or _layout(self.config.rosary_default_layout),
+            '<div class="rosary-block" data-icons="%s" data-photoset="%s" data-layout-choice="%s" '
+            'data-layout="%s" data-pictures="%s" data-verses="%s" data-extra="%s" data-config="%s"%s>%s%s%s%s</div>'
+            % (data_icons, photoset, layout,
+               # without JavaScript, "auto" shows the iPad layout (it adapts to narrow screens)
+               'ipad' if layout == 'auto' else layout, 'on' if pictures else 'off',
                self.options.get('verses') or self.config.rosary_default_verses, config['extra'],
                _esc(json.dumps(config)),
                prayers_attr, title_html, tabs, sets, credit))
@@ -603,7 +618,8 @@ def setup(app):
     # own menu choices take over from these
     app.add_config_value('rosary_default_icons', 'photo-sg', 'env')      # classic, stained, gold, photo, photo-sg
     app.add_config_value('rosary_default_nav_icons', 'classic', 'env')   # same, classic, stained, gold, photo...
-    app.add_config_value('rosary_default_layout', 'phone', 'env')        # phone, compact, side
+    app.add_config_value('rosary_default_layout', 'auto', 'env')         # auto, desktop, ipad, iphone
+    app.add_config_value('rosary_default_pictures', True, 'env')         # False to start with the pictures hidden
     app.add_config_value('rosary_default_verses', 'current', 'env')      # all, current, none
     app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture
     app.add_config_value('rosary_default_extra_prayers', 'on', 'env')    # off, on, full
