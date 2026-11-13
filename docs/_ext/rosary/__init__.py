@@ -1,0 +1,1 @@
+from .rosary import setup

@@ -1,0 +1,21 @@
+# Captions for the rosary paintings: file name (without extension): caption
+joyful-1: Fra Angelico, The Annunciation (c. 1426), Museo del Prado, Madrid
+joyful-2: Domenico Ghirlandaio, The Visitation (1491), Louvre, Paris
+joyful-3: Giotto, The Nativity (c. 1305), Scrovegni Chapel, Padua
+joyful-4: Giotto, The Presentation of Christ in the Temple (c. 1305), Scrovegni Chapel, Padua
+joyful-5: William Holman Hunt, The Finding of the Saviour in the Temple (1854-60), Birmingham Museum and Art Gallery
+luminous-1: Piero della Francesca, The Baptism of Christ (c. 1450), National Gallery, London
+luminous-2: Giotto, The Marriage at Cana (c. 1305), Scrovegni Chapel, Padua
+luminous-3: Carl Bloch, The Sermon on the Mount (1877), Frederiksborg Castle, Denmark
+luminous-4: Raphael, The Transfiguration (1516-20), Vatican Museums, Rome
+luminous-5: Juan de Juanes, The Last Supper (c. 1562), Museo del Prado, Madrid
+sorrowful-1: Giovanni Bellini, The Agony in the Garden (c. 1465), National Gallery, London
+sorrowful-2: Caravaggio, The Flagellation of Christ (1607), Museo di Capodimonte, Naples
+sorrowful-3: Titian, The Crowning with Thorns (c. 1542), Louvre, Paris
+sorrowful-4: El Greco, Christ Carrying the Cross (c. 1580), Metropolitan Museum of Art, New York
+sorrowful-5: Diego Velázquez, Christ Crucified (c. 1632), Museo del Prado, Madrid
+glorious-1: Piero della Francesca, The Resurrection (c. 1463), Museo Civico, Sansepolcro
+glorious-2: Giotto, The Ascension (c. 1305), Scrovegni Chapel, Padua
+glorious-3: El Greco, Pentecost (c. 1600), Museo del Prado, Madrid
+glorious-4: Titian, The Assumption of the Virgin (1516-18), Basilica dei Frari, Venice
+glorious-5: Diego Velázquez, The Coronation of the Virgin (c. 1635), Museo del Prado, Madrid

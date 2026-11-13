@@ -1,0 +1,910 @@
+/* rosary directive ------------------------------------------------------ */
+
+.rosary-block {
+    --r-c: #2f6db5;
+    --r-ink: #1d3f6b;
+    --r-soft: #dce8f7;
+    --r-soft2: #b7cdec;
+    --r-paper: #ffffff;
+    --r-text: #222;
+    --r-muted: #5f6672;
+    --r-gold: #e2b33c;
+    margin: 1.5em 0;
+    font-size: 0.97rem;
+    color: var(--r-text);
+}
+
+.rosary-set--joyful    { --r-c: #2f6db5; --r-ink: #1d3f6b; --r-soft: #dce8f7; --r-soft2: #b7cdec; }
+.rosary-set--luminous  { --r-c: #c48300; --r-ink: #6b4700; --r-soft: #fbefcd; --r-soft2: #f2d995; }
+.rosary-set--sorrowful { --r-c: #6d2e7a; --r-ink: #3f1648; --r-soft: #eedff1; --r-soft2: #d5b8dc; }
+.rosary-set--glorious  { --r-c: #b0282c; --r-ink: #641315; --r-soft: #f8e0df; --r-soft2: #eab8b6; }
+
+.rosary-title {
+    font-size: 1.25em;
+    font-weight: 700;
+    margin: 0 0 0.6em;
+}
+
+/* tabs for the four sets */
+.rosary-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em;
+    margin-bottom: 0.8em;
+}
+.rosary-tab {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.1em;
+    padding: 0.45em 0.9em;
+    border: 2px solid var(--r-c);
+    border-radius: 0.6em;
+    background: var(--r-paper);
+    color: var(--r-ink);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    line-height: 1.2;
+}
+.rosary-tab small {
+    font-weight: 400;
+    font-size: 0.78em;
+    color: var(--r-muted);
+}
+.rosary-tab[aria-selected="true"] {
+    background: var(--r-c);
+    color: #fff;
+}
+.rosary-tab[aria-selected="true"] small { color: rgba(255, 255, 255, 0.85); }
+.rosary-today-badge {
+    display: inline-block;
+    margin-left: 0.4em;
+    padding: 0 0.45em;
+    border-radius: 1em;
+    background: var(--r-gold);
+    color: #3b2a00;
+    font-size: 0.72em;
+    font-weight: 700;
+    vertical-align: middle;
+}
+
+/* a set of five mysteries */
+.rosary-set {
+    border: 2px solid var(--r-c);
+    border-radius: 0.9em;
+    padding: 0.9em 1em 1em;
+    margin-bottom: 1.2em;
+    background: linear-gradient(var(--r-soft), var(--r-paper) 9em);
+}
+.rosary-set-title {
+    margin: 0 0 0.6em !important;
+    font-size: 1.2em;
+    color: var(--r-ink);
+}
+.rosary-days {
+    font-size: 0.72em;
+    font-weight: 400;
+    color: var(--r-muted);
+    margin-left: 0.4em;
+}
+
+/* the strip of five icons used to choose a mystery */
+.rosary-nav {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.4em;
+    margin-bottom: 0.9em;
+}
+.rosary-nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2em;
+    padding: 0.35em 0.2em;
+    border: 2px solid transparent;
+    border-radius: 0.6em;
+    background: var(--r-paper);
+    color: var(--r-ink);
+    font: inherit;
+    font-size: 0.78em;
+    line-height: 1.15;
+    cursor: pointer;
+    text-align: center;
+}
+.rosary-nav-btn .rosary-svg { width: 4.2em; height: 4.2em; }
+.rosary-nav-btn[aria-current="true"] {
+    border-color: var(--r-c);
+    box-shadow: 0 0 0 2px var(--r-soft2);
+}
+.rosary-nav-btn:hover { border-color: var(--r-soft2); }
+
+/* one mystery */
+.rosary-mystery {
+    background: var(--r-paper);
+    border: 1px solid var(--r-soft2);
+    border-radius: 0.8em;
+    padding: 0.9em 1em;
+    margin-bottom: 0.9em;
+}
+.rosary-mystery:last-child { margin-bottom: 0; }
+.rosary-js .rosary-set:not(.rosary-single) .rosary-mystery:not(.rosary-active) { display: none; }
+
+.rosary-head {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    margin-bottom: 0.6em;
+}
+.rosary-icon {
+    flex: 0 0 auto;
+    width: 6.5em;
+    height: 6.5em;
+    border-radius: 50%;
+    background: var(--r-soft);
+    border: 3px solid var(--r-c);
+    padding: 0.15em;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.rosary-icon .rosary-svg { width: 100%; height: 100%; display: block; }
+.rosary-num {
+    margin: 0 !important;
+    font-size: 0.8em;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--r-c);
+}
+.rosary-mystery-title {
+    margin: 0.1em 0 0.15em !important;
+    font-size: 1.25em;
+    color: var(--r-ink);
+}
+.rosary-fruit {
+    margin: 0 !important;
+    color: var(--r-muted);
+}
+.rosary-fruit strong { color: var(--r-ink); }
+
+/* the decade of beads */
+.rosary-decade {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35em;
+    margin: 0.4em 0 0.5em;
+}
+.rosary-bead {
+    width: 1.55em;
+    height: 1.55em;
+    padding: 0;
+    border-radius: 50%;
+    border: 2px solid var(--r-ink);
+    background: radial-gradient(circle at 35% 30%, #fff, var(--r-soft2) 70%);
+    color: var(--r-ink);
+    font: inherit;
+    font-size: 0.8em;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+.rosary-bead--large {
+    width: 2em;
+    height: 2em;
+    border-radius: 30%;
+    background: radial-gradient(circle at 35% 30%, #fff, var(--r-gold) 75%);
+}
+.rosary-bead--glory {
+    width: auto;
+    border-radius: 1em;
+    padding: 0 0.6em;
+    height: 2em;
+    background: radial-gradient(circle at 35% 30%, #fff, var(--r-gold) 85%);
+}
+.rosary-bead.rosary-done {
+    background: var(--r-soft2);
+}
+.rosary-bead.rosary-here {
+    background: var(--r-c);
+    color: #fff;
+    box-shadow: 0 0 0 3px var(--r-gold);
+}
+.rosary-chain {
+    width: 0.9em;
+    height: 2px;
+    background: var(--r-muted);
+    flex: 0 0 auto;
+}
+
+.rosary-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0.3em 0 0.6em;
+}
+.rosary-btn {
+    padding: 0.3em 0.9em;
+    border: 2px solid var(--r-c);
+    border-radius: 0.5em;
+    background: var(--r-paper);
+    color: var(--r-ink);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+.rosary-btn--primary { background: var(--r-c); color: #fff; }
+.rosary-toggle {
+    margin-left: auto;
+    font-size: 0.88em;
+    color: var(--r-muted);
+    cursor: pointer;
+    user-select: none;
+}
+
+.rosary-now {
+    min-height: 2.6em;
+    padding: 0.6em 0.9em;
+    margin-bottom: 0.6em;
+    border-left: 5px solid var(--r-c);
+    border-radius: 0.4em;
+    background: var(--r-soft);
+}
+.rosary-now:empty { display: none; }
+.rosary-now-ref { font-weight: 700; color: var(--r-ink); }
+.rosary-now-prayer {
+    margin: 0.45em 0 0 !important;
+    font-style: italic;
+    color: var(--r-text);
+}
+.rosary-now-label {
+    display: block;
+    font-size: 0.78em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--r-c);
+}
+
+/* the ten references */
+ol.rosary-refs {
+    margin: 0 !important;
+    padding-left: 2.1em !important;
+}
+ol.rosary-refs > li {
+    margin: 0.12em 0 !important;
+    padding: 0.15em 0.4em;
+    border-radius: 0.35em;
+}
+ol.rosary-refs > li::marker { color: var(--r-c); font-weight: 700; }
+ol.rosary-refs > li.rosary-here { background: var(--r-soft); }
+.rosary-ref { font-weight: 700; color: var(--r-ink) !important; white-space: nowrap; }
+a.rosary-ref { text-decoration: underline dotted; }
+.rosary-cap { color: var(--r-text); }
+.rosary-cap::before { content: " \2013  "; color: var(--r-muted); }
+
+
+/* verse text ------------------------------------------------------------ */
+.rosary-verse {
+    display: block;
+    margin: 0.2em 0 0.35em;
+    padding-left: 0.7em;
+    border-left: 3px solid var(--r-soft2);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 0.95em;
+    line-height: 1.45;
+    color: var(--r-text);
+}
+.rosary-verse-src {
+    font-family: inherit;
+    font-size: 0.8em;
+    color: var(--r-muted);
+    white-space: nowrap;
+}
+.rosary-now-verse {
+    margin: 0.45em 0 0 !important;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.12em;
+    line-height: 1.5;
+    color: var(--r-text);
+}
+.rosary-now.rosary-speaking { box-shadow: inset 0 0 0 2px var(--r-gold); }
+.rosary-credit {
+    margin: 0.4em 0 0 !important;
+    font-size: 0.8em;
+    color: var(--r-muted);
+}
+
+/* audio ----------------------------------------------------------------- */
+.rosary-audio-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4em 1em;
+    margin: 0 0 0.8em;
+    padding: 0.4em 0.8em;
+    border-radius: 0.6em;
+    background: rgba(127, 127, 127, 0.08);
+    font-size: 0.9em;
+    color: var(--r-muted);
+}
+.rosary-audio-icon { font-size: 1.2em; }
+.rosary-select {
+    max-width: 17em;
+    padding: 0.15em 0.3em;
+    border: 1px solid rgba(127, 127, 127, 0.5);
+    border-radius: 0.35em;
+    background: var(--r-paper);
+    color: var(--r-text);
+    font: inherit;
+}
+.rosary-btn--audio { border-style: dashed; }
+.rosary-btn.rosary-on {
+    border-style: solid;
+    background: var(--r-gold);
+    border-color: #b98a12;
+    color: #3b2a00;
+}
+
+/* icon colours ---------------------------------------------------------- */
+.rosary-svg .ri-line      { stroke: var(--r-c); stroke-width: 3; fill: none; stroke-linecap: round; }
+.rosary-svg .ri-line-thin { stroke: var(--r-ink); stroke-width: 1.3; fill: none; stroke-linecap: round; }
+.rosary-svg .ri-line-dash { stroke: var(--r-c); stroke-width: 2; stroke-dasharray: 3 4; fill: none; }
+.rosary-svg .ri-line-fill { fill: var(--r-ink); }
+.rosary-svg .ri-outline   { stroke: var(--r-ink); stroke-width: 1.4; stroke-linejoin: round; }
+.rosary-svg .ri-fill      { fill: var(--r-c); }
+.rosary-svg .ri-soft      { fill: var(--r-soft); }
+.rosary-svg .ri-soft-strong { fill: var(--r-soft2); }
+.rosary-svg .ri-gold      { fill: #e2b33c; }
+.rosary-svg .ri-gold-line { stroke: #d9a521; stroke-width: 2; fill: none; stroke-linecap: round; }
+.rosary-svg .ri-gold-ring { stroke: #d9a521; stroke-width: 2; fill: none; }
+.rosary-svg .ri-gold-dash { stroke: #d9a521; stroke-width: 2; stroke-dasharray: 2 3; fill: none; }
+.rosary-svg .ri-white     { fill: #ffffff; }
+.rosary-svg .ri-dark      { fill: #2b2433; }
+.rosary-svg .ri-wine      { fill: #9b1d3a; }
+.rosary-svg .ri-wine-line { stroke: #9b1d3a; stroke-width: 3; fill: none; stroke-linecap: round; }
+.rosary-svg .ri-green     { fill: #6c9c4c; }
+.rosary-svg .ri-green-line { stroke: #4f7d36; stroke-width: 2.5; fill: none; stroke-linecap: round; }
+.rosary-svg .ri-water     { fill: #8cc8ec; }
+.rosary-svg .ri-water-line { stroke: #4a9ad0; stroke-width: 2.5; fill: none; stroke-linecap: round; }
+.rosary-svg .ri-text      { font: bold 5px sans-serif; fill: var(--r-ink); }
+
+
+/* picture styles ---------------------------------------------------------
+ * The block's data-icons attribute picks the style:
+ *   classic (default) | stained | gold | photo
+ * All styles colour the same SVG drawings; "photo" shows the author's own
+ * pictures (from the :images: option) where there is one.
+ */
+.rosary-icon, .rosary-nav-btn .rosary-svg { position: relative; }
+.rosary-svg .ri-glass-bg { display: none; }
+.rosary-block .rosary-photo,
+.rosary-block .rosary-photo-credit { display: none; }
+.rosary-block[data-icons="photo"] .rosary-photo-credit.rosary-photo-on {
+    display: block;
+    margin: 0.2em 0 0 !important;
+    font-size: 0.82em;
+    font-style: italic;
+    color: var(--r-muted);
+}
+
+.rosary-set--joyful    { --g-deep: #1d4fb8; --g-light: #a9d1ff; --g-a: #bcdcff; --g-b: #6fa8ef; --g-c: #fbe39a; }
+.rosary-set--luminous  { --g-deep: #c97f00; --g-light: #ffe38a; --g-a: #fff0b3; --g-b: #f5c542; --g-c: #bfe3ff; }
+.rosary-set--sorrowful { --g-deep: #5b1a85; --g-light: #d3a8ec; --g-a: #e7cdf3; --g-b: #a46bc4; --g-c: #f6b1b1; }
+.rosary-set--glorious  { --g-deep: #b3141b; --g-light: #ffb3ad; --g-a: #ffd6d2; --g-b: #e8615a; --g-c: #fff1a8; }
+
+/* --- stained glass: arched window, dark leading, jewel colours, rose window */
+.rosary-block[data-icons="stained"] .rosary-icon {
+    border-radius: 50% 50% 8% 8% / 40% 40% 5% 5%;
+    border: 4px solid #2a2622;
+    box-shadow: 0 0 0 2px var(--g-light), 0 3px 8px rgba(0, 0, 0, 0.25);
+    background: #2a2622;
+    padding: 0;
+    width: 6.2em;
+    height: 7.4em;
+}
+.rosary-block[data-icons="stained"] .rosary-icon .rosary-svg { width: 100%; height: 100%; }
+.rosary-block[data-icons="stained"] .rosary-icon .rosary-svg { transform: scale(1.0); }
+.rosary-block[data-icons="stained"] .rosary-icon::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0) 32%,
+                rgba(255, 255, 255, 0.14) 55%, rgba(255, 255, 255, 0) 70%);
+}
+.rosary-nav[data-icons="stained"] .rosary-nav-btn .rosary-svg {
+    border-radius: 50% 50% 8% 8% / 40% 40% 5% 5%;
+    border: 2px solid #2a2622;
+    background: #2a2622;
+    width: 3.6em;
+    height: 4.3em;
+}
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg { overflow: hidden; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-glass-bg { display: inline; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-glass-bg path,
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-glass-bg circle { stroke: #2a2622; stroke-width: 2.4; opacity: 0.9; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-pane-a { fill: var(--g-a); }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-pane-b { fill: var(--g-b); }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-pane-c { fill: var(--g-c); }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg :is(.ri-fill, .ri-soft, .ri-soft-strong, .ri-gold, .ri-white,
+    .ri-dark, .ri-wine, .ri-green, .ri-water, .ri-line-fill) { stroke: #1c1916; stroke-width: 2.3; stroke-linejoin: round; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-fill { fill: var(--g-deep); }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg :is(.ri-soft, .ri-soft-strong) { fill: var(--g-light); }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-white { fill: #fffbe6; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-gold { fill: #ffc928; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-wine { fill: #b0002e; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-green { fill: #3f9a3a; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-water { fill: #4fb0f0; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-dark { fill: #1d1736; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg :is(.ri-line, .ri-line-thin, .ri-line-dash) { stroke: #1c1916; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-line { stroke-width: 3.6; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg :is(.ri-gold-line, .ri-gold-ring, .ri-gold-dash) { stroke: #ffd84d; stroke-width: 2.8; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-green-line { stroke: #2f7d2b; stroke-width: 3; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-wine-line { stroke: #b0002e; stroke-width: 3.6; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="stained"] .rosary-svg .ri-water-line { stroke: #2e8fd6; stroke-width: 3.2; }
+
+/* --- gold icon: figures on gold leaf, brown linework */
+.rosary-block[data-icons="gold"] .rosary-icon {
+    border-radius: 0.5em;
+    border: 5px double #7a5512;
+    background: radial-gradient(circle at 35% 28%, #fff4bd, #ecc85e 45%, #b9872c 100%);
+    padding: 0.1em;
+}
+.rosary-nav[data-icons="gold"] .rosary-nav-btn .rosary-svg {
+    border-radius: 0.3em;
+    border: 2px solid #7a5512;
+    background: radial-gradient(circle at 35% 28%, #fff4bd, #ecc85e 45%, #b9872c 100%);
+}
+:is(.rosary-mysteries, .rosary-nav)[data-icons="gold"] .rosary-svg .ri-outline { stroke: #4b2e0e; stroke-width: 1.6; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="gold"] .rosary-svg .ri-fill { fill: var(--g-deep); }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="gold"] .rosary-svg .ri-soft { fill: #f4e4bc; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="gold"] .rosary-svg .ri-soft-strong { fill: #e6cf98; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="gold"] .rosary-svg .ri-white { fill: #fcf5e1; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="gold"] .rosary-svg .ri-gold { fill: #f8dc80; stroke: #6b4a12; stroke-width: 1.2; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="gold"] .rosary-svg :is(.ri-line, .ri-line-thin, .ri-line-dash) { stroke: #4b2e0e; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="gold"] .rosary-svg .ri-line-fill { fill: #4b2e0e; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="gold"] .rosary-svg :is(.ri-gold-line, .ri-gold-ring, .ri-gold-dash) { stroke: #fff7cf; stroke-width: 2.2; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="gold"] .rosary-svg .ri-text { fill: #4b2e0e; }
+
+/* --- the author's own pictures (:images: option) */
+:is(.rosary-mysteries, .rosary-nav)[data-icons="photo"] .rosary-has-photo .rosary-svg { display: none; }
+:is(.rosary-mysteries, .rosary-nav)[data-icons="photo"] .rosary-has-photo .rosary-photo.rosary-photo-on { display: block; }
+.rosary-photo { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.rosary-block[data-icons="photo"] .rosary-icon.rosary-has-photo { padding: 0; }
+.rosary-nav-btn .rosary-photo { width: 4.2em; height: 4.2em; border-radius: 0.4em; }
+.rosary-block[data-icons="photo"] .rosary-icon.rosary-has-photo .rosary-photo,
+.rosary-block[data-icons="photo"] .rosary-icon.rosary-has-photo { border-radius: 0.6em; }
+.rosary-block[data-icons="photo"] .rosary-icon.rosary-has-photo { width: 8em; height: 8em; }
+
+.rosary-icon .rosary-photo[data-full] { cursor: zoom-in; }
+.rosary-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6em;
+    padding: 2em;
+    background: rgba(10, 8, 6, 0.88);
+    cursor: zoom-out;
+}
+.rosary-lightbox img {
+    max-width: 100%;
+    max-height: calc(100vh - 7em);
+    object-fit: contain;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
+    cursor: default;
+}
+.rosary-lightbox-caption {
+    margin: 0 !important;
+    color: #f2ead8;
+    font-style: italic;
+    text-align: center;
+}
+.rosary-lightbox-close {
+    position: absolute;
+    top: 0.6em;
+    right: 0.8em;
+    border: 0;
+    background: none;
+    color: #fff;
+    font-size: 1.6em;
+    cursor: pointer;
+}
+@media print { .rosary-lightbox { display: none !important; } }
+
+
+/* large layout (default) -------------------------------------------------
+ * The picture sits above the title and beads, up to 75% of the screen's
+ * height.  Screen only: printing keeps the compact layout.
+ */
+@media screen {
+    .rosary-block[data-layout="large"] .rosary-head {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.7em;
+        margin-bottom: 0.9em;
+    }
+    .rosary-block[data-layout="large"] .rosary-icon {
+        width: min(100%, 75vh);
+        height: auto;
+        aspect-ratio: 1 / 1;
+        border-width: 5px;
+        padding: 0.4em;
+    }
+    .rosary-block[data-layout="large"][data-icons="stained"] .rosary-icon {
+        width: min(100%, 62vh);
+        height: auto;
+        aspect-ratio: 5 / 6;
+        border-width: 7px;
+        padding: 0;
+    }
+    .rosary-block[data-layout="large"][data-icons="gold"] .rosary-icon {
+        border-width: 9px;
+        border-radius: 0.8em;
+    }
+    /* a painting is shown whole, on a dark gallery wall */
+    .rosary-block[data-layout="large"][data-icons="photo"] .rosary-icon.rosary-has-photo {
+        width: 100%;
+        height: 75vh;
+        aspect-ratio: auto;
+        padding: 0;
+        border: 0;
+        border-radius: 0.8em;
+        background: #1a1613;
+        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+    }
+    .rosary-block[data-layout="large"][data-icons="photo"] .rosary-icon.rosary-has-photo .rosary-photo {
+        object-fit: contain;
+        border-radius: 0;
+        padding: 1.2em;
+        box-sizing: border-box;
+    }
+    .rosary-block[data-layout="large"] .rosary-mystery-title { font-size: 1.55em; }
+    .rosary-block[data-layout="large"] .rosary-head > div:last-child { max-width: 46em; }
+}
+
+/* Present mode: one mystery full screen, picture 75%, prayer below -------- */
+.rosary-set.rosary-presenting {
+    --r-paper: #141210;
+    --r-text: #f1ece3;
+    --r-muted: #b9b0a3;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 2vh 3vw;
+    border: 0;
+    border-radius: 0;
+    background: #141210;
+    color: var(--r-text);
+    overflow-y: auto;
+}
+.rosary-presenting .rosary-set-title,
+.rosary-presenting .rosary-nav,
+.rosary-presenting ol.rosary-refs,
+.rosary-presenting .rosary-toggle { display: none !important; }
+.rosary-presenting .rosary-mystery.rosary-active {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(16em, 1fr);
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+    column-gap: 2.5vw;
+    height: 96vh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+}
+/* picture: left 75%, full height; text column: right 25% */
+.rosary-presenting .rosary-head { display: contents; }
+.rosary-presenting .rosary-icon {
+    grid-column: 1;
+    grid-row: 1 / span 4;
+    align-self: center;
+    justify-self: center;
+    height: 96vh;
+    width: auto;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+    border-width: 6px;
+    padding: 0.5em;
+}
+.rosary-block[data-icons="stained"] .rosary-presenting .rosary-icon { aspect-ratio: 5 / 6; padding: 0; }
+.rosary-block[data-icons] .rosary-presenting .rosary-icon.rosary-has-photo {
+    width: 100%;
+    height: 96vh;
+    aspect-ratio: auto;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+}
+.rosary-block[data-icons] .rosary-presenting .rosary-icon.rosary-has-photo .rosary-photo {
+    object-fit: contain;
+    border-radius: 0;
+    padding: 0;
+}
+.rosary-presenting .rosary-head > div:last-child {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+    padding-top: 2vh;
+}
+.rosary-presenting .rosary-decade { grid-column: 2; grid-row: 2; margin-top: 1em; }
+.rosary-presenting .rosary-controls { grid-column: 2; grid-row: 3; }
+.rosary-presenting .rosary-now {
+    grid-column: 2;
+    grid-row: 4;
+    align-self: start;
+    max-height: 100%;
+    overflow-y: auto;
+    margin: 0.3em 0 0;
+    background: rgba(255, 255, 255, 0.07);
+    font-size: 1.12em;
+    color: var(--r-text);
+}
+.rosary-presenting .rosary-num { color: var(--r-gold); }
+.rosary-presenting .rosary-mystery-title { color: #fff !important; font-size: 1.6em; }
+.rosary-presenting .rosary-fruit,
+.rosary-presenting .rosary-photo-credit { color: var(--r-muted) !important; }
+.rosary-presenting .rosary-fruit strong { color: #fff; }
+.rosary-presenting .rosary-btn {
+    padding: 0.25em 0.7em;
+    background: transparent;
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.55);
+}
+.rosary-presenting .rosary-btn--primary { background: var(--r-c); border-color: var(--r-c); }
+.rosary-presenting .rosary-btn.rosary-on { background: var(--r-gold); color: #3b2a00; }
+.rosary-presenting .rosary-now-ref, .rosary-presenting .rosary-now-verse { color: #fff; }
+.rosary-presenting .rosary-now-prayer { color: var(--r-text); }
+/* portrait screens: picture on top (75%), text below */
+@media (orientation: portrait) {
+    .rosary-presenting .rosary-mystery.rosary-active {
+        grid-template-columns: 1fr;
+        grid-template-rows: 70vh auto auto auto minmax(0, 1fr);
+    }
+    .rosary-presenting .rosary-icon,
+    .rosary-block[data-icons] .rosary-presenting .rosary-icon.rosary-has-photo { grid-row: 1; height: 70vh; }
+    .rosary-presenting .rosary-head > div:last-child { grid-column: 1; grid-row: 2; }
+    .rosary-presenting .rosary-decade { grid-column: 1; grid-row: 3; }
+    .rosary-presenting .rosary-controls { grid-column: 1; grid-row: 4; }
+    .rosary-presenting .rosary-now { grid-column: 1; grid-row: 5; }
+}
+
+
+/* compact top row ------------------------------------------------------- */
+.rosary-topbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4em;
+    margin-bottom: 0.6em;
+}
+.rosary-topbar .rosary-tabs { margin: 0; gap: 0.3em; }
+.rosary-topbar .rosary-tab {
+    flex-direction: row;
+    align-items: center;
+    padding: 0.25em 0.75em;
+    border-width: 2px;
+    border-radius: 2em;
+    font-size: 0.9em;
+}
+.rosary-topbar .rosary-tab small { display: none; }
+.rosary-topbar-gap { flex: 1 1 auto; }
+.rosary-top-btn, .rosary-show-menus {
+    padding: 0.25em 0.8em;
+    border: 1px solid rgba(127, 127, 127, 0.45);
+    border-radius: 2em;
+    background: var(--r-paper);
+    color: var(--r-text);
+    font: inherit;
+    font-size: 0.85em;
+    cursor: pointer;
+}
+.rosary-top-btn.rosary-on { background: rgba(127, 127, 127, 0.15); }
+.rosary-audio-bar[hidden] { display: none !important; }
+.rosary-show-menus { display: none; }
+/* Hide menus: only the mystery itself stays */
+.rosary-menus-hidden .rosary-topbar,
+.rosary-menus-hidden .rosary-audio-bar,
+.rosary-menus-hidden .rosary-set-title,
+.rosary-menus-hidden .rosary-nav,
+.rosary-menus-hidden .rosary-credit { display: none !important; }
+.rosary-menus-hidden .rosary-show-menus {
+    display: inline-block;
+    position: sticky;
+    top: 0.5em;
+    z-index: 5;
+    margin-bottom: 0.4em;
+}
+.rosary-menus-hidden .rosary-set { padding-top: 0.6em; }
+
+/* slimmer set heading and mystery picker */
+.rosary-set-title { font-size: 1.05em; margin-bottom: 0.4em !important; }
+/* mystery picker: picture and numbered title for each mystery, in every layout */
+.rosary-nav { gap: 0.35em; margin-bottom: 0.7em; }
+.rosary-nav-btn { padding: 0.3em 0.2em; font-size: 0.78em; }
+.rosary-nav-btn .rosary-svg, .rosary-nav-btn .rosary-photo { width: 3.4em !important; height: 3.4em !important; }
+.rosary-nav[data-icons="stained"] .rosary-nav-btn .rosary-svg { width: 3em !important; height: 3.6em !important; }
+
+/* side-by-side layout (default): picture left, details right ------------- */
+@media screen and (min-width: 800px) {
+    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-mystery {
+        display: grid;
+        grid-template-columns: minmax(0, 3fr) minmax(15em, 1fr);
+        grid-template-rows: auto auto auto auto 1fr;
+        column-gap: 1.4em;
+        align-items: start;
+        padding: 0.8em;
+    }
+    .rosary-js .rosary-block[data-layout="side"] .rosary-set:not(.rosary-single) .rosary-mystery:not(.rosary-active),
+    .rosary-block[data-layout="side"].rosary-js .rosary-set:not(.rosary-single) .rosary-mystery:not(.rosary-active) { display: none; }
+    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-head { display: contents; }
+    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-icon {
+        grid-column: 1;
+        grid-row: 1 / span 5;
+        align-self: start;
+        justify-self: center;
+        position: sticky;
+        top: 4.5rem;
+        height: auto;
+        width: min(100%, calc(100vh - 6rem));
+        aspect-ratio: 1 / 1;
+        border-width: 5px;
+        padding: 0.4em;
+    }
+    .rosary-block[data-layout="side"][data-icons="stained"] .rosary-set:not(.rosary-presenting) .rosary-icon {
+        aspect-ratio: 5 / 6;
+        width: min(100%, calc((100vh - 6rem) * 0.83));
+        border-width: 7px;
+        padding: 0;
+    }
+    .rosary-block[data-layout="side"][data-icons="gold"] .rosary-set:not(.rosary-presenting) .rosary-icon { border-width: 9px; border-radius: 0.8em; }
+    .rosary-block[data-layout="side"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo {
+        width: 100%;
+        height: calc(100vh - 6rem);
+        aspect-ratio: auto;
+        padding: 0;
+        border: 0;
+        border-radius: 0.6em;
+        background: #1a1613;
+        box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+    }
+    .rosary-block[data-layout="side"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo .rosary-photo {
+        object-fit: contain;
+        border-radius: 0;
+        padding: 0.8em;
+        box-sizing: border-box;
+    }
+    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-head > div:last-child { grid-column: 2; grid-row: 1; }
+    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-decade { grid-column: 2; grid-row: 2; margin-top: 0.8em; }
+    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-controls { grid-column: 2; grid-row: 3; }
+    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-now { grid-column: 2; grid-row: 4; margin-bottom: 0.4em; }
+    .rosary-block[data-layout="side"] ol.rosary-refs {
+        grid-column: 2;
+        grid-row: 5;
+    }
+    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-mystery-title { font-size: 1.3em; }
+    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-btn { padding: 0.25em 0.7em; }
+    .rosary-block[data-layout="side"] .rosary-set:not(.rosary-presenting) .rosary-toggle { margin-left: 0; }
+    .rosary-block[data-layout="side"] .rosary-set { padding: 0.6em 0.7em 0.7em; }
+}
+/* narrow screens: side-by-side falls back to picture above */
+@media screen and (max-width: 799px) {
+    .rosary-block[data-layout="side"] .rosary-head { flex-direction: column; align-items: center; text-align: center; }
+    .rosary-block[data-layout="side"] .rosary-icon { width: min(100%, 70vh); height: auto; aspect-ratio: 1 / 1; }
+    .rosary-block[data-layout="side"][data-icons="photo"] .rosary-icon.rosary-has-photo { width: 100%; height: 70vh; aspect-ratio: auto; padding: 0; border: 0; background: #1a1613; }
+    .rosary-block[data-layout="side"][data-icons="photo"] .rosary-icon.rosary-has-photo .rosary-photo { object-fit: contain; border-radius: 0; }
+}
+/* side-by-side: widen into the empty space right of the page (set by rosary.js) */
+@media screen and (min-width: 800px) {
+    .rosary-block[data-layout="side"][data-widen] {
+        width: calc(100% + var(--rosary-widen, 0px));
+        max-width: none;
+    }
+}
+@media print {
+    .rosary-topbar, .rosary-show-menus { display: none !important; }
+}
+
+
+/* scripture under the steps: data-verses = all | current | none ----------- */
+.rosary-block[data-verses="none"] .rosary-verse,
+.rosary-block[data-verses="none"] .rosary-now-verse { display: none !important; }
+.rosary-block[data-verses="current"] ol.rosary-refs > li:not(.rosary-here) .rosary-verse { display: none; }
+/* the step's verse is already highlighted in the list, so skip it in the panel */
+.rosary-block[data-verses="current"] .rosary-now-verse { display: none; }
+ol.rosary-refs > li.rosary-step { cursor: pointer; }
+ol.rosary-refs > li.rosary-step:hover:not(.rosary-here) { background: rgba(127, 127, 127, 0.07); }
+
+/* phone-size layout (default): phone-sized picture left, steps right ------ */
+@media screen and (min-width: 700px) {
+    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-mystery {
+        display: grid;
+        grid-template-columns: minmax(12em, 19em) minmax(0, 1fr);
+        grid-template-rows: auto auto auto auto 1fr;
+        column-gap: 1.3em;
+        align-items: start;
+    }
+    .rosary-block[data-layout="phone"].rosary-js .rosary-set:not(.rosary-single) .rosary-mystery:not(.rosary-active) { display: none; }
+    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-head { display: contents; }
+    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-icon {
+        grid-column: 1;
+        grid-row: 1 / span 5;
+        position: sticky;
+        top: 4.5rem;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        border-width: 4px;
+        padding: 0.3em;
+    }
+    .rosary-block[data-layout="phone"][data-icons="stained"] .rosary-set:not(.rosary-presenting) .rosary-icon {
+        aspect-ratio: 5 / 6;
+        border-width: 5px;
+        padding: 0;
+    }
+    .rosary-block[data-layout="phone"][data-icons="gold"] .rosary-set:not(.rosary-presenting) .rosary-icon { border-width: 7px; border-radius: 0.8em; }
+    /* pictures: a phone-shaped portrait panel, the whole picture inside */
+    .rosary-block[data-layout="phone"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 9 / 16;
+        max-height: calc(100vh - 6rem);
+        padding: 0;
+        border: 6px solid #2b2724;
+        border-radius: 1.6em;
+        background: #1a1613;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+    }
+    .rosary-block[data-layout="phone"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo .rosary-photo {
+        object-fit: contain;
+        border-radius: 0;
+    }
+    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-head > div:last-child { grid-column: 2; grid-row: 1; }
+    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-decade { grid-column: 2; grid-row: 2; }
+    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-controls { grid-column: 2; grid-row: 3; }
+    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) .rosary-now { grid-column: 2; grid-row: 4; }
+    .rosary-block[data-layout="phone"] .rosary-set:not(.rosary-presenting) ol.rosary-refs { grid-column: 2; grid-row: 5; }
+}
+@media screen and (max-width: 699px) {
+    .rosary-block[data-layout="phone"] .rosary-head { flex-direction: column; align-items: center; text-align: center; }
+    .rosary-block[data-layout="phone"] .rosary-icon { width: min(100%, 22em); height: auto; aspect-ratio: 1 / 1; }
+    .rosary-block[data-layout="phone"][data-icons="photo"] .rosary-icon.rosary-has-photo { aspect-ratio: 9 / 16; padding: 0; border: 6px solid #2b2724; border-radius: 1.6em; background: #1a1613; }
+    .rosary-block[data-layout="phone"][data-icons="photo"] .rosary-icon.rosary-has-photo .rosary-photo { object-fit: contain; border-radius: 0; }
+}
+
+/* dark mode (Shibuya adds class "dark" to <html>) */
+html.dark .rosary-block,
+html[data-color-mode="dark"] .rosary-block { --r-paper: #1f2228; --r-text: #e6e6e6; --r-muted: #a9b0bb; }
+html.dark .rosary-set,
+html[data-color-mode="dark"] .rosary-set { background: var(--r-paper); }
+html.dark .rosary-mystery-title, html.dark .rosary-set-title, html.dark .rosary-ref,
+html.dark .rosary-fruit strong, html.dark .rosary-now-ref, html.dark .rosary-tab,
+html.dark .rosary-nav-btn, html.dark .rosary-btn { color: #f2f2f2 !important; }
+html.dark .rosary-now, html.dark ol.rosary-refs > li.rosary-here { background: rgba(255, 255, 255, 0.08); }
+html.dark .rosary-verse, html.dark .rosary-now-verse { color: #e6e6e6; }
+
+/* narrow screens */
+@media (max-width: 560px) {
+    .rosary-nav-btn span { display: none; }
+    .rosary-icon { width: 4.6em; height: 4.6em; }
+    .rosary-ref { white-space: normal; }
+}
+
+/* print: every set and mystery, no buttons */
+@media print {
+    .rosary-tabs, .rosary-nav, .rosary-decade, .rosary-controls, .rosary-now, .rosary-audio-bar { display: none !important; }
+    .rosary-js .rosary-set.rosary-tabhidden, .rosary-js .rosary-mystery { display: block !important; }
+    .rosary-set { background: none; break-inside: auto; }
+    .rosary-mystery { break-inside: avoid; }
+    .rosary-block, .rosary-svg * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    a.rosary-ref { text-decoration: none; }
+}
