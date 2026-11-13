@@ -1,5 +1,5 @@
 ======================
-All the Mysteries
+The Rosary
 ======================
 
 .. rosary::
