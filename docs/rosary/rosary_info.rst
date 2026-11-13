@@ -125,7 +125,7 @@ mystery. The page remembers the choice.
      - A famous painting of each mystery, such as Fra Angelico's
        *Annunciation* or Raphael's *Transfiguration*, with the artist and
        title underneath. Click a painting to see all of it (see
-       :doc:`traditional paintings </info/rosary_artworks>`)
+       :doc:`traditional paintings </rosary/rosary_artworks>`)
 
 The opening and closing prayers have their own pictures too: in the
 paintings, Masaccio's *Holy Trinity* and Piero della Francesca's *Madonna

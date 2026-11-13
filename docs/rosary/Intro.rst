@@ -11,19 +11,14 @@ Introduction
 
    * - Page
      - What it shows
-   * - :doc:`Today's mysteries </tools/rosary_today>`
-     - The set of mysteries prayed on today's day of the week
-   * - :doc:`All the mysteries </tools/rosary>`
-     - All four sets, with a tab for each set
-   * - :doc:`Joyful </tools/joyful>`, :doc:`Luminous </tools/luminous>`,
-       :doc:`Sorrowful </tools/sorrowful>`, :doc:`Glorious </tools/glorious>`
-     - One set of five mysteries per page
-   * - :doc:`User guide </info/rosary_info>`
+   * - :doc:`All the mysteries </rosary/rosary>`
+     - All four sets, with a tab for each set, opening on today's set
+   * - :doc:`User guide </rosary/rosary_info>`
      - Praying with the beads, the opening and closing prayers, the Options
        panel, Present mode, reading aloud and printing
-   * - :doc:`Traditional paintings </info/rosary_artworks>`
+   * - :doc:`Traditional paintings </rosary/rosary_artworks>`
      - The public-domain painting used for each mystery
-   * - :doc:`Developer reference </info/rosary_dev>`
+   * - :doc:`Developer reference </rosary/rosary_dev>`
      - Installing the directive, its options and the site's starting choices
 
 

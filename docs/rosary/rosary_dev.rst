@@ -276,7 +276,7 @@ Every rosary offers the pictures in the site's picture folder as
     rosary_images = "/_static/rosary-images"   # "" for no pictures
 
 It holds 20 public-domain paintings (see
-:doc:`traditional paintings </info/rosary_artworks>`).
+:doc:`traditional paintings </rosary/rosary_artworks>`).
 
 A second folder, ``/_static/rosary-images_sg``, is offered as **Stained
 glass windows**, for photographs of stained-glass windows. It works the same
@@ -335,7 +335,7 @@ are shown for the opening and closing prayers, with ``opening:`` and
 ``closing:`` lines in ``credits.txt``. Without them, the drawn opening and
 closing icons are used.
 
-:doc:`Traditional paintings </info/rosary_artworks>` lists a public-domain
+:doc:`Traditional paintings </rosary/rosary_artworks>` lists a public-domain
 painting for every mystery, with a ready-made ``credits.txt``. The pictures are copied into
 the built site automatically. Square pictures work best: they are cropped to
 fill the frame. Use only pictures you have the right to publish, such as your

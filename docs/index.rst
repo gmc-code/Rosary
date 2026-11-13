@@ -12,25 +12,20 @@ with the opening and closing prayers.
     :caption: Table of Contents:
     :numbered:
 
-    info/Intro.rst
+    rosary/Intro.rst
 
 
 .. toctree::
-    :maxdepth: 2
+    :maxdepth: 1
     :caption: Rosary:
 
-    tools/rosary_today.rst
-    tools/rosary.rst
-    tools/joyful.rst
-    tools/luminous.rst
-    tools/sorrowful.rst
-    tools/glorious.rst
+    rosary/rosary.rst
 
 
 .. toctree::
     :maxdepth: 1
     :caption: About the directive:
 
-    info/rosary_info.rst
-    info/rosary_artworks.rst
-    info/rosary_dev.rst
+    rosary/rosary_info.rst
+    rosary/rosary_artworks.rst
+    rosary/rosary_dev.rst
