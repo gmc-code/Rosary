@@ -145,7 +145,7 @@ Options
    * - ``:verses:``
      - Scripture under the steps: ``all`` (default), ``current`` (only the
        step being prayed) or ``none``. Readers can change it in the
-       **Verses** menu.
+       **Scripture verses** menu.
    * - ``:read:``
      - What **Listen** and **Pray aloud** read on each Hail Mary bead:
        ``step`` (the summary), ``both`` (default) or ``scripture``. Readers
@@ -340,7 +340,9 @@ defaults:
 
 A picture style whose folder is missing falls back to ``classic``. A
 reader's own choices from the **Options** menus are kept in their browser
-and take over from these.
+(``localStorage`` keys starting ``rosary-``) and take over from these.
+**Reset to starting choices** in the Options panel removes those keys and
+reloads the page.
 
 The opening and closing prayers are ``OPENING`` and ``CLOSING`` in
 ``rosary_data.py``: one entry per bead, with its label, name, intention and

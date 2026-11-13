@@ -331,7 +331,7 @@
 
             /* scripture under the steps: all, the current step only, or none */
             if (block.querySelector('.rosary-verse')) {
-                var verLabel = el('label', 'rosary-audio-field', 'Verses ');
+                var verLabel = el('label', 'rosary-audio-field', 'Scripture verses ');
                 var verSelect = el('select', 'rosary-select');
                 [['all', 'All, under each step'], ['current', 'Current step, in the panel'], ['none', 'Hidden']].forEach(function (v) {
                     var o = el('option', '', v[1]);
@@ -529,6 +529,61 @@
                 speech.rate = parseFloat(rateSelect.value) || 0.9;
                 store(STORE_RATE, rateSelect.value);
             });
+        }
+
+        /* ---------------- tidy the Options panel into labelled groups */
+        if (bar) {
+            var oldIcon = bar.querySelector('.rosary-audio-icon');
+            if (oldIcon) oldIcon.remove();
+            bar.classList.add('rosary-opt-panel');
+            var groups = el('div', 'rosary-opt-groups');
+            var addGroup = function (title, items) {
+                items = items.filter(function (x) { return x && x.parentNode === bar; });
+                if (!items.length) return;
+                var g = el('fieldset', 'rosary-opt-group');
+                g.appendChild(el('legend', '', title));
+                var selects = el('div', 'rosary-opt-selects');
+                var checks = el('div', 'rosary-opt-checks');
+                items.forEach(function (lab) {
+                    (lab.querySelector('input[type="checkbox"]') ? checks : selects).appendChild(lab);
+                });
+                if (selects.children.length) g.appendChild(selects);
+                if (checks.children.length) g.appendChild(checks);
+                groups.appendChild(g);
+            };
+            addGroup('🖼 Pictures', [picLabel, navLabel, layLabel]);
+            addGroup('✝ Prayers', [exLabel, verLabel, prLabel, faLabel]);
+            addGroup('🔊 Reading aloud', [voiceLabel, readLabel, rateLabel, titlesLabel]);
+            // anything not placed above stays, in a final group
+            var rest = Array.prototype.slice.call(bar.children);
+            if (rest.length) addGroup('Other', rest);
+            bar.appendChild(groups);
+
+            var foot = el('div', 'rosary-opt-foot');
+            var resetBtn = button('rosary-opt-btn', '↺ Reset to starting choices',
+                'Forget the choices saved in this browser and go back to the site’s starting choices');
+            var doneBtn = button('rosary-opt-btn rosary-opt-done', '✓ Done', 'Close the options');
+            resetBtn.addEventListener('click', function () {
+                try {
+                    var keys = [];
+                    for (var i = 0; i < window.localStorage.length; i++) {
+                        var k = window.localStorage.key(i);
+                        if (k && k.indexOf('rosary-') === 0) keys.push(k);
+                    }
+                    keys.forEach(function (k) { window.localStorage.removeItem(k); });
+                } catch (e) { /* storage unavailable */ }
+                if (window.speechSynthesis) window.speechSynthesis.cancel();
+                document.documentElement.classList.remove('rosary-page-focus');
+                window.location.reload();
+            });
+            doneBtn.addEventListener('click', function () {
+                setOptions(false);
+                store('rosary-options-open', '0');
+                if (optionsBtn) optionsBtn.focus();
+            });
+            foot.appendChild(resetBtn);
+            foot.appendChild(doneBtn);
+            bar.appendChild(foot);
         }
 
         /* ---------------- sets: tabs, or today's set only */

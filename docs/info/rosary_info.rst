@@ -90,6 +90,8 @@ windows** pictures, **Classic** icons in the mystery picker, the
 only** read aloud, with the opening and closing prayers and the Fatima
 prayer on. After that, the
 page remembers each reader's own choices from the **Options** menus.
+**Reset to starting choices**, at the bottom of **Options**, forgets them
+and goes back to these starting choices.
 
 
 Choosing the pictures
@@ -126,10 +128,18 @@ Layout and presenting
 
 The top row holds the four sets (hover over one to see its days), then:
 
-* **Options** opens the **Pictures**, **Mystery picker**, **Layout**,
-  **Verses**, **Opening & closing**, **Voice**, **Read aloud** and **Speed**
-  menus and the **Show the prayers** and **Fatima prayer** checkboxes, and
-  closes them again.
+* **Options** opens the options panel, and closes it again. The panel has
+  three groups, side by side on a wide screen and one above another on a
+  phone:
+
+  * **Pictures:** **Pictures**, **Mystery picker** and **Layout**.
+  * **Prayers:** **Opening & closing**, **Scripture verses**, **Show the prayers** and
+    **Fatima prayer**.
+  * **Reading aloud:** **Voice**, **Read aloud**, **Speed** and **Read prayer
+    names**.
+
+  At the bottom, **Reset to starting choices** forgets the choices saved in
+  this browser, and **Done** closes the panel.
 * **Mystery picker** sets the small pictures in the row of five mysteries.
   *Same as pictures* matches the main pictures; choose another style to
   mix them, e.g. simple **Classic** icons in the picker with **Stained glass
@@ -151,7 +161,7 @@ The top row holds the four sets (hover over one to see its days), then:
 
 On a narrow screen the details always go under the picture.
 
-**Verses** (under **Options**) sets the scripture shown under the ten steps:
+**Scripture verses** (under **Options**) sets the scripture shown under the ten steps:
 
 * **All, under each step**: every step's passage, under its line in the
   list.
