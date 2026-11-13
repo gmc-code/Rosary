@@ -55,9 +55,9 @@ Opening and closing prayers
 **Opening & closing** (under **Options**) adds the rest of the Rosary's
 prayers, so a whole set can be prayed from start to finish:
 
-* **Opening prayers**, before the first mystery: the Sign of the Cross and
-  the Apostles' Creed (on the crucifix), the Our Father, three Hail Marys for
-  an increase in faith, hope and charity, and the Glory Be.
+* **Opening prayers**, before the first mystery: the Sign of the Cross, the
+  Apostles' Creed, the Our Father for the intentions of the Holy Father, three
+  Hail Marys for an increase in faith, hope and charity, and the Glory Be.
 * **Closing prayers**, after the fifth mystery: the Hail, Holy Queen, "Pray
   for us, O holy Mother of God", the closing prayer ("O God, whose
   only-begotten Son...") and the Sign of the Cross.

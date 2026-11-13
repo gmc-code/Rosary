@@ -444,8 +444,9 @@ PRAYERS.update({
 # The beads of the opening and closing prayers, in order:
 # (bead label, name, intention, [prayer keys], bead style, only with "St Michael and Memorare")
 OPENING = [
-    ('\u271D', "The Sign of the Cross and the Apostles' Creed", '', ['sign-of-cross', 'creed'], 'cross', False),
-    ('', 'Our Father', '', ['our-father'], 'large', False),
+    ('\u271D', 'The Sign of the Cross', '', ['sign-of-cross'], 'cross', False),
+    ('Creed', "The Apostles' Creed", '', ['creed'], 'cross', False),
+    ('', 'Our Father', 'for the intentions of the Holy Father', ['our-father'], 'large', False),
     ('1', 'Hail Mary', 'for an increase in faith', ['hail-mary'], '', False),
     ('2', 'Hail Mary', 'for an increase in hope', ['hail-mary'], '', False),
     ('3', 'Hail Mary', 'for an increase in charity', ['hail-mary'], '', False),
