@@ -333,7 +333,7 @@
             if (block.querySelector('.rosary-verse')) {
                 var verLabel = el('label', 'rosary-audio-field', 'Verses ');
                 var verSelect = el('select', 'rosary-select');
-                [['all', 'All'], ['current', 'Current step only'], ['none', 'Hidden']].forEach(function (v) {
+                [['all', 'All, under each step'], ['current', 'Current step, in the panel'], ['none', 'Hidden']].forEach(function (v) {
                     var o = el('option', '', v[1]);
                     o.value = v[0];
                     verSelect.appendChild(o);

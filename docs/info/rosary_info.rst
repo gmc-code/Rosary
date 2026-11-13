@@ -86,7 +86,7 @@ Starting choices
 
 The first time someone opens the site, it starts on **Stained glass
 windows** pictures, **Classic** icons in the mystery picker, the
-**Phone-size picture** layout, **Current step only** verses and **Step
+**Phone-size picture** layout, **Current step, in the panel** verses and **Step
 only** read aloud, with the opening and closing prayers and the Fatima
 prayer on. After that, the
 page remembers each reader's own choices from the **Options** menus.
@@ -153,9 +153,13 @@ On a narrow screen the details always go under the picture.
 
 **Verses** (under **Options**) sets the scripture shown under the ten steps:
 
-* **All**: every step's passage.
-* **Current step only**: just the passage for the bead being prayed; the
-  others show only their one-line summary.
+* **All, under each step**: every step's passage, under its line in the
+  list.
+* **Current step, in the panel**: the list shows only the one-line summaries;
+  the passage for the bead being prayed appears in the panel at the top, even
+  when it isn't read aloud, and before the Hail Mary when **Show the
+  prayers** is ticked. The opening and closing prayers work the same way:
+  the words of the prayer being said appear in the panel.
 * **Hidden**: no passages, only the summaries.
 
 Click a step in the list to go to its bead.
