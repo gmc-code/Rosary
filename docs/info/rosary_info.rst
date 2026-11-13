@@ -45,7 +45,7 @@ Click **Begin**, then **Next** for each prayer, or click any bead to jump to
 it. After the Glory Be, **Finish decade** moves on to the next mystery of the
 set, so all five decades can be prayed in order.
 
-Tick **Show the prayers** to see the words of the Our Father, Hail Mary, Glory
+Tick **Show the prayers** (under **Options**) to see the words of the Our Father, Hail Mary, Glory
 Be and O my Jesus on each bead. This is useful when leading a class.
 
 
@@ -84,8 +84,8 @@ Layout and presenting
 The top row holds the four sets (hover over one to see its days), then:
 
 * **Options** opens the **Pictures**, **Mystery picker**, **Layout**,
-  **Verses**, **Voice**, **Read aloud** and **Speed** menus, and closes them
-  again.
+  **Verses**, **Voice**, **Read aloud** and **Speed** menus and the **Show
+  the prayers** checkbox, and closes them again.
 * **Mystery picker** sets the small pictures in the row of five mysteries.
   *Same as pictures* matches the main pictures; choose another style to
   mix them, e.g. simple **Classic** icons in the picker with **Stained glass
@@ -154,7 +154,7 @@ downloaded, but sound must be on.
 * **Read aloud** (under **Options**) sets what is read on each Hail Mary
   bead: **Step only** (the one-line summary), **Step and scripture**, or
   **Scripture only**.
-* Tick **Show the prayers** to have the Our Father, Hail Mary, Glory Be and
+* Tick **Show the prayers** (under **Options**) to have the Our Father, Hail Mary, Glory Be and
   O my Jesus read aloud too. Leave it unticked to hear only the scripture, as a
   quiet meditation.
 * Choose the **Voice** and **Speed** in the bar at the top. The page picks an

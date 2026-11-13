@@ -332,6 +332,25 @@
             }
         }
 
+        /* Show the prayers: one checkbox for the whole rosary, in the Options panel */
+        var savedPrayers = store('rosary-prayers');
+        if (savedPrayers === '1' || savedPrayers === '0') state.showPrayers = savedPrayers === '1';
+        var prayersBox = null;
+        if (bar && config.beads) {
+            var prLabel = el('label', 'rosary-audio-field rosary-prayers-field');
+            prayersBox = el('input');
+            prayersBox.type = 'checkbox';
+            prayersBox.checked = state.showPrayers;
+            prLabel.appendChild(prayersBox);
+            prLabel.appendChild(document.createTextNode(' Show the prayers'));
+            bar.appendChild(prLabel);
+            prayersBox.addEventListener('change', function () {
+                state.showPrayers = prayersBox.checked;
+                store('rosary-prayers', state.showPrayers ? '1' : '0');
+                refreshAll();
+            });
+        }
+
         /* large layout and Present mode show the whole painting, not the crop */
         function updatePhotos() {
             var big = block.getAttribute('data-layout') !== 'compact' ||
@@ -568,18 +587,22 @@
                 });
             }
 
-            var toggleLabel = el('label', 'rosary-toggle');
-            var toggle = el('input');
-            toggle.type = 'checkbox';
-            toggle.checked = state.showPrayers;
-            toggleLabel.appendChild(toggle);
-            toggleLabel.appendChild(document.createTextNode(' Show the prayers'));
-            controls.appendChild(toggleLabel);
+            var toggle = null;
+            if (!prayersBox) {     // no Options panel on this rosary: keep a checkbox here
+                var toggleLabel = el('label', 'rosary-toggle');
+                toggle = el('input');
+                toggle.type = 'checkbox';
+                toggle.checked = state.showPrayers;
+                toggleLabel.appendChild(toggle);
+                toggleLabel.appendChild(document.createTextNode(' Show the prayers'));
+                controls.appendChild(toggleLabel);
+            }
 
             prev.addEventListener('click', function () { if (pos > 0) go(pos - 1, true); });
             next.addEventListener('click', function () { advance(true); });
-            toggle.addEventListener('change', function () {
+            if (toggle) toggle.addEventListener('change', function () {
                 state.showPrayers = toggle.checked;
+                store('rosary-prayers', state.showPrayers ? '1' : '0');
                 refreshAll();
             });
             if (listen) listen.addEventListener('click', function () {
@@ -649,7 +672,8 @@
             }
 
             function render() {
-                toggle.checked = state.showPrayers;
+                if (toggle) toggle.checked = state.showPrayers;
+                if (prayersBox) prayersBox.checked = state.showPrayers;
                 beads.forEach(function (b, i) {
                     b.classList.toggle('rosary-here', i === pos);
                     b.classList.toggle('rosary-done', pos >= 0 && i < pos);
