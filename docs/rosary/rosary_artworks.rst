@@ -1,8 +1,8 @@
-===============================
-Rosary: traditional paintings
-===============================
+====================
+Rosary: masterpieces
+====================
 
-The rosary can show a traditional painting for each mystery, and for the
+The rosary can show a public-domain masterpiece for each mystery, and for the
 opening and closing prayers, instead of the stained-glass windows or the
 drawn icons. The paintings below are all centuries old, so the artworks are in
 the public domain, and Wikimedia Commons has free photographs of them.
@@ -13,8 +13,8 @@ Using the paintings
 
 The paintings are already in ``docs\_static\rosary-images``, cropped to
 squares around the main figures, with the whole paintings in its ``full``
-folder. Every rosary on the site offers them: choose **Traditional
-paintings** from the **Pictures** menu. The artist, title and gallery appear
+folder. Every rosary on the site offers them: choose **Masterpieces**
+from the **Pictures** menu. The artist, title and gallery appear
 under each mystery's title, and clicking a painting shows the whole work.
 
 To open a page on the paintings, add ``:icons: photo``:

@@ -16,7 +16,7 @@ Introduction
    * - :doc:`User guide </rosary/rosary_info>`
      - Praying with the beads, the opening and closing prayers, the Options
        panel, full screen, reading aloud and printing
-   * - :doc:`Traditional paintings </rosary/rosary_artworks>`
+   * - :doc:`Masterpieces </rosary/rosary_artworks>`
      - The public-domain painting used for each mystery
    * - :doc:`Developer reference </rosary/rosary_dev>`
      - Installing the directive, its options and the site's starting choices

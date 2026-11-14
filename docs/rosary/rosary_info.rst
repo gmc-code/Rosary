@@ -116,22 +116,22 @@ order.
 
    * - Pictures
      - Look
-   * - Modern Australian
-     - Each mystery set in the Australian bush, in thick, bold brushwork
-       in the style of Australian modernist painting. The opening and
-       closing prayers use the drawn icons.
-   * - Cubism
-     - Each mystery in the style of Cubism: bold, broken planes of colour
-       and strong outlines. These pictures are wide, so the iPad layout
-       frames them to their shape. The opening and closing prayers use the
-       drawn icons.
    * - Stained glass windows (the starting choice)
      - Photographs of real stained-glass windows, flattened to face the front
-   * - Traditional paintings
+   * - Cubism
+     - Each mystery in the style of Cubism: bold, broken planes of colour
+       and strong outlines
+   * - Renaissance style
+     - Newly painted pictures in the style of traditional Catholic sacred
+       art, with Mary, Jesus and Joseph looking the same in every mystery
+   * - Modern Australian
+     - Each mystery set in the Australian bush, in thick, bold brushwork
+       in the style of Australian modernist painting
+   * - Masterpieces
      - A famous painting of each mystery, such as Fra Angelico's
        *Annunciation* or Raphael's *Transfiguration*, with the artist and
        title underneath. Click a painting to see all of it (see
-       :doc:`traditional paintings </rosary/rosary_artworks>`)
+       :doc:`masterpieces </rosary/rosary_artworks>`)
    * - Gold icon
      - Figures on gold leaf, in the style of a Byzantine icon
    * - Stained glass (drawn)
@@ -141,9 +141,11 @@ order.
      - Soft colours in a circle, in each set's colour
 
 The opening and closing prayers have their own pictures too: in the
-paintings, Masaccio's *Holy Trinity* and Piero della Francesca's *Madonna
-della Misericordia*, and a stained-glass window of each. In the drawn styles
-show a whole rosary, the loop of beads with the medal, the three Hail Marys,
+Masterpieces, Masaccio's *Holy Trinity* and Piero della Francesca's *Madonna
+della Misericordia*. In the other picture sets, the opening picture is the
+crucifix with a whole rosary (where the rosary begins) and the closing
+picture is Mary as Queen and Mother of Mercy, sheltering her people under her
+mantle (the Hail, Holy Queen). The drawn styles show a whole rosary, the loop of beads with the medal, the three Hail Marys,
 the Our Father bead and the crucifix the opening prayers are said on
 (opening), and hands joined in prayer with a rosary hanging across them
 (closing). On the Sign of the Cross bead, the panel also says how to make

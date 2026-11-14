@@ -18,12 +18,12 @@
     var STORE_ICONS = 'rosary-icons';
     var STORE_LAYOUT = 'rosary-layout';
     var FULLSCREEN = !!(document.documentElement.requestFullscreen);
-    // drawn styles; the picture folders (Traditional paintings, Stained glass
+    // drawn styles; the picture folders (Stained glass windows, Masterpieces
     // windows ...) are added from the directive's config.photosets
     var STYLES = [['classic', 'Classic'], ['stained', 'Stained glass (drawn)'], ['gold', 'Gold icon']];
-    // menu order: newest picture folder first, the drawn styles last
+    // menu order: the picture folders in their config order, then the drawn styles
     function menuStyles(config) {
-        return STYLES.concat(config.photosets || []).reverse();
+        return (config.photosets || []).concat(STYLES.slice().reverse());
     }
 
     function el(tag, cls, text) {

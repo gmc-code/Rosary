@@ -132,9 +132,9 @@ Options
      - Leave out the **Reading aloud** options and the **🔊 Listen** buttons.
    * - ``:icons:``
      - Picture style to start with: ``classic``, ``stained``, ``gold``,
-       ``photo`` (Traditional paintings), ``photo-sg`` (Stained glass
-       windows), ``photo-cubism`` (Cubism) or ``photo-modaus`` (Modern
-       Australian); ``photo-<key>`` for any other
+       ``photo`` (Masterpieces), ``photo-sg`` (Stained glass
+       windows), ``photo-cubism`` (Cubism), ``photo-modaus`` (Modern
+       Australian) or ``photo-trad`` (Renaissance style); ``photo-<key>`` for any other
        picture folder.
    * - ``:images:``
      - Folder of pictures for this rosary instead of the site's
@@ -296,11 +296,11 @@ A new style needs only CSS: copy one of the blocks under *picture styles* in
 ``rosary.css`` and add its name to ``STYLES`` in ``rosary.js`` and
 ``ICON_STYLES`` in ``rosary.py``.
 
-Traditional paintings and your own pictures
--------------------------------------------
+Masterpieces and your own pictures
+----------------------------------
 
 Every rosary offers the pictures in the site's picture folder as
-**Traditional paintings** in the **Pictures** menu. The folder is set in
+**Masterpieces** in the **Pictures** menu. The folder is set in
 ``conf.py`` (this is the default):
 
 .. code-block:: python
@@ -308,33 +308,35 @@ Every rosary offers the pictures in the site's picture folder as
     rosary_images = "/_static/rosary-images"   # "" for no pictures
 
 It holds 20 public-domain paintings (see
-:doc:`traditional paintings </rosary/rosary_artworks>`).
+:doc:`masterpieces </rosary/rosary_artworks>`).
 
-A second folder, ``/_static/rosary-images_sg``, is offered as **Stained
+A second folder, ``/_static/rosary-images-sg``, is offered as **Stained
 glass windows**, for photographs of stained-glass windows. It works the same
 way: pictures named ``joyful-1.jpg`` ... ``glorious-5.jpg``, an optional
 ``credits.txt`` and an optional ``full`` folder. Its pictures are
 perspective-corrected photographs saved as ``.webp``. A third folder,
-``/_static/rosary-images-cubism``, is offered as **Cubism**, and a fourth,
-``/_static/rosary-images-mod-aus``, as **Modern Australian**, in the same
-way. Each folder becomes its own
-entry in the **Pictures** menu, which lists them last folder first, above the
-drawn styles (the **Mystery picker** menu uses the same order under **Same as
-pictures**); a folder that is missing or empty is left
+``/_static/rosary-images-cubism``, is offered as **Cubism**, a fourth,
+``/_static/rosary-images-mod-aus``, as **Modern Australian**, and a fifth,
+``/_static/rosary-images-trad``, as **Renaissance style**, in the same way. Each folder becomes its own
+entry in the **Pictures** menu, in this order: Stained glass windows, Cubism,
+Renaissance style, Modern Australian, Masterpieces, then the drawn styles (the
+**Mystery picker** menu uses the same order under **Same as pictures**); a folder that is missing or empty is left
 out, and a mystery without a picture in the chosen folder uses its drawn
 icon. In the iPad layout, wide (landscape) pictures are framed to their own
 shape; tall ones keep the phone-shaped frame.
 
 More folders can be listed in ``conf.py``, each with a short key and its
-menu label (this replaces the four defaults):
+menu label, in the order the menu should list them (this replaces the five
+defaults):
 
 .. code-block:: python
 
     rosary_image_sets = [
-        ("photo", "Traditional paintings", "/_static/rosary-images"),
-        ("sg", "Stained glass windows", "/_static/rosary-images_sg"),
+        ("sg", "Stained glass windows", "/_static/rosary-images-sg"),
         ("cubism", "Cubism", "/_static/rosary-images-cubism"),
+        ("trad", "Renaissance style", "/_static/rosary-images-trad"),
         ("modaus", "Modern Australian", "/_static/rosary-images-mod-aus"),
+        ("photo", "Masterpieces", "/_static/rosary-images"),
         ("icons", "Eastern icons", "/_static/rosary-images_icons"),
     ]
 
@@ -375,7 +377,7 @@ are shown for the opening and closing prayers, with ``opening:`` and
 ``closing:`` lines in ``credits.txt``. Without them, the drawn opening and
 closing icons are used.
 
-:doc:`Traditional paintings </rosary/rosary_artworks>` lists a public-domain
+:doc:`Masterpieces </rosary/rosary_artworks>` lists a public-domain
 painting for every mystery, with a ready-made ``credits.txt``. The pictures are copied into
 the built site automatically. Square pictures work best: they are cropped to
 fill the frame. Use only pictures you have the right to publish, such as your
@@ -392,7 +394,7 @@ choices for every rosary on the site are built into ``rosary.py``, so
 
 .. code-block:: python
 
-    rosary_default_icons = "photo-sg"        # classic, stained, gold, photo, photo-sg, photo-cubism, photo-modaus
+    rosary_default_icons = "photo-sg"        # classic, stained, gold, photo, photo-sg, photo-cubism, photo-modaus, photo-trad
     rosary_default_nav_icons = "classic"     # same, classic, stained, gold, photo, photo-sg
     rosary_default_layout = "auto"           # auto, desktop, ipad, iphone
     rosary_default_pictures = True           # False to start with the pictures hidden
