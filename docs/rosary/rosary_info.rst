@@ -290,7 +290,7 @@ order:
   decade to Jesus in honour of the mystery and asks, through Mary's prayers,
   for the mystery's fruit, e.g. "We offer you, Lord Jesus, this first decade
   in honour of your Incarnation... we ask of you a deep humility of heart."
-* **A classic meditation (1915)**: the meditations from *The Rosary*, a
+* **A classic meditation**: the meditations from *The Rosary*, a
   Dominican booklet printed in San Francisco in 1915, now in the public
   domain. Each has a title (the virtue it teaches, e.g. *Mary's Humility*), a
   reflection of about 80 to 150 words in the language of its day, and an

@@ -276,7 +276,7 @@ class RosaryDirective(SphinxDirective):
                    '<p class="rosary-offering-text rosary-say">%s</p>' % _esc(OFFERINGS[key][index]))
         if key in CLASSIC:
             title, paras, invocation = CLASSIC[key][index]
-            out += box('classic', 'Classic meditation (1915)',
+            out += box('classic', 'Classic meditation',
                        '<p class="rosary-classic-title rosary-say">%s</p>%s'
                        '<p class="rosary-meditation-prayer rosary-say">%s</p>'
                        '<p class="rosary-classic-source">%s</p>' % (

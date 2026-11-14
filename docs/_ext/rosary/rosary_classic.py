@@ -6,7 +6,7 @@ McMahon, O.P.) and an Imprimatur (Edward J. Hanna, Archbishop of San
 Francisco, 27 September 1915) and names no author.  The text is in the public
 domain.
 
-Shown when the reader chooses "A classic meditation (1915)" under "Under the
+Shown when the reader chooses "A classic meditation" under "Under the
 beads" (directive option :under: classic).  The book was written before the
 Luminous Mysteries were added in 2002, so those have none here.
 

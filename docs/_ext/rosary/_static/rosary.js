@@ -209,10 +209,10 @@
          * "Under the beads" in Options); any mix can be shown, in this order */
         var UNDER_KEYS = ['steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern'];
         var UNDER_SHORT = {steps: 'Steps', meditation: 'Meditation', virtue: 'Virtue', intention: 'Intention',
-                           offering: 'Offering', classic: 'Classic (1915)', modern: 'Modern'};
+                           offering: 'Offering', classic: 'Classic', modern: 'Modern'};
         var UNDER_LONG = {steps: 'The ten steps', meditation: 'A meditation', virtue: 'A meditation on the virtue',
                           intention: 'An intention', offering: 'A Montfort-style offering',
-                          classic: 'A classic meditation (1915)', modern: 'A modern reflection'};
+                          classic: 'A classic meditation', modern: 'A modern reflection'};
         var underSyncs = [];
         // "none", "all" (the six alternatives to the steps), one key, or a list
         function parseUnder(v) {
