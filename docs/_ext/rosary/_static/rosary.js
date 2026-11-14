@@ -486,13 +486,13 @@
                 [['none', 'None'], ['steps', 'The ten steps'], ['meditation', 'A meditation'],
                  ['virtue', 'A meditation on the virtue'], ['intention', 'An intention'],
                  ['offering', 'A Montfort-style offering'], ['classic', 'A classic meditation (1915)'],
-                 ['modern', 'A modern reflection']].forEach(function (v) {
+                 ['modern', 'A modern reflection'], ['all', 'All of these']].forEach(function (v) {
                     var o = el('option', '', v[1]);
                     o.value = v[0];
                     undSelect.appendChild(o);
                 });
                 var savedUnder = store('rosary-under');
-                var UNDER = ['none', 'steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern'];
+                var UNDER = ['none', 'steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern', 'all'];
                 if (UNDER.indexOf(savedUnder) !== -1) block.setAttribute('data-under', savedUnder);
                 undSelect.value = UNDER.indexOf(block.getAttribute('data-under')) !== -1
                     ? block.getAttribute('data-under') : 'none';
@@ -706,7 +706,7 @@
          * Offering, Classic, Modern - the same choice as "Under the beads" */
         var UNDER_CHOICES = [['none', 'None'], ['steps', 'Steps'], ['meditation', 'Meditation'], ['virtue', 'Virtue'],
                              ['intention', 'Intention'], ['offering', 'Offering'],
-                             ['classic', 'Classic'], ['modern', 'Modern']];
+                             ['classic', 'Classic'], ['modern', 'Modern'], ['all', 'All']];
         var underPickers = [];
         function setUnder(v) {
             block.setAttribute('data-under', v);
@@ -1192,7 +1192,8 @@
             // parts marked rosary-say are shown and read on the Our Father bead
             function meditation() {
                 var under = block.getAttribute('data-under');
-                if (!under || under === 'steps' || under === 'none') return null;
+                // nothing extra is read for none, steps or all (all would be too long)
+                if (!under || under === 'steps' || under === 'none' || under === 'all') return null;
                 var box = mystery.querySelector('.rosary-under-box.rosary-' + under);
                 if (!box) return null;
                 var parts = Array.prototype.map.call(box.querySelectorAll('.rosary-say'), function (e) {

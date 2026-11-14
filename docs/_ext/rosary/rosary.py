@@ -82,8 +82,9 @@ Options
                      meditation on the mystery's fruit), intention (who and
                      what the decade is offered for), classic (a classic
                      meditation from The Rosary, 1915; rosary_classic.py) or
-                     modern (a modern reflection with a question); the
-                     others are in rosary_meditations.py  [none]
+                     modern (a modern reflection with a question), or all
+                     (every one of these, one after another); the others
+                     are in rosary_meditations.py  [none]
     :read:           what Listen / Pray aloud read for each Hail Mary: step
                      (the one-line summary), both (summary then scripture)
                      or scripture  [step]
@@ -148,7 +149,7 @@ def days_text(days):
     return names[0] if len(names) == 1 else ' and '.join(names)
 
 
-UNDER = ('none', 'steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern')   # under the beads
+UNDER = ('none', 'steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern', 'all')   # under the beads
 LAYOUTS = ('auto', 'desktop', 'ipad', 'iphone')
 # layouts from earlier versions, mapped to the nearest new one
 OLD_LAYOUTS = {'phone': 'ipad', 'large': 'ipad', 'side': 'desktop', 'compact': 'iphone'}
@@ -706,7 +707,7 @@ def setup(app):
     app.add_config_value('rosary_default_layout', 'auto', 'env')         # auto, desktop, ipad, iphone
     app.add_config_value('rosary_default_pictures', True, 'env')         # False to start with the pictures hidden
     app.add_config_value('rosary_default_virtues', True, 'env')          # False to hide the virtues in the picker
-    app.add_config_value('rosary_default_under', 'none', 'env')          # none, steps, meditation, virtue, intention, offering, classic, modern
+    app.add_config_value('rosary_default_under', 'none', 'env')          # none, steps, meditation, virtue, intention, offering, classic, modern, all
     app.add_config_value('rosary_default_verses', 'current', 'env')      # all, current, none
     app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture
     app.add_config_value('rosary_default_extra_prayers', 'on', 'env')    # off, on, full

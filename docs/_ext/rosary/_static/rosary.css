@@ -1270,8 +1270,17 @@ html.dark .rosary-verse, html.dark .rosary-now-verse { color: #e6e6e6; }
 }
 
 
-/* Under the beads: nothing (data-under="none"), the ten steps ("steps"), or one of a
-   meditation, offering, classic meditation or modern reflection ----------- */
+/* Under the beads: nothing (data-under="none"), the ten steps ("steps"), one of a
+   meditation, offering, classic meditation or modern reflection, or all of
+   them one after another ("all") ------------------------------------------ */
+/* all: in the same order as the menu */
+.rosary-block[data-under="all"] .rosary-under-wrap { display: flex; flex-direction: column; gap: 0.7em; }
+.rosary-block[data-under="all"] .rosary-meditation { order: 1; }
+.rosary-block[data-under="all"] .rosary-virtue { order: 2; }
+.rosary-block[data-under="all"] .rosary-intention { order: 3; }
+.rosary-block[data-under="all"] .rosary-offering { order: 4; }
+.rosary-block[data-under="all"] .rosary-classic { order: 5; }
+.rosary-block[data-under="all"] .rosary-modern { order: 6; }
 .rosary-under-box { display: none; }
 .rosary-block:not([data-under="steps"]) .rosary-mystery:not(.rosary-prayers-card) ol.rosary-refs { display: none; }
 .rosary-block[data-under="meditation"] .rosary-meditation,
@@ -1279,7 +1288,8 @@ html.dark .rosary-verse, html.dark .rosary-now-verse { color: #e6e6e6; }
 .rosary-block[data-under="intention"] .rosary-intention,
 .rosary-block[data-under="offering"] .rosary-offering,
 .rosary-block[data-under="classic"] .rosary-classic,
-.rosary-block[data-under="modern"] .rosary-modern {
+.rosary-block[data-under="modern"] .rosary-modern,
+.rosary-block[data-under="all"] .rosary-under-box {
     display: block;
     padding: 0.7em 1em 0.8em;
     border-radius: 0.5em;

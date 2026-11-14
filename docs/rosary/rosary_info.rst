@@ -303,17 +303,20 @@ its beads:
   connecting the mystery to ordinary life (being honest with God, turning up
   for people, standing up for someone who is being picked on), ending with a
   question to think about. These suit students well.
+* **All of these**: every one of the above, one after another, each with its
+  heading, for reading or comparing them.
 
 To switch quickly, use the 📖 drop-down beside **Next** in each mystery:
 **None**, **Steps**, **Meditation**, **Virtue**, **Intention**,
-**Offering**, **Classic** and **Modern**. The choice applies to every mystery, and
+**Offering**, **Classic**, **Modern** and **All**. The choice applies to every mystery, and
 **Under the beads** in **Options** changes to match.
 
 The beads, buttons and the panel at the top work the same whichever is
-chosen. With any choice other than **None** or the steps, the Listen buttons read it on
+chosen. With a single meditation, offering or reflection chosen, the Listen buttons read it on
 the Our Father bead, after announcing the mystery, and in **Full screen** it
 appears in the panel beside the picture on that bead. Bible references in
 brackets in the classic meditations are left out when they are read aloud.
+With **All of these**, nothing extra is read aloud (it would be too long).
 The opening and closing prayers still show their list of prayers.
 
 The meditations, offerings and reflections were written for this site, so

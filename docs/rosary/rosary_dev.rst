@@ -171,8 +171,9 @@ Options
        ``side`` gives ``desktop`` and ``compact`` gives ``iphone``.
    * - ``:under:``
      - ``none``, ``steps``, ``meditation``, ``virtue``, ``intention``,
-       ``offering``, ``classic`` or ``modern``: show nothing under the beads
-       (the starting choice), the ten steps, or the mystery's meditation, meditation on its virtue, intention,
+       ``offering``, ``classic``, ``modern`` or ``all``: show nothing under
+       the beads (the starting choice), the ten steps, all of the
+       alternatives one after another, or the mystery's meditation, meditation on its virtue, intention,
        Montfort-style offering, classic (1915) meditation or modern
        reflection.
    * - ``:virtues:``
@@ -399,7 +400,7 @@ choices for every rosary on the site are built into ``rosary.py``, so
     rosary_default_layout = "auto"           # auto, desktop, ipad, iphone
     rosary_default_pictures = True           # False to start with the pictures hidden
     rosary_default_virtues = True            # False to hide the virtues in the mystery picker
-    rosary_default_under = "none"            # none, steps, meditation, virtue, intention, offering, classic, modern
+    rosary_default_under = "none"            # none, steps, meditation, virtue, intention, offering, classic, modern, all
     rosary_default_verses = "current"        # all, current, none
     rosary_default_read = "step"             # step, both, scripture
     rosary_default_extra_prayers = "on"      # off, on, full
