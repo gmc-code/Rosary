@@ -1,10 +1,15 @@
-"""A short meditation on each of the twenty mysteries, with a closing prayer.
+"""Meditations and offerings for the twenty mysteries.
 
-Shown instead of the ten steps when the reader chooses "A meditation" under
-"Under the beads" in the Options panel (directive option :under: meditation).
+Shown instead of the ten steps when the reader chooses, under "Under the
+beads" in the Options panel:
 
-Original text written for this site; free to use and edit.  Each entry is
-(meditation, prayer).  Keep them brief: about a hundred words each.
+  "A meditation"                MEDITATIONS: (meditation, prayer), about a
+                                hundred words each  (:under: meditation)
+  "A Montfort-style offering"   OFFERINGS: one offering of the decade, in the
+                                manner of St Louis de Montfort's first method
+                                (:under: offering)
+
+Original text written for this site; free to use and edit.
 """
 
 MEDITATIONS = {
@@ -208,4 +213,68 @@ MEDITATIONS = {
     ],
 }
 
+
+# In the manner of St Louis de Montfort (The Secret of the Rosary): before each
+# decade, offer it to Jesus in honour of the mystery and ask, through Mary's
+# prayers, for the mystery's fruit.  Written fresh for this site.
+_ASK = 'Through this mystery, and through the prayers of your holy Mother, we ask of you '
+
+
+def _offer(nth, honour, ask):
+    return 'We offer you, Lord Jesus, this %s decade in honour of %s. %s%s. Amen.' % (nth, honour, _ASK, ask)
+
+
+OFFERINGS = {
+    'joyful': [
+        _offer('first', 'your Incarnation, when at the angel\u2019s greeting you, the eternal Word, '
+               'were made flesh in the womb of the Virgin Mary', 'a deep humility of heart'),
+        _offer('second', 'the Visitation of your holy Mother to her cousin Elizabeth, when you made '
+               'John the Baptist leap for joy before his birth', 'a true love of our neighbour'),
+        _offer('third', 'your Nativity in the stable at Bethlehem, where you were born poor and laid '
+               'in a manger', 'poverty of spirit and freedom from the things of this world'),
+        _offer('fourth', 'your Presentation in the Temple, when Mary and Joseph offered you to the '
+               'Father in obedience to the Law', 'a ready obedience to the will of God'),
+        _offer('fifth', 'your Finding in the Temple among the teachers, after Mary and Joseph had '
+               'searched for you for three days in sorrow', 'the grace to seek you always, and the '
+               'joy of finding you'),
+    ],
+    'luminous': [
+        _offer('first', 'your Baptism in the Jordan, when the Holy Spirit came down upon you and the '
+               'Father declared you his beloved Son', 'an openness to the Holy Spirit, who was given '
+               'to us in our own baptism'),
+        _offer('second', 'your first sign at the wedding at Cana, when at your Mother\u2019s word you '
+               'changed water into wine', 'the grace to come to you through Mary, and to do whatever '
+               'you tell us'),
+        _offer('third', 'your proclamation of the Kingdom of God and your call to repentance',
+               'true conversion of heart and a childlike trust in our Father'),
+        _offer('fourth', 'your Transfiguration on the holy mountain, when your glory shone before '
+               'Peter, James and John', 'a deep desire for holiness, and ears to listen to you'),
+        _offer('fifth', 'your institution of the Holy Eucharist at the Last Supper, when you gave us '
+               'your body and blood', 'a living faith in your presence and a spirit of adoration'),
+    ],
+    'sorrowful': [
+        _offer('first', 'your agony in the Garden of Gethsemane, when you accepted the Father\u2019s '
+               'will in anguish and prayer', 'true sorrow for our sins'),
+        _offer('second', 'your cruel scourging at the pillar', 'purity of body and soul'),
+        _offer('third', 'your crowning with thorns, when you were mocked as a king',
+               'courage to stand by you when you are scorned'),
+        _offer('fourth', 'your carrying of the cross to Calvary', 'patience in carrying our own '
+               'crosses, and kindness in helping others with theirs'),
+        _offer('fifth', 'your crucifixion and death on Calvary, with your Mother standing by the '
+               'cross', 'perseverance in your grace to the end of our lives'),
+    ],
+    'glorious': [
+        _offer('first', 'your glorious Resurrection from the dead', 'a living faith'),
+        _offer('second', 'your Ascension into heaven, where you have gone to prepare a place for us',
+               'a firm hope and a longing for heaven'),
+        _offer('third', 'the coming of the Holy Spirit upon your apostles and your holy Mother at '
+               'Pentecost', 'the fire of the Holy Spirit and a burning love of God'),
+        _offer('fourth', 'the Assumption of your holy Mother, body and soul, into heaven',
+               'the grace of a happy death'),
+        _offer('fifth', 'the crowning of your holy Mother as Queen of heaven and earth',
+               'a childlike trust in her motherly care and prayers'),
+    ],
+}
+
 assert all(len(v) == 5 for v in MEDITATIONS.values()), 'five meditations per set'
+assert all(len(v) == 5 for v in OFFERINGS.values()), 'five offerings per set'

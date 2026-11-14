@@ -73,8 +73,10 @@ Options
                      current (only the step being prayed, in the panel at
                      the top) or none  [current]
     :under:          what is shown under the beads: steps (the ten scripture
-                     steps) or meditation (a short meditation on the mystery
-                     and a prayer, from rosary_meditations.py)  [steps]
+                     steps), meditation (a short meditation on the mystery
+                     and a prayer) or offering (an offering of the decade in
+                     the manner of St Louis de Montfort); the texts are in
+                     rosary_meditations.py  [steps]
     :read:           what Listen / Pray aloud read for each Hail Mary: step
                      (the one-line summary), both (summary then scripture)
                      or scripture  [step]
@@ -98,7 +100,7 @@ from sphinx.util.docutils import SphinxDirective
 
 from .rosary_data import CLOSING, DAY_NAMES, OPENING, ORDINALS, PRAYERS, SET_ORDER, SETS
 from .rosary_icons import extra_icon, icon
-from .rosary_meditations import MEDITATIONS
+from .rosary_meditations import MEDITATIONS, OFFERINGS
 from .rosary_scripture import TEXT, TRANSLATION, TRANSLATION_SHORT
 
 logger = logging.getLogger(__name__)
@@ -138,6 +140,7 @@ def days_text(days):
     return names[0] if len(names) == 1 else ' and '.join(names)
 
 
+UNDER = ('steps', 'meditation', 'offering')     # what is shown under the beads
 LAYOUTS = ('auto', 'desktop', 'ipad', 'iphone')
 # layouts from earlier versions, mapped to the nearest new one
 OLD_LAYOUTS = {'phone': 'ipad', 'large': 'ipad', 'side': 'desktop', 'compact': 'iphone'}
@@ -176,7 +179,7 @@ class RosaryDirective(SphinxDirective):
         'hide-title': directives.flag,
         'extra-prayers': lambda a: directives.choice(a, ('off', 'on', 'full')),
         'fatima': lambda a: directives.choice(a, ('yes', 'no')),
-        'under': lambda a: directives.choice(a, ('steps', 'meditation')),
+        'under': lambda a: directives.choice(a, UNDER),
     }
 
     def _warn(self, message, *args):
@@ -211,6 +214,8 @@ class RosaryDirective(SphinxDirective):
         meditation = ('<div class="rosary-meditation"><p class="rosary-meditation-label">Meditation</p>'
                       '<p class="rosary-meditation-text">%s</p>'
                       '<p class="rosary-meditation-prayer">%s</p></div>' % (_esc(med_text), _esc(med_prayer)))
+        meditation += ('<div class="rosary-offering"><p class="rosary-meditation-label">Offering of the decade</p>'
+                       '<p class="rosary-offering-text">%s</p></div>' % _esc(OFFERINGS[key][index]))
         decade = ('<div class="rosary-decade" aria-label="Beads of the decade"></div>'
                   '<div class="rosary-controls"></div>'
                   '<div class="rosary-now" aria-live="polite"></div>') if beads else ''
@@ -550,7 +555,7 @@ class RosaryDirective(SphinxDirective):
                # without JavaScript, "auto" shows the iPad layout (it adapts to narrow screens)
                'ipad' if layout == 'auto' else layout, 'on' if pictures else 'off',
                self.options.get('under') or (self.config.rosary_default_under
-                                             if self.config.rosary_default_under in ('steps', 'meditation') else 'steps'),
+                                             if self.config.rosary_default_under in UNDER else 'steps'),
                self.options.get('verses') or self.config.rosary_default_verses, config['extra'],
                _esc(json.dumps(config)),
                prayers_attr, title_html, tabs, sets, credit))
@@ -631,7 +636,7 @@ def setup(app):
     app.add_config_value('rosary_default_nav_icons', 'classic', 'env')   # same, classic, stained, gold, photo...
     app.add_config_value('rosary_default_layout', 'auto', 'env')         # auto, desktop, ipad, iphone
     app.add_config_value('rosary_default_pictures', True, 'env')         # False to start with the pictures hidden
-    app.add_config_value('rosary_default_under', 'steps', 'env')         # steps, meditation (under the beads)
+    app.add_config_value('rosary_default_under', 'steps', 'env')         # steps, meditation, offering (under the beads)
     app.add_config_value('rosary_default_verses', 'current', 'env')      # all, current, none
     app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture
     app.add_config_value('rosary_default_extra_prayers', 'on', 'env')    # off, on, full

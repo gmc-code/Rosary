@@ -440,14 +440,16 @@
             if (block.querySelector('.rosary-meditation')) {
                 var undLabel = el('label', 'rosary-audio-field', 'Under the beads ');
                 var undSelect = el('select', 'rosary-select');
-                [['steps', 'The ten steps'], ['meditation', 'A meditation']].forEach(function (v) {
+                [['steps', 'The ten steps'], ['meditation', 'A meditation'],
+                 ['offering', 'A Montfort-style offering']].forEach(function (v) {
                     var o = el('option', '', v[1]);
                     o.value = v[0];
                     undSelect.appendChild(o);
                 });
                 var savedUnder = store('rosary-under');
-                if (savedUnder === 'steps' || savedUnder === 'meditation') block.setAttribute('data-under', savedUnder);
-                undSelect.value = block.getAttribute('data-under') === 'meditation' ? 'meditation' : 'steps';
+                if (['steps', 'meditation', 'offering'].indexOf(savedUnder) !== -1) block.setAttribute('data-under', savedUnder);
+                undSelect.value = ['meditation', 'offering'].indexOf(block.getAttribute('data-under')) !== -1
+                    ? block.getAttribute('data-under') : 'steps';
                 undSelect.addEventListener('change', function () {
                     block.setAttribute('data-under', undSelect.value);
                     store('rosary-under', undSelect.value);
@@ -1075,9 +1077,15 @@
             }
 
             /* what is read aloud for the current bead */
-            // the mystery's meditation, when "Under the beads" is set to A meditation
+            // the mystery's meditation or Montfort-style offering, when "Under the
+            // beads" is set to one of them: shown and read on the Our Father bead
             function meditation() {
-                if (block.getAttribute('data-under') !== 'meditation') return null;
+                var under = block.getAttribute('data-under');
+                if (under === 'offering') {
+                    var o = mystery.querySelector('.rosary-offering-text');
+                    return o ? { text: o.textContent, prayer: '' } : null;
+                }
+                if (under !== 'meditation') return null;
                 var t = mystery.querySelector('.rosary-meditation-text');
                 var pr = mystery.querySelector('.rosary-meditation-prayer');
                 return t ? { text: t.textContent, prayer: pr ? pr.textContent : '' } : null;
@@ -1088,7 +1096,7 @@
                 if (pos === 0) {
                     var med = meditation();
                     return [ordinal + '. ' + title + '. The fruit of the mystery: ' + fruit + '.']
-                        .concat(med ? [med.text, med.prayer] : [])
+                        .concat(med ? [med.text, med.prayer].filter(Boolean) : [])
                         .concat([p && prayers['our-father'] ? prayers['our-father'][1] : '']);
                 }
                 if (pos >= 1 && pos <= 10) {
@@ -1154,7 +1162,7 @@
                     var md = meditation();
                     if (md) {
                         extra.push(el('p', 'rosary-now-meditation', md.text));
-                        extra.push(el('p', 'rosary-now-meditation rosary-now-meditation-prayer', md.prayer));
+                        if (md.prayer) extra.push(el('p', 'rosary-now-meditation rosary-now-meditation-prayer', md.prayer));
                     }
                     if (state.showPrayers) extra.push(prayer('our-father'));
                 } else if (pos <= 10) {
