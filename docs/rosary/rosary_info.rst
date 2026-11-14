@@ -123,7 +123,8 @@ order.
      - Photographs of real stained-glass windows, flattened to face the front
    * - Cubism
      - Each mystery in the style of Cubism: bold, broken planes of colour
-       and strong outlines
+       and strong outlines. The mystery pictures are wide, so the iPad layout
+       frames them to their shape
    * - Renaissance style
      - Newly painted pictures in the style of traditional Catholic sacred
        art, with Mary, Jesus and Joseph looking the same in every mystery

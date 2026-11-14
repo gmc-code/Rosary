@@ -30,13 +30,16 @@ To change a painting, replace its file (e.g. ``joyful-1.jpg``, square, about
 refresh the page with Ctrl+F5.
 
 The site starts on **Stained glass windows**, the photographs in
-``docs\_static\rosary-images_sg``. They are named the same way
+``docs\_static\rosary-images-sg``. They are named the same way
 (``joyful-1.webp`` ... ``glorious-5.webp``, ``opening.webp``,
 ``closing.webp``).
 
 
 The paintings
 =============
+
+:doc:`Pictures: Masterpieces </rosary/gallery_masterpieces>` shows them all
+together as a collage.
 
 .. list-table::
    :header-rows: 1

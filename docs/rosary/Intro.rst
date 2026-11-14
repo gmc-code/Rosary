@@ -22,6 +22,27 @@ Introduction
      - Installing the directive, its options and the site's starting choices
 
 
+.. list-table:: Picture galleries
+   :header-rows: 1
+   :widths: 30 70
+
+   * - Gallery
+     - What it shows
+   * - :doc:`Stained glass windows </rosary/gallery_stained_glass>`
+     - Photographs of real stained-glass windows (the starting choice)
+   * - :doc:`Cubism </rosary/gallery_cubism>`
+     - Bold, broken planes of colour with strong outlines
+   * - :doc:`Renaissance style </rosary/gallery_renaissance>`
+     - New paintings in the style of traditional Catholic sacred art
+   * - :doc:`Modern Australian </rosary/gallery_modern_australian>`
+     - The mysteries set in the Australian landscape
+   * - :doc:`Masterpieces </rosary/gallery_masterpieces>`
+     - Famous public-domain paintings
+
+Each gallery shows every picture in that set as a collage: the opening and
+closing prayers, then the five mysteries of each set.
+
+
 ----
 
 The four sets of mysteries
