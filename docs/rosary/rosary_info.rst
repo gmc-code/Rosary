@@ -129,6 +129,11 @@ mystery. The page remembers the choice.
        *Annunciation* or Raphael's *Transfiguration*, with the artist and
        title underneath. Click a painting to see all of it (see
        :doc:`traditional paintings </rosary/rosary_artworks>`)
+   * - Cubism
+     - Each mystery in the style of Cubism: bold, broken planes of colour
+       and strong outlines. These pictures are wide, so the iPad layout
+       frames them to their shape. The opening and closing prayers use the
+       drawn icons.
 
 The opening and closing prayers have their own pictures too: in the
 paintings, Masaccio's *Holy Trinity* and Piero della Francesca's *Madonna

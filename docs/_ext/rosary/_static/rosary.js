@@ -233,6 +233,7 @@
                 p.classList.toggle('rosary-photo-on', p.getAttribute('data-photoset') === set);
             });
             applyNav();
+            if (block.rosaryMarkShapes) block.rosaryMarkShapes();
         }
         /* the mystery picker: "same" as the main pictures, or its own style */
         var navChoice = config.navIcons || 'same';
@@ -568,6 +569,25 @@
         }
         updatePhotos();
         block.rosaryUpdatePhotos = updatePhotos;
+
+        /* wide (landscape) pictures: marked so the iPad layout can frame them to
+         * their own shape instead of the tall phone-shaped frame */
+        function markShape(img) {
+            var mark = function () {
+                var icon = img.closest('.rosary-icon');
+                if (!icon || !img.naturalWidth || !img.classList.contains('rosary-photo-on')) return;
+                icon.classList.toggle('rosary-wide', img.naturalWidth > img.naturalHeight * 1.1);
+            };
+            if (img.complete && img.naturalWidth) mark(); else img.addEventListener('load', mark, { once: true });
+        }
+        function markShapes() {
+            block.querySelectorAll('.rosary-mystery .rosary-icon.rosary-wide').forEach(function (i) {
+                i.classList.remove('rosary-wide');
+            });
+            block.querySelectorAll('.rosary-mystery .rosary-icon .rosary-photo.rosary-photo-on').forEach(markShape);
+        }
+        markShapes();
+        block.rosaryMarkShapes = markShapes;
 
         /* desktop: widen the block into empty space right of the page's
          * column, so the picture can be as large as the screen allows */

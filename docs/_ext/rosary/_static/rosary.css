@@ -1457,3 +1457,17 @@ html.dark .rosary-audio-group-label { background: rgba(255, 255, 255, 0.08); col
 /* a short how-to line in the panel, e.g. how to make the Sign of the Cross */
 .rosary-now-hint { margin: 0.45em 0 0 !important; font-size: 0.85em; color: var(--r-muted); }
 .rosary-presenting .rosary-now-hint { color: var(--r-muted); }
+
+/* iPad layout: a wide (landscape) picture gets a frame shaped to it, not the
+   tall phone-shaped frame (rosary.js marks these .rosary-wide) */
+@media screen and (min-width: 700px) {
+    .rosary-block[data-layout="ipad"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo.rosary-wide {
+        aspect-ratio: auto;
+        height: auto;
+        align-self: start;
+        border-radius: 0.8em;
+    }
+    .rosary-block[data-layout="ipad"][data-icons="photo"] .rosary-set:not(.rosary-presenting) .rosary-icon.rosary-has-photo.rosary-wide .rosary-photo.rosary-photo-on {
+        height: auto;
+    }
+}
