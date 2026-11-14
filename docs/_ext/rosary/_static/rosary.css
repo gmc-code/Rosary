@@ -695,6 +695,14 @@ a.rosary-ref { text-decoration: underline dotted; }
 .rosary-presenting .rosary-btn.rosary-on { background: var(--r-gold); color: #3b2a00; }
 .rosary-presenting .rosary-now-ref, .rosary-presenting .rosary-now-verse { color: #fff; }
 .rosary-presenting .rosary-now-prayer { color: var(--r-text); }
+/* iPad-sized screens in landscape: a wider text column (about 40%) */
+@media screen and (min-width: 700px) and (max-width: 1400px) and (orientation: landscape) {
+    .rosary-presenting .rosary-mystery.rosary-active {
+        grid-template-columns: minmax(0, 1.5fr) minmax(20em, 1fr);
+        column-gap: 2vw;
+    }
+    .rosary-presenting .rosary-now { font-size: 1.15em; }
+}
 /* portrait screens: picture on top (75%), text below */
 @media (orientation: portrait) {
     .rosary-presenting .rosary-mystery.rosary-active {
