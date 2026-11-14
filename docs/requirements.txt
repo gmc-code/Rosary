@@ -1,6 +1,3 @@
 Sphinx
-sphinx-copybutton
-sphinx-rtd-theme
-sphinx-togglebutton
-sphinx_design
 shibuya
+sphinx-new-tab-link

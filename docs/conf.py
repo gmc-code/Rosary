@@ -30,6 +30,7 @@ from docutils.parsers.rst import roles
 # ones.
 extensions = [
     "rosary.rosary",
+    "sphinx_new_tab_link",   # external links open in a new tab
 ]
 
 # Add any paths that contain templates here, relative to this directory.
