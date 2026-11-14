@@ -342,8 +342,9 @@ The 🔊 Listen control under the beads, 🔊 **Bead** | **All**, has two button
 (the same in every layout):
 
 * **Bead** reads the current bead once: the mystery on the Our Father bead,
-  the step (and its passage, if chosen) on a Hail Mary bead, or the current
-  prayer on the opening and closing prayers.
+  or the step (and its passage, if chosen) on a Hail Mary bead. On the
+  opening and closing prayers it is called **Prayer** and reads the current
+  prayer.
 * **All** prays aloud bead by bead, moving on by itself, then carries on to
   the next mystery of the set. On the opening and closing prayers it reads
   all the prayers in turn.

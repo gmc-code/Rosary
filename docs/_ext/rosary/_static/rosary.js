@@ -42,8 +42,9 @@
         finish: [['Finish'], [' \u2714']],
         finishDecade: [['Finish'], [' decade', true], [' \u2714']],
         // the Listen control, the same in every layout: '🔊 [Bead] [All]'
+        // ('🔊 [Prayer] [All]' on the opening and closing prayers)
         listenBead: [['Bead']],
-        listenPrayer: [['Bead']],
+        listenPrayer: [['Prayer']],
         allDecade: [['All']],
         allPrayers: [['All']],
         stop: [['\u25A0 Stop']],
