@@ -145,8 +145,8 @@ The top row holds the four sets (hover over one to see its days), then:
 
   * **Pictures:** **Pictures**, **Mystery picker**, **Layout** and **Show
     pictures**.
-  * **Prayers:** **Opening & closing**, **Scripture verses**, **Show the prayers** and
-    **Fatima prayer**.
+  * **Prayers:** **Opening & closing**, **Under the beads**, **Scripture
+    verses**, **Show the prayers** and **Fatima prayer**.
   * **Reading aloud:** **Voice**, **Read aloud**, **Speed** and **Read prayer
     names**.
 
@@ -237,6 +237,28 @@ full-screen rosary with no Safari bars:
    with the rosary as its icon.
 
 Use **Hide menus** as well to remove the page title and menus.
+
+
+Meditations
+===========
+
+**Under the beads** (under **Options**) chooses what each mystery shows under
+its beads:
+
+* **The ten steps** (the starting choice): the ten scripture references, one
+  for each Hail Mary.
+* **A meditation**: a short meditation on the mystery, about a hundred words,
+  ending with a one-line prayer. Each one draws on the mystery's scripture
+  and leads to its fruit.
+
+The beads, buttons and the panel at the top work the same either way. With
+a meditation chosen, **Listen** and **Pray aloud** read it on the Our Father
+bead, after announcing the mystery, and in **Full screen** it appears in the
+panel beside the picture on that bead. The opening and closing prayers still
+show their list of prayers.
+
+The meditations were written for this site and can be used and edited
+freely.
 
 
 Reading the passages

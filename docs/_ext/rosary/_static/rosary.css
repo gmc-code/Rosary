@@ -619,6 +619,7 @@ a.rosary-ref { text-decoration: underline dotted; }
 .rosary-presenting .rosary-set-title,
 .rosary-presenting .rosary-nav,
 .rosary-presenting ol.rosary-refs,
+.rosary-presenting .rosary-meditation,
 .rosary-presenting .rosary-toggle { display: none !important; }
 .rosary-presenting .rosary-mystery.rosary-active {
     display: grid;
@@ -826,6 +827,7 @@ a.rosary-ref { text-decoration: underline dotted; }
     .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-decade { grid-column: 2; grid-row: 2; margin-top: 0.8em; }
     .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-controls { grid-column: 2; grid-row: 3; }
     .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-now { grid-column: 2; grid-row: 4; margin-bottom: 0.4em; }
+    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-meditation { grid-column: 2; grid-row: 5; }
     .rosary-block[data-layout="desktop"] ol.rosary-refs {
         grid-column: 2;
         grid-row: 5;
@@ -912,7 +914,8 @@ ol.rosary-refs > li.rosary-step:hover:not(.rosary-here) { background: rgba(127, 
     .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-decade { grid-column: 2; grid-row: 2; }
     .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-controls { grid-column: 2; grid-row: 3; }
     .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-now { grid-column: 2; grid-row: 4; }
-    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) ol.rosary-refs { grid-column: 2; grid-row: 5; }
+    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) ol.rosary-refs,
+    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-meditation { grid-column: 2; grid-row: 5; }
 }
 @media screen and (max-width: 699px) {
     .rosary-block[data-layout="ipad"] .rosary-head { flex-direction: column; align-items: center; text-align: center; }
@@ -1249,4 +1252,56 @@ html.dark .rosary-verse, html.dark .rosary-now-verse { color: #e6e6e6; }
     .rosary-mystery { break-inside: avoid; }
     .rosary-block, .rosary-svg * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     a.rosary-ref { text-decoration: none; }
+}
+
+
+/* Under the beads: the ten steps (data-under="steps") or a meditation ---- */
+.rosary-meditation { display: none; }
+.rosary-block[data-under="meditation"] .rosary-mystery:not(.rosary-prayers-card) ol.rosary-refs { display: none; }
+.rosary-block[data-under="meditation"] .rosary-meditation {
+    display: block;
+    padding: 0.7em 1em 0.8em;
+    border-radius: 0.5em;
+    background: var(--r-soft);
+    border-left: 5px solid var(--r-gold);
+}
+.rosary-meditation-label {
+    margin: 0 0 0.3em !important;
+    font-size: 0.78em;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--r-c);
+}
+.rosary-meditation-text {
+    margin: 0 !important;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.05em;
+    line-height: 1.6;
+    color: var(--r-text);
+}
+.rosary-meditation-prayer {
+    margin: 0.6em 0 0 !important;
+    font-style: italic;
+    color: var(--r-ink);
+}
+html.dark .rosary-block[data-under="meditation"] .rosary-meditation { background: rgba(255, 255, 255, 0.07); }
+html.dark .rosary-meditation-text { color: #e6e6e6; }
+html.dark .rosary-meditation-prayer { color: #f2f2f2; }
+@media screen {
+    .rosary-block[data-layout="iphone"] .rosary-meditation { padding: 0.5em 0.65em 0.6em; }
+    .rosary-block[data-layout="iphone"] .rosary-meditation-text { font-size: 0.98em; line-height: 1.5; }
+}
+/* in the panel at the top only in full screen, on the Our Father bead */
+.rosary-now-meditation { display: none; }
+.rosary-presenting .rosary-now-meditation {
+    display: block;
+    margin: 0.5em 0 0 !important;
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.5;
+    color: var(--r-text);
+}
+.rosary-presenting .rosary-now-meditation-prayer { font-family: inherit; font-style: italic; color: #fff; }
+@media print {
+    .rosary-block[data-under="meditation"] .rosary-meditation { break-inside: avoid; }
 }

@@ -15,7 +15,7 @@ scripture references, one for each Hail Mary of the decade.
 
 Options
     Options that match a menu in the reader's Options panel (icons, nav-icons,
-    layout, pictures, verses, read, extra-prayers, fatima) set this page's starting
+    layout, pictures, under, verses, read, extra-prayers, fatima) set this page's starting
     choice.  When one is left out, the site's starting choice from conf.py is
     used; those are built in (see setup() at the end of this file) and are
     shown in [brackets] below.  A reader's own choices, saved in their
@@ -72,6 +72,9 @@ Options
     :verses:         where the scripture is shown: all (under each step),
                      current (only the step being prayed, in the panel at
                      the top) or none  [current]
+    :under:          what is shown under the beads: steps (the ten scripture
+                     steps) or meditation (a short meditation on the mystery
+                     and a prayer, from rosary_meditations.py)  [steps]
     :read:           what Listen / Pray aloud read for each Hail Mary: step
                      (the one-line summary), both (summary then scripture)
                      or scripture  [step]
@@ -95,6 +98,7 @@ from sphinx.util.docutils import SphinxDirective
 
 from .rosary_data import CLOSING, DAY_NAMES, OPENING, ORDINALS, PRAYERS, SET_ORDER, SETS
 from .rosary_icons import extra_icon, icon
+from .rosary_meditations import MEDITATIONS
 from .rosary_scripture import TEXT, TRANSLATION, TRANSLATION_SHORT
 
 logger = logging.getLogger(__name__)
@@ -172,6 +176,7 @@ class RosaryDirective(SphinxDirective):
         'hide-title': directives.flag,
         'extra-prayers': lambda a: directives.choice(a, ('off', 'on', 'full')),
         'fatima': lambda a: directives.choice(a, ('yes', 'no')),
+        'under': lambda a: directives.choice(a, ('steps', 'meditation')),
     }
 
     def _warn(self, message, *args):
@@ -202,6 +207,10 @@ class RosaryDirective(SphinxDirective):
         m = data['mysteries'][index]
         ordinal = '%s %s Mystery' % (ORDINALS[index], data['name'])
         refs = ''.join(self._ref_html(r, c, version, captions, scripture) for r, c in m['refs'])
+        med_text, med_prayer = MEDITATIONS[key][index]
+        meditation = ('<div class="rosary-meditation"><p class="rosary-meditation-label">Meditation</p>'
+                      '<p class="rosary-meditation-text">%s</p>'
+                      '<p class="rosary-meditation-prayer">%s</p></div>' % (_esc(med_text), _esc(med_prayer)))
         decade = ('<div class="rosary-decade" aria-label="Beads of the decade"></div>'
                   '<div class="rosary-controls"></div>'
                   '<div class="rosary-now" aria-live="polite"></div>') if beads else ''
@@ -213,13 +222,13 @@ class RosaryDirective(SphinxDirective):
             '<h4 class="rosary-mystery-title">%s</h4>'
             '<p class="rosary-fruit">Fruit of the mystery: <strong>%s</strong></p>%s</div>'
             '</div>%s'
-            '<ol class="rosary-refs">%s</ol>'
+            '<ol class="rosary-refs">%s</ol>%s'
             '</article>' % (
                 ' rosary-active' if active else '', index,
                 ' rosary-has-photo' if self._photo(key, index) else '',
                 icon(key, index, _esc(m['title'])) + self._photo_html(key, index, m['title']),
                 _esc(ordinal), _esc(m['title']), _esc(m['fruit']),
-                self._credit_html(key, index), decade, refs))
+                self._credit_html(key, index), decade, refs, meditation))
 
     def _set_html(self, key, version, captions, scripture, beads, only=None, hidden=False):
         data = SETS[key]
@@ -536,10 +545,12 @@ class RosaryDirective(SphinxDirective):
             pictures = bool(self.config.rosary_default_pictures)
         html_output = (
             '<div class="rosary-block" data-icons="%s" data-photoset="%s" data-layout-choice="%s" '
-            'data-layout="%s" data-pictures="%s" data-verses="%s" data-extra="%s" data-config="%s"%s>%s%s%s%s</div>'
+            'data-layout="%s" data-pictures="%s" data-under="%s" data-verses="%s" data-extra="%s" data-config="%s"%s>%s%s%s%s</div>'
             % (data_icons, photoset, layout,
                # without JavaScript, "auto" shows the iPad layout (it adapts to narrow screens)
                'ipad' if layout == 'auto' else layout, 'on' if pictures else 'off',
+               self.options.get('under') or (self.config.rosary_default_under
+                                             if self.config.rosary_default_under in ('steps', 'meditation') else 'steps'),
                self.options.get('verses') or self.config.rosary_default_verses, config['extra'],
                _esc(json.dumps(config)),
                prayers_attr, title_html, tabs, sets, credit))
@@ -620,6 +631,7 @@ def setup(app):
     app.add_config_value('rosary_default_nav_icons', 'classic', 'env')   # same, classic, stained, gold, photo...
     app.add_config_value('rosary_default_layout', 'auto', 'env')         # auto, desktop, ipad, iphone
     app.add_config_value('rosary_default_pictures', True, 'env')         # False to start with the pictures hidden
+    app.add_config_value('rosary_default_under', 'steps', 'env')         # steps, meditation (under the beads)
     app.add_config_value('rosary_default_verses', 'current', 'env')      # all, current, none
     app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture
     app.add_config_value('rosary_default_extra_prayers', 'on', 'env')    # off, on, full

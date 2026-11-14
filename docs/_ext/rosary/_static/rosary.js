@@ -436,6 +436,27 @@
                 bar.appendChild(verLabel);
             }
 
+            /* under the beads: the ten steps, or a meditation on the mystery */
+            if (block.querySelector('.rosary-meditation')) {
+                var undLabel = el('label', 'rosary-audio-field', 'Under the beads ');
+                var undSelect = el('select', 'rosary-select');
+                [['steps', 'The ten steps'], ['meditation', 'A meditation']].forEach(function (v) {
+                    var o = el('option', '', v[1]);
+                    o.value = v[0];
+                    undSelect.appendChild(o);
+                });
+                var savedUnder = store('rosary-under');
+                if (savedUnder === 'steps' || savedUnder === 'meditation') block.setAttribute('data-under', savedUnder);
+                undSelect.value = block.getAttribute('data-under') === 'meditation' ? 'meditation' : 'steps';
+                undSelect.addEventListener('change', function () {
+                    block.setAttribute('data-under', undSelect.value);
+                    store('rosary-under', undSelect.value);
+                    refreshAll();
+                });
+                undLabel.appendChild(undSelect);
+                bar.appendChild(undLabel);
+            }
+
             /* the opening and closing prayers of the rosary */
             if (block.querySelector('.rosary-prayers-card')) {
                 var exLabel = el('label', 'rosary-audio-field', 'Opening & closing ');
@@ -638,7 +659,7 @@
                 groups.appendChild(g);
             };
             addGroup('🖼 Pictures', [picLabel, navLabel, layLabel, spLabel]);
-            addGroup('✝ Prayers', [exLabel, verLabel, prLabel, faLabel]);
+            addGroup('✝ Prayers', [exLabel, undLabel, verLabel, prLabel, faLabel]);
             addGroup('🔊 Reading aloud', [voiceLabel, readLabel, rateLabel, titlesLabel]);
             // anything not placed above stays, in a final group
             var rest = Array.prototype.slice.call(bar.children);
@@ -1054,11 +1075,21 @@
             }
 
             /* what is read aloud for the current bead */
+            // the mystery's meditation, when "Under the beads" is set to A meditation
+            function meditation() {
+                if (block.getAttribute('data-under') !== 'meditation') return null;
+                var t = mystery.querySelector('.rosary-meditation-text');
+                var pr = mystery.querySelector('.rosary-meditation-prayer');
+                return t ? { text: t.textContent, prayer: pr ? pr.textContent : '' } : null;
+            }
+
             function beadTexts() {
                 var p = state.showPrayers;
                 if (pos === 0) {
-                    return [ordinal + '. ' + title + '. The fruit of the mystery: ' + fruit + '.',
-                            p && prayers['our-father'] ? prayers['our-father'][1] : ''];
+                    var med = meditation();
+                    return [ordinal + '. ' + title + '. The fruit of the mystery: ' + fruit + '.']
+                        .concat(med ? [med.text, med.prayer] : [])
+                        .concat([p && prayers['our-father'] ? prayers['our-father'][1] : '']);
                 }
                 if (pos >= 1 && pos <= 10) {
                     var li = items[pos - 1];
@@ -1119,6 +1150,12 @@
                     line = el('div');
                     line.appendChild(el('span', 'rosary-now-ref', ordinal + ': ' + title));
                     line.appendChild(document.createTextNode(' – fruit: ' + fruit));
+                    // the meditation, in the panel only in full screen (it is under the beads otherwise)
+                    var md = meditation();
+                    if (md) {
+                        extra.push(el('p', 'rosary-now-meditation', md.text));
+                        extra.push(el('p', 'rosary-now-meditation rosary-now-meditation-prayer', md.prayer));
+                    }
                     if (state.showPrayers) extra.push(prayer('our-father'));
                 } else if (pos <= 10) {
                     var li = items[pos - 1];
