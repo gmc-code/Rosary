@@ -22,6 +22,7 @@ with the opening and closing prayers.
     rosary/rosary.rst
     rosary/marian_prayers.rst
     rosary/rosary_history.rst
+    rosary/rosary_theology.rst
 
 
 .. toctree::

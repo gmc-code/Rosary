@@ -20,6 +20,9 @@ Introduction
    * - :doc:`A short history of the Rosary </rosary/rosary_history>`
      - How the Rosary grew, from praying the Psalms on beads to the
        Luminous Mysteries in 2002
+   * - :doc:`The theology of the Rosary </rosary/rosary_theology>`
+     - Why the Rosary is a prayer centred on Christ, Mary's place in it, its
+       roots in Scripture, the four sets of mysteries, and why it repeats
    * - :doc:`User guide </rosary/rosary_info>`
      - Praying with the beads, the opening and closing prayers, the Options
        panel, full screen, reading aloud and printing
