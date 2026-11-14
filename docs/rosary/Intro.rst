@@ -34,7 +34,7 @@ Introduction
    * - :doc:`Masterpieces </rosary/rosary_artworks>`
      - The public-domain painting used for each mystery
    * - :doc:`Developer reference </rosary/rosary_dev>`
-     - Installing the directive, its options and the site's starting choices
+     - Installing the website sphinxdirective, its options and the site's starting choices
 
 
 .. list-table:: Picture galleries
