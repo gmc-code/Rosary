@@ -1012,6 +1012,11 @@
                 li.querySelectorAll('.rosary-prayer-text').forEach(function (t) {
                     now.appendChild(el('p', 'rosary-now-prayer rosary-now-prayer-always', t.textContent));
                 });
+                // how to make the Sign of the Cross (shown, not read aloud)
+                if (li.getAttribute('data-name') === 'The Sign of the Cross') {
+                    now.appendChild(el('p', 'rosary-now-hint',
+                        'Touch your forehead, your breast, your left shoulder, then your right shoulder.'));
+                }
             }
             function go(index, manual) {
                 pos = Math.max(-1, Math.min(items.length - 1, index));

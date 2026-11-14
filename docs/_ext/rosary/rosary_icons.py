@@ -462,8 +462,8 @@ def coronation():
 
 # ---------------------------------------------------------------- opening / closing
 
-def opening():
-    """The opening prayers begin with the Sign of the Cross: a cross with flared
+def sign_of_cross():
+    """The Sign of the Cross: a cross with flared
     ends, a soft glow behind it, and a numbered gold dot at each place it is
     traced (1 forehead, 2 breast, 3 left shoulder, 4 right shoulder)."""
     out = ['<circle class="ri-soft ri-outline" cx="50" cy="50" r="46"/>',
@@ -507,6 +507,51 @@ def closing():
     return ''.join(out)
 
 
+def first_beads():
+    """The opening prayers: a whole rosary, the full loop of beads with the
+    centre medal, and below it the three Hail Marys, the Our Father bead and the
+    crucifix on which the opening prayers are said."""
+    cx, cy, R = 50, 29, 18
+    out = ['<circle class="ri-soft ri-outline" cx="50" cy="50" r="46"/>',
+           '<circle class="ri-line-thin" fill="none" cx="%d" cy="%d" r="%d"/>' % (cx, cy, R),
+           '<path class="ri-line-thin" fill="none" d="M50,%d L50,78"/>' % (cy + R)]
+    for i in range(15):                                   # the loop, open at the medal
+        a = math.radians(90 + 24 + 312 * i / 14)
+        out.append('<circle class="ri-fill ri-outline" cx="%s" cy="%s" r="3"/>'
+                   % (_f(cx + R * math.cos(a)), _f(cy + R * math.sin(a))))
+    out.append('<ellipse class="ri-gold ri-outline" cx="50" cy="%d" rx="4.2" ry="5"/>' % (cy + R))   # medal
+    for y in (55, 61, 67):                                # three Hail Marys
+        out.append('<circle class="ri-fill ri-outline" cx="50" cy="%d" r="2.8"/>' % y)
+    out.append('<circle class="ri-gold ri-outline" cx="50" cy="73.5" r="3.8"/>')   # Our Father bead
+    out.append(cross(50, 78, 16, 12, 3.6, 'ri-fill'))     # crucifix
+    return ''.join(out)
+
+
+def praying_hands():
+    """The closing prayers: hands joined in prayer, with a rosary hanging over
+    them at an angle of 45 degrees and its crucifix dropping from the lower end."""
+    out = ['<circle class="ri-soft ri-outline" cx="50" cy="50" r="46"/>',
+           # sleeves
+           '<path class="ri-fill ri-outline" d="M30,90 L37,68 L49,73 L45,92 Z"/>',
+           '<path class="ri-fill ri-outline" d="M70,90 L63,68 L51,73 L55,92 Z"/>',
+           # the joined hands, fingers and thumbs
+           '<path class="ri-white ri-outline" d="M50,15 C45,16 41.5,24 40.5,36 L39,56 C38.5,64 41,70 46,72 '
+           'L50,73 L54,72 C59,70 61.5,64 61,56 L59.5,36 C58.5,24 55,16 50,15 Z"/>',
+           '<path class="ri-line-thin" d="M50,17 L50,72 M45,30 L46.5,44 M55,30 L53.5,44"/>',
+           '<path class="ri-white ri-outline" d="M41,52 C36,50 34,56 38,60 L43,63 Z"/>',
+           '<path class="ri-white ri-outline" d="M59,52 C64,50 66,56 62,60 L57,63 Z"/>',
+           # the rosary over the hands at 45 degrees, from upper left to lower right,
+           # with a slight sag, then the crucifix hanging straight down
+           '<path class="ri-line-thin" fill="none" d="M27,34 Q47,57 69,72 L69,76"/>']
+    for i in range(10):
+        t = i / 9
+        x = (1 - t) ** 2 * 27 + 2 * (1 - t) * t * 47 + t * t * 69
+        y = (1 - t) ** 2 * 34 + 2 * (1 - t) * t * 57 + t * t * 72
+        out.append('<circle class="ri-fill ri-outline" cx="%s" cy="%s" r="3.2"/>' % (_f(x), _f(y)))
+    out.append(cross(69, 76, 16, 11, 3.4, 'ri-gold'))
+    return ''.join(out)
+
+
 def radiant_crucifix():
     """The closing prayers: a radiant crucifix, Christ on the cross with rays of
     glory behind it, the Rosary's last word on his victory over death."""
@@ -527,10 +572,10 @@ def radiant_crucifix():
     return ''.join(out)
 
 
-# The opening prayers begin with the Sign of the Cross; the closing prayers show
-# the radiant crucifix.  closing() (the crown of roses) is kept above in case it
-# is wanted again: use {'closing': closing} to bring it back.
-EXTRA_ICONS = {'opening': opening, 'closing': radiant_crucifix}
+# Opening: the crucifix and first beads; closing: hands joined in prayer with a
+# rosary.  Other designs kept above, to swap in if wanted: sign_of_cross,
+# radiant_crucifix and closing (the crown of roses).
+EXTRA_ICONS = {'opening': first_beads, 'closing': praying_hands}
 
 
 def extra_icon(kind, label):

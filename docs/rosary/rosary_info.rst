@@ -133,9 +133,11 @@ mystery. The page remembers the choice.
 The opening and closing prayers have their own pictures too: in the
 paintings, Masaccio's *Holy Trinity* and Piero della Francesca's *Madonna
 della Misericordia*, and a stained-glass window of each. In the drawn styles
-show the Sign of the Cross, a cross with a gold dot at each place it is
-traced (opening), and a radiant crucifix, Christ on the cross with rays of
-glory behind it (closing).
+show a whole rosary, the loop of beads with the medal, the three Hail Marys,
+the Our Father bead and the crucifix the opening prayers are said on
+(opening), and hands joined in prayer with a rosary hanging across them
+(closing). On the Sign of the Cross bead, the panel also says how to make
+it: forehead, breast, left shoulder, then right shoulder.
 
 
 Layout and full screen

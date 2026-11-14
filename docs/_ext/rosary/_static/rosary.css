@@ -1453,3 +1453,7 @@ html.dark .rosary-audio-group-label { background: rgba(255, 255, 255, 0.08); col
     .rosary-presenting .rosary-audio-group .rosary-btn-word,
     .rosary-presenting .rosary-audio-group-label .rosary-btn-word { display: none; }
 }
+
+/* a short how-to line in the panel, e.g. how to make the Sign of the Cross */
+.rosary-now-hint { margin: 0.45em 0 0 !important; font-size: 0.85em; color: var(--r-muted); }
+.rosary-presenting .rosary-now-hint { color: var(--r-muted); }
