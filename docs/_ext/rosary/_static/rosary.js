@@ -37,10 +37,12 @@
         next: [['Next'], [' \u25B6']],
         finish: [['Finish'], [' \u2714']],
         finishDecade: [['Finish'], [' decade', true], [' \u2714']],
-        listen: [['\uD83D\uDD0A'], [' Listen', true]],
-        stop: [['\u25A0'], [' Stop', true]],
-        pray: [['\u25B6'], [' Pray'], [' aloud', true]],
-        prayStop: [['\u25A0'], [' Stop']],
+        // the Listen control: 'Listen: [This bead] [Whole decade]', on iPhone '[Bead] [All]'
+        listenBead: [['This bead', true], ['Bead', 'short']],
+        listenPrayer: [['This prayer', true], ['Prayer', 'short']],
+        allDecade: [['Whole decade', true], ['All', 'short']],
+        allPrayers: [['All prayers', true], ['All', 'short']],
+        stop: [['\u25A0 Stop']],
         full: [['\u26F6'], [' Full screen', true]]
     };
     function setLabel(b, parts) {
@@ -49,12 +51,27 @@
         b.setAttribute('data-lbl', key);
         b.textContent = '';
         parts.forEach(function (p) {
-            if (p[1]) b.appendChild(el('span', 'rosary-btn-word', p[0]));
+            if (p[1] === 'short') b.appendChild(el('span', 'rosary-btn-short', p[0]));
+            else if (p[1]) b.appendChild(el('span', 'rosary-btn-word', p[0]));
             else b.appendChild(document.createTextNode(p[0]));
         });
-        b.setAttribute('aria-label', parts.map(function (p) { return p[0]; }).join('').replace(/^\s+|\s+$/g, ''));
+        b.setAttribute('aria-label', parts.filter(function (p) { return p[1] !== 'short'; })
+            .map(function (p) { return p[0]; }).join('').replace(/^\s+|\s+$/g, ''));
     }
     function fullLabel(b) { setLabel(b, LBL.full); }
+
+    // "🔊 Listen: [one] [all]": both audio buttons in one labelled group
+    function audioGroup(one, all) {
+        var g = el('span', 'rosary-audio-group');
+        g.setAttribute('role', 'group');
+        g.setAttribute('aria-label', 'Listen');
+        var lab = el('span', 'rosary-audio-group-label', '\uD83D\uDD0A');
+        lab.appendChild(el('span', 'rosary-btn-word', ' Listen:'));
+        g.appendChild(lab);
+        g.appendChild(one);
+        g.appendChild(all);
+        return g;
+    }
 
     function button(cls, text, title) {
         var b = el('button', cls, text);
@@ -861,6 +878,7 @@
 
         /* ---------------- the opening or closing prayers: one bead per prayer */
         function initPrayers(card, onFinish) {
+            var LISTEN_ONE = LBL.listenPrayer, LISTEN_ALL = LBL.allPrayers;
             var decade = card.querySelector('.rosary-decade');
             var controls = card.querySelector('.rosary-controls');
             var now = card.querySelector('.rosary-now');
@@ -900,16 +918,19 @@
             controls.appendChild(next);
             var listen = null, auto = null;
             if (audio) {
-                listen = button('rosary-btn rosary-btn--audio', '\uD83D\uDD0A Listen', 'Read this prayer aloud');
-                auto = button('rosary-btn rosary-btn--audio', '\u25B6 Pray aloud', 'Read the prayers aloud, one after another');
-                setLabel(listen, LBL.listen);
-                setLabel(auto, LBL.pray);
-                controls.appendChild(listen);
-                controls.appendChild(auto);
+                listen = button('rosary-btn rosary-btn--audio', 'This prayer', 'Read this prayer aloud, once');
+                auto = button('rosary-btn rosary-btn--audio', 'All prayers',
+                              'Pray aloud from here on, moving through the beads by itself');
+                setLabel(listen, LBL.listenPrayer);
+                setLabel(auto, LBL.allPrayers);
+                controls.appendChild(audioGroup(listen, auto));
             }
             var present = button('rosary-btn rosary-btn--present', '\u26F6 Full screen', 'Show this prayer full screen');
             fullLabel(present);
             controls.appendChild(present);
+            // the Listen group last, so Back, Next and Full screen share the first row
+            var agroup = controls.querySelector('.rosary-audio-group');
+            if (agroup) controls.appendChild(agroup);
             present.addEventListener('click', function () {
                 var set = card.closest('.rosary-set');
                 if (set.classList.contains('rosary-presenting')) { endPresent(set); return; }
@@ -975,11 +996,11 @@
                 setLabel(next, pos < 0 ? LBL.begin : (nextIndex(pos) === -1 ? LBL.finish : LBL.next));
                 var speakingHere = state.speaking === card;
                 if (listen) {
-                    setLabel(listen, speakingHere && !state.auto ? LBL.stop : LBL.listen);
+                    setLabel(listen, speakingHere && !state.auto ? LBL.stop : LISTEN_ONE);
                     listen.classList.toggle('rosary-on', speakingHere && !state.auto);
                 }
                 if (auto) {
-                    setLabel(auto, state.auto && speakingHere ? LBL.prayStop : LBL.pray);
+                    setLabel(auto, state.auto && speakingHere ? LBL.stop : LISTEN_ALL);
                     auto.classList.toggle('rosary-on', state.auto && speakingHere);
                 }
                 now.classList.toggle('rosary-speaking', speakingHere);
@@ -1007,6 +1028,7 @@
 
         /* ---------------- one decade */
         function initDecade(mystery, onFinish) {
+            var LISTEN_ONE = LBL.listenBead, LISTEN_ALL = LBL.allDecade;
             var decade = mystery.querySelector('.rosary-decade');
             var controls = mystery.querySelector('.rosary-controls');
             var now = mystery.querySelector('.rosary-now');
@@ -1044,18 +1066,21 @@
 
             var listen = null, auto = null;
             if (audio) {
-                listen = button('rosary-btn rosary-btn--audio', '🔊 Listen', 'Read this bead aloud');
-                auto = button('rosary-btn rosary-btn--audio', '▶ Pray aloud', 'Read the whole decade aloud, bead by bead');
-                setLabel(listen, LBL.listen);
-                setLabel(auto, LBL.pray);
-                controls.appendChild(listen);
-                controls.appendChild(auto);
+                listen = button('rosary-btn rosary-btn--audio', 'This bead', 'Read this bead aloud, once');
+                auto = button('rosary-btn rosary-btn--audio', 'Whole decade',
+                              'Pray the decade aloud, bead by bead, moving on by itself');
+                setLabel(listen, LBL.listenBead);
+                setLabel(auto, LBL.allDecade);
+                controls.appendChild(audioGroup(listen, auto));
             }
 
             var present = button('rosary-btn rosary-btn--present', '\u26F6 Full screen',
                                  'Show this mystery full screen (arrow keys or swipes move through the beads)');
             fullLabel(present);
             controls.appendChild(present);
+            // the Listen group last, so Back, Next and Full screen share the first row
+            var agroup = controls.querySelector('.rosary-audio-group');
+            if (agroup) controls.appendChild(agroup);
             present.addEventListener('click', function () {
                 var set = mystery.closest('.rosary-set');
                 if (set.classList.contains('rosary-presenting')) { endPresent(set); return; }
@@ -1188,11 +1213,11 @@
                 setLabel(next, pos < 0 ? LBL.begin : (pos >= 11 ? LBL.finishDecade : LBL.next));
                 var speakingHere = state.speaking === mystery;
                 if (listen) {
-                    setLabel(listen, speakingHere && !state.auto ? LBL.stop : LBL.listen);
+                    setLabel(listen, speakingHere && !state.auto ? LBL.stop : LISTEN_ONE);
                     listen.classList.toggle('rosary-on', speakingHere && !state.auto);
                 }
                 if (auto) {
-                    setLabel(auto, state.auto && speakingHere ? LBL.prayStop : LBL.pray);
+                    setLabel(auto, state.auto && speakingHere ? LBL.stop : LISTEN_ALL);
                     auto.classList.toggle('rosary-on', state.auto && speakingHere);
                 }
                 now.classList.toggle('rosary-speaking', speakingHere);

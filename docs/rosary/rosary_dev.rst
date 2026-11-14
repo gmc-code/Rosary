@@ -129,8 +129,7 @@ Options
    * - ``:no-scripture:``
      - Leave out the verse text under each reference (a shorter page to print).
    * - ``:no-audio:``
-     - Leave out the **Reading aloud** options and the **Listen** / **Pray
-       aloud** buttons.
+     - Leave out the **Reading aloud** options and the **🔊 Listen** buttons.
    * - ``:icons:``
      - Picture style to start with: ``classic``, ``stained``, ``gold``,
        ``photo`` (Traditional paintings) or ``photo-sg`` (Stained glass
@@ -185,7 +184,7 @@ Options
      - Where the scripture is shown: ``all`` (under each step), ``current``
        (only the step being prayed, in the panel at the top) or ``none``.
    * - ``:read:``
-     - What **Listen** and **Pray aloud** read on each Hail Mary bead:
+     - What the **🔊 Listen** buttons read on each Hail Mary bead:
        ``step`` (the summary), ``both`` or ``scripture``.
 
 Options that match a menu in the Options panel (``:icons:``, ``:nav-icons:``,

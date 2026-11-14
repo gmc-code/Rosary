@@ -463,15 +463,21 @@ def coronation():
 # ---------------------------------------------------------------- opening / closing
 
 def opening():
-    """The opening prayers begin with the Sign of the Cross: a cross with a gold
-    dot at each place it is traced (forehead, breast, left and right shoulder),
-    and a faint line showing the order."""
+    """The opening prayers begin with the Sign of the Cross: a cross with flared
+    ends, a soft glow behind it, and a numbered gold dot at each place it is
+    traced (1 forehead, 2 breast, 3 left shoulder, 4 right shoulder)."""
     out = ['<circle class="ri-soft ri-outline" cx="50" cy="50" r="46"/>',
-           # the path of the hand: forehead, down to the breast, then shoulder to shoulder
-           '<path class="ri-gold-dash" fill="none" d="M50,17 L50,83 M26,40 L74,40"/>',
-           cross(50, 21, 58, 40, 9, 'ri-fill')]
-    for x, y in ((50, 15), (50, 85), (24, 40), (76, 40)):
-        out.append('<circle class="ri-gold ri-outline" cx="%d" cy="%d" r="6"/>' % (x, y))
+           '<circle class="ri-soft-strong" cx="50" cy="42" r="17"/>',          # soft glow
+           # faint lines joining the four places, in the order they are touched
+           '<path class="ri-gold-dash" fill="none" d="M50,17 L50,83 M23,41 L77,41"/>',
+           # the cross: flared (pattee) ends on all four arms
+           '<path class="ri-fill ri-outline" d="M45,22 L44,16 L56,16 L55,22 L55,37 L70,37 L76,35 '
+           'L76,47 L70,45 L55,45 L55,76 L57,84 L43,84 L45,76 L45,45 L30,45 L24,47 L24,35 L30,37 '
+           'L45,37 Z"/>']
+    for n, (x, y) in enumerate(((50, 11), (50, 89), (17, 41), (83, 41)), 1):
+        out.append('<circle class="ri-gold ri-outline" cx="%d" cy="%d" r="6.2"/>' % (x, y))
+        out.append('<text class="ri-text" x="%d" y="%s" text-anchor="middle" '
+                   'style="font-size:8px">%d</text>' % (x, _f(y + 2.9), n))
     return ''.join(out)
 
 
@@ -501,10 +507,30 @@ def closing():
     return ''.join(out)
 
 
-# The closing prayers end with the Sign of the Cross too, so they use the same
-# icon.  closing() (the crown of roses) is kept above in case it is wanted again:
-# use {'closing': closing} to bring it back.
-EXTRA_ICONS = {'opening': opening, 'closing': opening}
+def radiant_crucifix():
+    """The closing prayers: a radiant crucifix, Christ on the cross with rays of
+    glory behind it, the Rosary's last word on his victory over death."""
+    cx, cy = 50, 35                                   # where the rays meet: behind the head
+    out = ['<circle class="ri-soft ri-outline" cx="50" cy="50" r="46"/>']
+    for i in range(16):                               # rays, alternating long and short
+        a = math.radians(i * 22.5)
+        r1, r2 = 8, (36 if i % 2 == 0 else 27)
+        out.append('<path class="ri-gold-line" d="M%s,%s L%s,%s"/>' % (
+            _f(cx + r1 * math.cos(a)), _f(cy + r1 * math.sin(a)),
+            _f(cx + r2 * math.cos(a)), _f(cy + r2 * math.sin(a))))
+    out.append(cross(50, 14, 74, 52, 8, 'ri-fill'))   # the cross
+    out.append('<circle class="ri-gold-ring" cx="50" cy="30.5" r="6.2"/>')          # halo
+    out.append('<circle class="ri-white ri-outline" cx="50" cy="30.5" r="3.8"/>')    # head
+    out.append('<path class="ri-white ri-outline" d="M28,33.5 L72,33.5 L72,37 L56,38.5 '
+               'L54,58 L52.5,76 L47.5,76 L46,58 L44,38.5 L28,37 Z"/>')              # arms and body
+    out.append('<path class="ri-white ri-outline" d="M45.5,52 L54.5,52 L53.5,57 L46.5,57 Z"/>')  # loincloth
+    return ''.join(out)
+
+
+# The opening prayers begin with the Sign of the Cross; the closing prayers show
+# the radiant crucifix.  closing() (the crown of roses) is kept above in case it
+# is wanted again: use {'closing': closing} to bring it back.
+EXTRA_ICONS = {'opening': opening, 'closing': radiant_crucifix}
 
 
 def extra_icon(kind, label):

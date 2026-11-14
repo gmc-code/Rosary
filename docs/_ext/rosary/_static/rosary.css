@@ -1408,3 +1408,48 @@ html.dark .rosary-nav-fruit { color: #a9b0bb; }
 }
 .rosary-menus-hidden .rosary-nav-fruit,
 .rosary-block[data-virtues="off"] .rosary-nav-fruit { display: none !important; }
+
+/* the Listen control: "🔊 Listen: [This bead] [Whole decade]" as one joined group */
+.rosary-audio-group {
+    display: inline-flex;
+    align-items: stretch;
+    flex: 0 0 auto;
+    border: 2px solid var(--r-c);
+    border-radius: 0.5em;
+    overflow: hidden;
+    background: var(--r-paper);
+}
+.rosary-audio-group-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25em;
+    padding: 0 0.55em;
+    background: var(--r-soft);
+    color: var(--r-ink);
+    font-weight: 700;
+    white-space: nowrap;
+}
+.rosary-audio-group .rosary-btn {
+    border: 0;
+    border-left: 1px solid var(--r-soft2);
+    border-radius: 0;
+    white-space: nowrap;
+}
+.rosary-audio-group .rosary-btn.rosary-on { background: var(--r-gold); color: #3b2a00; }
+.rosary-btn-short { display: none; }
+html.dark .rosary-audio-group-label { background: rgba(255, 255, 255, 0.08); color: #f2f2f2; }
+/* full screen: on the dark background */
+.rosary-presenting .rosary-audio-group { border-color: rgba(255, 255, 255, 0.55); background: transparent; }
+.rosary-presenting .rosary-audio-group-label { background: rgba(255, 255, 255, 0.1); color: #fff; }
+.rosary-presenting .rosary-audio-group .rosary-btn { border-left-color: rgba(255, 255, 255, 0.3); }
+/* iPhone (and phones in full screen): "🔊 [Bead] [All]" */
+@media screen {
+    .rosary-block[data-layout="iphone"] .rosary-audio-group { border-width: 1.5px; border-radius: 0.45em; flex: 0 0 auto; }
+    .rosary-block[data-layout="iphone"] .rosary-audio-group-label { padding: 0 0.35em; font-size: 0.8em; }
+    .rosary-block[data-layout="iphone"] .rosary-audio-group .rosary-btn-short { display: inline; }
+}
+@media (max-width: 699px) {
+    .rosary-presenting .rosary-audio-group .rosary-btn-short { display: inline; }
+    .rosary-presenting .rosary-audio-group .rosary-btn-word,
+    .rosary-presenting .rosary-audio-group-label .rosary-btn-word { display: none; }
+}

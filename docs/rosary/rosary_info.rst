@@ -75,10 +75,10 @@ prayers, so a whole set can be prayed from start to finish:
 
 They appear as **Opening prayers** and **Closing prayers** at each end of the
 mystery picker, each with its own beads and the words of every prayer.
-**Pray aloud** runs straight through: opening prayers, the five mysteries,
-then the closing prayers.
+**Listen: All prayers** runs straight through: opening prayers, the five
+mysteries, then the closing prayers.
 
-Listen and **Pray aloud** read only the words of each opening and closing
+Reading aloud reads only the words of each opening and closing
 prayer. Tick **Read prayer names** (under **Options**) to have each one
 announced first, with its intention, e.g. "Hail Mary, for an increase in
 faith".
@@ -133,8 +133,9 @@ mystery. The page remembers the choice.
 The opening and closing prayers have their own pictures too: in the
 paintings, Masaccio's *Holy Trinity* and Piero della Francesca's *Madonna
 della Misericordia*, and a stained-glass window of each. In the drawn styles
-both show the Sign of the Cross, with which the Rosary begins and ends: a
-cross with a gold dot at each place it is traced.
+show the Sign of the Cross, a cross with a gold dot at each place it is
+traced (opening), and a radiant crucifix, Christ on the cross with rays of
+glory behind it (closing).
 
 
 Layout and full screen
@@ -188,8 +189,8 @@ screen:
     hidden.
   * The picture runs across the top, as large as fits, then the title.
   * The beads, from the Our Father to the Glory Be, fit on one line.
-  * The buttons fit on one line too: **Back**, **Next**, 🔊 (Listen),
-    **▶ Pray** (Pray aloud) and ⛶ (Full screen).
+  * The buttons fit on one line too: **Back**, **Next**, ⛶ (Full screen)
+    and the Listen control, shortened to 🔊 **Bead** | **All**.
   * The mystery picker becomes one row that scrolls sideways.
 
 On a narrow screen, Desktop and iPad put the details under the picture.
@@ -288,7 +289,7 @@ chosen one is highlighted, the choice applies to every mystery, and
 **Under the beads** in **Options** changes to match.
 
 The beads, buttons and the panel at the top work the same whichever is
-chosen. With any choice other than the steps, **Listen** and **Pray aloud** read it on
+chosen. With any choice other than the steps, the Listen buttons read it on
 the Our Father bead, after announcing the mystery, and in **Full screen** it
 appears in the panel beside the picture on that bead. Bible references in
 brackets in the classic meditations are left out when they are read aloud.
@@ -320,12 +321,19 @@ Listening
 The rosary can be read aloud by the computer's own voice. Nothing has to be
 downloaded, but sound must be on.
 
-* **Listen** reads the current bead once: the mystery on the Our Father bead,
-  the step (and its passage, if chosen) on a Hail Mary bead, or the prayer on
-  an opening or closing bead.
-* **Pray aloud** reads the whole decade bead by bead, moving on by itself,
-  then carries on to the next mystery of the set. Click **Stop** at any time.
-  Clicking a bead while it is praying aloud carries on from that bead.
+The **🔊 Listen** control under the beads has two buttons:
+
+* **This bead** reads the current bead once: the mystery on the Our Father
+  bead, the step (and its passage, if chosen) on a Hail Mary bead. On the
+  opening and closing prayers it is called **This prayer**.
+* **Whole decade** prays aloud bead by bead, moving on by itself, then
+  carries on to the next mystery of the set. On the opening and closing
+  prayers it is called **All prayers**.
+
+While it is reading, the button becomes **■ Stop**; click it to stop.
+Clicking a bead while it is praying aloud carries on from that bead. On the
+iPhone layout the control is shortened to 🔊 **Bead** | **All**.
+
 * **Read aloud** (under **Options**) sets what is read on each Hail Mary
   bead: **Step only** (the one-line summary), **Step and scripture**, or
   **Scripture only**.
