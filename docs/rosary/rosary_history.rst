@@ -135,8 +135,9 @@ asked them to pray the Rosary every day, for peace and an end to the war. At
 the last appearance, on 13 October, she called herself "the Lady of the
 Rosary". [#fatima-cdf]_ [#lucia]_
 
-The short Fatima prayer said after each Glory Be, "O my Jesus, forgive us our
-sins…", comes from the July appearance. [#lucia]_
+The short Fatima prayer said after each Glory Be, "O my Jesus, forgive us our sins,
+save us from the fires of hell, lead all souls to heaven,
+especially those in most need of thy mercy.", comes from the July appearance. [#lucia]_
 
 In 1930, after a long investigation, the local bishop declared the children's
 visions "worthy of credit" and approved devotion to Our Lady of Fatima.
