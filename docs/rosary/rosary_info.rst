@@ -107,7 +107,8 @@ Choosing the pictures
 =====================
 
 Use **Pictures** (under **Options**) to change the picture shown for each
-mystery. The page remembers the choice.
+mystery. The page remembers the choice. The menu lists the choices in this
+order.
 
 .. list-table::
    :header-rows: 1
@@ -115,25 +116,29 @@ mystery. The page remembers the choice.
 
    * - Pictures
      - Look
-   * - Stained glass windows (the starting choice)
-     - Photographs of real stained-glass windows, flattened to face the front
-   * - Classic
-     - Soft colours in a circle, in each set's colour
-   * - Stained glass (drawn)
-     - An arched window with dark leading, jewel colours and a rose-window
-       background
-   * - Gold icon
-     - Figures on gold leaf, in the style of a Byzantine icon
-   * - Traditional paintings
-     - A famous painting of each mystery, such as Fra Angelico's
-       *Annunciation* or Raphael's *Transfiguration*, with the artist and
-       title underneath. Click a painting to see all of it (see
-       :doc:`traditional paintings </rosary/rosary_artworks>`)
+   * - Modern Australian
+     - Each mystery set in the Australian bush, in thick, bold brushwork
+       in the style of Australian modernist painting. The opening and
+       closing prayers use the drawn icons.
    * - Cubism
      - Each mystery in the style of Cubism: bold, broken planes of colour
        and strong outlines. These pictures are wide, so the iPad layout
        frames them to their shape. The opening and closing prayers use the
        drawn icons.
+   * - Stained glass windows (the starting choice)
+     - Photographs of real stained-glass windows, flattened to face the front
+   * - Traditional paintings
+     - A famous painting of each mystery, such as Fra Angelico's
+       *Annunciation* or Raphael's *Transfiguration*, with the artist and
+       title underneath. Click a painting to see all of it (see
+       :doc:`traditional paintings </rosary/rosary_artworks>`)
+   * - Gold icon
+     - Figures on gold leaf, in the style of a Byzantine icon
+   * - Stained glass (drawn)
+     - An arched window with dark leading, jewel colours and a rose-window
+       background
+   * - Classic
+     - Soft colours in a circle, in each set's colour
 
 The opening and closing prayers have their own pictures too: in the
 paintings, Masaccio's *Holy Trinity* and Piero della Francesca's *Madonna

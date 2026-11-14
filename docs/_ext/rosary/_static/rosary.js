@@ -21,6 +21,10 @@
     // drawn styles; the picture folders (Traditional paintings, Stained glass
     // windows ...) are added from the directive's config.photosets
     var STYLES = [['classic', 'Classic'], ['stained', 'Stained glass (drawn)'], ['gold', 'Gold icon']];
+    // menu order: newest picture folder first, the drawn styles last
+    function menuStyles(config) {
+        return STYLES.concat(config.photosets || []).reverse();
+    }
 
     function el(tag, cls, text) {
         var node = document.createElement(tag);
@@ -361,7 +365,7 @@
         if (config.picker) {
             var picLabel = el('label', 'rosary-audio-field', 'Pictures ');
             var picSelect = el('select', 'rosary-select');
-            STYLES.concat(config.photosets || []).forEach(function (st) {
+            menuStyles(config).forEach(function (st) {
                 var o = el('option', '', st[1]);
                 o.value = st[0];
                 picSelect.appendChild(o);
@@ -380,7 +384,7 @@
 
             var navLabel = el('label', 'rosary-audio-field', 'Mystery picker ');
             var navSelect = el('select', 'rosary-select');
-            [['same', 'Same as pictures']].concat(STYLES, config.photosets || []).forEach(function (st) {
+            [['same', 'Same as pictures']].concat(menuStyles(config)).forEach(function (st) {
                 var o = el('option', '', st[1]);
                 o.value = st[0];
                 navSelect.appendChild(o);

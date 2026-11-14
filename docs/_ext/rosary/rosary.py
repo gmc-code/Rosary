@@ -368,7 +368,8 @@ class RosaryDirective(SphinxDirective):
         if sets is None:
             sets = [('photo', 'Traditional paintings', self.config.rosary_images),
                     ('sg', 'Stained glass windows', '/_static/rosary-images_sg'),
-                    ('cubism', 'Cubism', '/_static/rosary-images-cubism')]
+                    ('cubism', 'Cubism', '/_static/rosary-images-cubism'),
+                    ('modaus', 'Modern Australian', '/_static/rosary-images-mod-aus')]
         out = []
         for entry in sets:
             key, label, folder = entry[0], entry[1], entry[2]
@@ -683,12 +684,13 @@ def setup(app):
     app.add_config_value('rosary_images', '/_static/rosary-images', 'env')
     # every picture folder offered in the Pictures menu: [(key, label, folder), ...]
     # None = Traditional paintings (rosary_images), Stained glass windows
-    # (/_static/rosary-images_sg) and Cubism (/_static/rosary-images-cubism);
-    # folders that are missing or empty are skipped
+    # (/_static/rosary-images_sg), Cubism (/_static/rosary-images-cubism) and
+    # Modern Australian (/_static/rosary-images-mod-aus); the Pictures menu
+    # lists them last-first, above the drawn styles; folders that are missing or empty are skipped
     app.add_config_value('rosary_image_sets', None, 'env')
     # site-wide starting choices; a page's directive options and each reader's
     # own menu choices take over from these
-    app.add_config_value('rosary_default_icons', 'photo-sg', 'env')      # classic, stained, gold, photo, photo-sg, photo-cubism
+    app.add_config_value('rosary_default_icons', 'photo-sg', 'env')      # classic, stained, gold, photo, photo-sg, photo-cubism, photo-modaus
     app.add_config_value('rosary_default_nav_icons', 'classic', 'env')   # same, classic, stained, gold, photo...
     app.add_config_value('rosary_default_layout', 'auto', 'env')         # auto, desktop, ipad, iphone
     app.add_config_value('rosary_default_pictures', True, 'env')         # False to start with the pictures hidden

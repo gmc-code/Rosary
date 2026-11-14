@@ -133,7 +133,8 @@ Options
    * - ``:icons:``
      - Picture style to start with: ``classic``, ``stained``, ``gold``,
        ``photo`` (Traditional paintings), ``photo-sg`` (Stained glass
-       windows) or ``photo-cubism`` (Cubism); ``photo-<key>`` for any other
+       windows), ``photo-cubism`` (Cubism) or ``photo-modaus`` (Modern
+       Australian); ``photo-<key>`` for any other
        picture folder.
    * - ``:images:``
      - Folder of pictures for this rosary instead of the site's
@@ -314,15 +315,18 @@ glass windows**, for photographs of stained-glass windows. It works the same
 way: pictures named ``joyful-1.jpg`` ... ``glorious-5.jpg``, an optional
 ``credits.txt`` and an optional ``full`` folder. Its pictures are
 perspective-corrected photographs saved as ``.webp``. A third folder,
-``/_static/rosary-images-cubism``, is offered as **Cubism** in the same
+``/_static/rosary-images-cubism``, is offered as **Cubism**, and a fourth,
+``/_static/rosary-images-mod-aus``, as **Modern Australian**, in the same
 way. Each folder becomes its own
-entry in the **Pictures** menu; a folder that is missing or empty is left
+entry in the **Pictures** menu, which lists them last folder first, above the
+drawn styles (the **Mystery picker** menu uses the same order under **Same as
+pictures**); a folder that is missing or empty is left
 out, and a mystery without a picture in the chosen folder uses its drawn
 icon. In the iPad layout, wide (landscape) pictures are framed to their own
 shape; tall ones keep the phone-shaped frame.
 
 More folders can be listed in ``conf.py``, each with a short key and its
-menu label (this replaces the three defaults):
+menu label (this replaces the four defaults):
 
 .. code-block:: python
 
@@ -330,6 +334,7 @@ menu label (this replaces the three defaults):
         ("photo", "Traditional paintings", "/_static/rosary-images"),
         ("sg", "Stained glass windows", "/_static/rosary-images_sg"),
         ("cubism", "Cubism", "/_static/rosary-images-cubism"),
+        ("modaus", "Modern Australian", "/_static/rosary-images-mod-aus"),
         ("icons", "Eastern icons", "/_static/rosary-images_icons"),
     ]
 
@@ -387,7 +392,7 @@ choices for every rosary on the site are built into ``rosary.py``, so
 
 .. code-block:: python
 
-    rosary_default_icons = "photo-sg"        # classic, stained, gold, photo, photo-sg, photo-cubism
+    rosary_default_icons = "photo-sg"        # classic, stained, gold, photo, photo-sg, photo-cubism, photo-modaus
     rosary_default_nav_icons = "classic"     # same, classic, stained, gold, photo, photo-sg
     rosary_default_layout = "auto"           # auto, desktop, ipad, iphone
     rosary_default_pictures = True           # False to start with the pictures hidden
