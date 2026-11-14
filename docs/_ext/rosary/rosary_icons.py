@@ -542,13 +542,13 @@ def praying_hands():
            '<path class="ri-white ri-outline" d="M59,52 C64,50 66,56 62,60 L57,63 Z"/>',
            # the rosary over the hands at 45 degrees, from upper left to lower right,
            # with a slight sag, then the crucifix hanging straight down
-           '<path class="ri-line-thin" fill="none" d="M27,34 Q47,57 69,72 L69,76"/>']
-    for i in range(10):
-        t = i / 9
-        x = (1 - t) ** 2 * 27 + 2 * (1 - t) * t * 47 + t * t * 69
-        y = (1 - t) ** 2 * 34 + 2 * (1 - t) * t * 57 + t * t * 72
+           '<path class="ri-line-thin" fill="none" d="M43,27 Q54,40 67,51 L67,57"/>']
+    for i in range(7):                                   # from the left edge of the hands
+        t = i / 6
+        x = (1 - t) ** 2 * 43 + 2 * (1 - t) * t * 54 + t * t * 67
+        y = (1 - t) ** 2 * 27 + 2 * (1 - t) * t * 40 + t * t * 51
         out.append('<circle class="ri-fill ri-outline" cx="%s" cy="%s" r="3.2"/>' % (_f(x), _f(y)))
-    out.append(cross(69, 76, 16, 11, 3.4, 'ri-gold'))
+    out.append(cross(67, 57, 16, 11, 3.4, 'ri-gold'))
     return ''.join(out)
 
 
