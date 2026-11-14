@@ -448,7 +448,12 @@ class RosaryDirective(SphinxDirective):
     def _find_photos(self):
         """Every picture folder that has pictures, first one first."""
         self.photosets = []
+        # rebuild the page when this code, or a picture folder's contents, changes
+        self.env.note_dependency(os.path.abspath(__file__))
         for key, label, folder, explicit in self._picture_folders():
+            folder_path = self.env.relfn2path(folder)[1]
+            if os.path.isdir(folder_path):
+                self.env.note_dependency(folder_path)
             found = self._scan_folder(key, label, folder, explicit)
             if found:
                 self.photosets.append(found)

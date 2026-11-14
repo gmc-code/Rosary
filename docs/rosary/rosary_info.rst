@@ -48,7 +48,9 @@ Under each mystery is a decade of beads:
 
 Click **Begin**, then **Next** for each prayer, or click any bead to jump to
 it. After the Glory Be, **Finish decade** moves on to the next mystery of the
-set, so all five decades can be prayed in order.
+set, so all five decades can be prayed in order. **◀** (Back) goes back one
+bead, and **⛶** opens *Full screen*. The 📖 drop-down beside them chooses
+what is shown under the beads (see *Meditations, offerings and reflections*).
 
 Click a step in the list to go to its bead.
 
@@ -203,8 +205,10 @@ screen:
     hidden.
   * The picture runs across the top, as large as fits, then the title.
   * The beads, from the Our Father to the Glory Be, fit on one line.
-  * The buttons fit on one line too: **Back**, **Next**, ⛶ (Full screen)
-    and the Listen control, shortened to 🔊 **Bead** | **All**.
+  * The buttons fit on one line too: **◀** (Back), **Next**, the 📖
+    drop-down, ⛶ (Full screen) and the Listen control, shortened to
+    🔊 **Bead** | **All**. In Full screen the 📖 drop-down is left out to
+    make room.
   * The mystery picker becomes one row that scrolls sideways.
 
 On a narrow screen, Desktop and iPad put the details under the picture.
@@ -229,7 +233,7 @@ are shown:
 This only changes what is shown. What is read aloud is set by **Read aloud**
 (see *Listening*).
 
-**Full screen** (with the buttons under each mystery) fills the screen with
+**Full screen** (the **⛶** button under each mystery) fills the screen with
 the current mystery, for projecting to a class. The picture takes up
 three-quarters of the screen, with the title, beads and current passage
 beside it (below it on a tall, narrow screen).
@@ -296,10 +300,9 @@ its beads:
   for people, standing up for someone who is being picked on), ending with a
   question to think about. These suit students well.
 
-To switch quickly, use the row of buttons above the steps in each mystery:
+To switch quickly, use the 📖 drop-down beside **Next** in each mystery:
 **Steps**, **Meditation**, **Virtue**, **Intention**, **Offering**,
-**Classic** and **Modern**. The
-chosen one is highlighted, the choice applies to every mystery, and
+**Classic** and **Modern**. The choice applies to every mystery, and
 **Under the beads** in **Options** changes to match.
 
 The beads, buttons and the panel at the top work the same whichever is

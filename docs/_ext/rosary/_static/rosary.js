@@ -36,7 +36,7 @@
     /* button labels: parts marked true are words that the iPhone layout hides,
      * so the buttons fit on one line there */
     var LBL = {
-        back: [['\u25C0'], [' Back']],
+        back: [['\u25C0']],
         begin: [['Begin'], [' \u25B6']],
         next: [['Next'], [' \u25B6']],
         finish: [['Finish'], [' \u2714']],
@@ -699,30 +699,38 @@
             });
         }
 
-        /* ---------------- quick switch above the steps: Steps, Meditation, Virtue,
-         * Intention, Offering, Classic, Modern (the same choice as "Under the beads") */
+        /* ---------------- quick switch in each mystery's control row: a small
+         * drop-down (book icon) for Steps, Meditation, Virtue, Intention,
+         * Offering, Classic, Modern - the same choice as "Under the beads" */
+        var UNDER_CHOICES = [['steps', 'Steps'], ['meditation', 'Meditation'], ['virtue', 'Virtue'],
+                             ['intention', 'Intention'], ['offering', 'Offering'],
+                             ['classic', 'Classic'], ['modern', 'Modern']];
+        var underPickers = [];
         function setUnder(v) {
             block.setAttribute('data-under', v);
             store('rosary-under', v);
             if (undSelect) undSelect.value = v;
+            underPickers.forEach(function (s) { s.value = v; });
             refreshAll();
         }
-        block.querySelectorAll('.rosary-mystery:not(.rosary-prayers-card) .rosary-under-wrap').forEach(function (wrap) {
-            if (!wrap.querySelector('.rosary-under-box')) return;
-            var row = el('div', 'rosary-under-switch');
-            row.setAttribute('role', 'group');
-            row.setAttribute('aria-label', 'Show under the beads');
-            [['steps', 'Steps', 'The ten scripture steps'], ['meditation', 'Meditation', 'A meditation'],
-             ['virtue', 'Virtue', 'A meditation on the virtue'], ['intention', 'Intention', 'An intention'],
-             ['offering', 'Offering', 'A Montfort-style offering'], ['classic', 'Classic', 'A classic meditation (1915)'],
-             ['modern', 'Modern', 'A modern reflection']].forEach(function (c) {
-                var b = button('rosary-under-chip', c[1], c[2]);
-                b.setAttribute('data-v', c[0]);
-                b.addEventListener('click', function () { setUnder(c[0]); });
-                row.appendChild(b);
+        function underPicker() {
+            var wrap = el('label', 'rosary-under-pick');
+            wrap.title = 'Show under the beads';
+            wrap.appendChild(el('span', 'rosary-under-pick-icon', '\uD83D\uDCD6'));
+            var sel = el('select', 'rosary-under-select');
+            sel.setAttribute('aria-label', 'Show under the beads');
+            UNDER_CHOICES.forEach(function (c) {
+                var o = el('option', '', c[1]);
+                o.value = c[0];
+                sel.appendChild(o);
             });
-            wrap.insertBefore(row, wrap.firstChild);
-        });
+            sel.value = block.getAttribute('data-under') || 'steps';
+            if (!sel.value) sel.value = 'steps';
+            sel.addEventListener('change', function () { setUnder(sel.value); });
+            underPickers.push(sel);
+            wrap.appendChild(sel);
+            return wrap;
+        }
 
         /* ---------------- tidy the Options panel into labelled groups */
         if (bar) {
@@ -934,7 +942,8 @@
                 });
             });
 
-            var prev = button('rosary-btn', '\u25C0 Back');
+            var prev = button('rosary-btn rosary-btn--back', '\u25C0', 'Back');
+            prev.setAttribute('aria-label', 'Back');
             var next = button('rosary-btn rosary-btn--primary', 'Begin \u25B6');
             setLabel(prev, LBL.back);
             setLabel(next, LBL.begin);
@@ -1086,12 +1095,14 @@
             decade.appendChild(el('span', 'rosary-chain'));
             addBead('Glory Be', 'rosary-bead--glory', 'Glory Be');
 
-            var prev = button('rosary-btn', '◀ Back');
+            var prev = button('rosary-btn rosary-btn--back', '\u25C0', 'Back');
+            prev.setAttribute('aria-label', 'Back');
             var next = button('rosary-btn rosary-btn--primary', 'Begin ▶');
             setLabel(prev, LBL.back);
             setLabel(next, LBL.begin);
             controls.appendChild(prev);
             controls.appendChild(next);
+            if (mystery.querySelector('.rosary-under-box')) controls.appendChild(underPicker());
 
             var listen = null, auto = null;
             if (audio) {

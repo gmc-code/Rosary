@@ -1344,41 +1344,51 @@ html.dark .rosary-classic-title, html.dark .rosary-modern-question { color: #f2f
     .rosary-under-box { break-inside: avoid; }
 }
 
-/* quick switch above the steps (made by rosary.js); the chosen one is
-   highlighted from the block's data-under, so every mystery stays in step */
-.rosary-under-switch {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.25em;
-    margin: 0.2em 0 0.5em;
-}
-.rosary-under-chip {
-    padding: 0.18em 0.7em;
-    border: 1px solid var(--r-soft2);
-    border-radius: 2em;
+/* Back is an arrow only (it is rarely used) */
+.rosary-btn--back { padding-left: 0.55em; padding-right: 0.55em; }
+/* Full screen is its icon only (its tooltip names it), so Back,
+   Next, the under-the-beads drop-down and Full screen share one row */
+.rosary-btn--present .rosary-btn-word { display: none; }
+.rosary-set .rosary-btn--present { padding-left: 0.55em; padding-right: 0.55em; }
+
+/* the under-the-beads drop-down in each mystery's control row (made by
+   rosary.js): a book icon and a small select, kept in step across mysteries */
+.rosary-under-pick {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.1em;
+    padding: 0.1em 0.2em 0.1em 0.35em;
+    border: 2px solid var(--r-c);
+    border-radius: 0.5em;
     background: var(--r-paper);
-    color: var(--r-ink);
-    font: inherit;
-    font-size: 0.8em;
     cursor: pointer;
 }
-.rosary-under-chip:hover { border-color: var(--r-c); }
-.rosary-block[data-under="steps"] .rosary-under-chip[data-v="steps"],
-.rosary-block[data-under="meditation"] .rosary-under-chip[data-v="meditation"],
-.rosary-block[data-under="virtue"] .rosary-under-chip[data-v="virtue"],
-.rosary-block[data-under="intention"] .rosary-under-chip[data-v="intention"],
-.rosary-block[data-under="offering"] .rosary-under-chip[data-v="offering"],
-.rosary-block[data-under="classic"] .rosary-under-chip[data-v="classic"],
-.rosary-block[data-under="modern"] .rosary-under-chip[data-v="modern"] {
-    background: var(--r-c);
-    border-color: var(--r-c);
-    color: #fff;
+.rosary-under-pick-icon { font-size: 1.05em; line-height: 1; }
+.rosary-under-select {
+    border: 0;
+    background: transparent;
+    color: var(--r-ink);
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.85em;
+    max-width: 8em;
+    padding: 0;
+    cursor: pointer;
 }
-html.dark .rosary-under-chip { color: #f2f2f2; }
+.rosary-under-select:focus { outline: none; }
+.rosary-under-pick:focus-within { outline: 2px solid var(--r-c); outline-offset: 2px; }
+html.dark .rosary-under-select { color: #f2f2f2; }
+html.dark .rosary-under-select option { color: #111; }
+.rosary-presenting .rosary-under-pick { background: transparent; border-color: rgba(255, 255, 255, 0.55); }
+.rosary-presenting .rosary-under-select { color: #fff; }
+.rosary-presenting .rosary-under-select option { color: #111; }
 @media screen {
-    .rosary-block[data-layout="iphone"] .rosary-under-switch { justify-content: center; gap: 0.25em 0.2em; }
-    .rosary-block[data-layout="iphone"] .rosary-under-chip { padding: 0.2em 0.5em; font-size: 0.72em; white-space: nowrap; }
+    .rosary-block[data-layout="iphone"] .rosary-under-select { font-size: 0.8em; max-width: 7.5em; }
+    .rosary-block[data-layout="iphone"] .rosary-btn--back { padding-left: 0.45em; padding-right: 0.45em; }
+    /* no room in the phone's full-screen row */
+    .rosary-block[data-layout="iphone"] .rosary-presenting .rosary-under-pick { display: none; }
 }
+@media print { .rosary-under-pick { display: none !important; } }
 /* the steps and their alternatives sit in the details column on iPad and Desktop */
 @media screen and (min-width: 700px) {
     .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-under-wrap { grid-column: 2; grid-row: 5; }
@@ -1387,7 +1397,6 @@ html.dark .rosary-under-chip { color: #f2f2f2; }
     .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-under-wrap { grid-column: 2; grid-row: 5; }
 }
 .rosary-presenting .rosary-under-wrap { display: none !important; }
-@media print { .rosary-under-switch { display: none !important; } }
 
 /* the mystery picker: each mystery's virtue (fruit) under its name */
 .rosary-nav-fruit {
