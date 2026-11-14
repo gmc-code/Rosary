@@ -12,6 +12,31 @@ div:has(> button.js-menu[aria-controls="rside"]) {
   display: none !important;
 }
 
+/* Remove the "Made with Sphinx and Shibuya theme" line */
+.sy-foot-copyright p + p,
+.sy-foot-socials {
+  display: none;
+}
+
+/* Shrink the footer */
+.sy-foot,
+.sy-foot-inner,
+.sy-foot-reserved {
+  padding-top: 0.25rem !important;
+  padding-bottom: 0.25rem !important;
+  margin: 0 auto !important;
+  min-height: 0 !important;
+}
+
+.sy-foot-copyright p {
+  margin: 0 !important;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+/* ========================================== */
+/* ========================================== */
+/* ========================================== */
 
 /* Expand the main content grid area */
 .sy-content,
