@@ -989,8 +989,10 @@ ol.rosary-refs > li.rosary-step:hover:not(.rosary-here) { background: rgba(127, 
     justify-content: center;
     gap: 0.12em;
     margin: 0.3em 0 0.35em;
-    font-size: min(0.8em, 3vw);
+    font-size: min(1.25em, 4.3vw);
 }
+/* the opening and closing prayers have more named beads, so a little smaller */
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-prayers-card .rosary-decade { font-size: min(1.25em, 4.3vw); }
 .rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-bead { flex-shrink: 0; }
 .rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-bead--glory { padding: 0 0.4em; white-space: nowrap; }
 .rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-chain { flex: 1 1 0; width: auto; min-width: 2px; max-width: 0.6em; }
@@ -1169,8 +1171,28 @@ html.rosary-noscroll, html.rosary-noscroll body { overflow: hidden; }
         grid-column: 1; grid-row: 1; height: 58vh; height: 58dvh; position: static;
     }
     .rosary-presenting .rosary-head > div:last-child { grid-column: 1; grid-row: 2; padding-top: 0.6em; text-align: center; }
-    .rosary-presenting .rosary-decade { grid-column: 1; grid-row: 3; justify-content: center; }
-    .rosary-presenting .rosary-controls { grid-column: 1; grid-row: 4; justify-content: center; }
+    .rosary-presenting .rosary-decade {
+        grid-column: 1; grid-row: 3;
+        flex-wrap: nowrap; justify-content: center; gap: 0.12em;
+        font-size: min(1.25em, 4.3vw);
+    }
+    .rosary-presenting .rosary-prayers-card .rosary-decade { font-size: min(1.25em, 4.3vw); }
+    .rosary-presenting .rosary-bead { flex-shrink: 0; }
+    .rosary-presenting .rosary-bead--glory { padding: 0 0.4em; white-space: nowrap; }
+    .rosary-presenting .rosary-chain { flex: 1 1 0; width: auto; min-width: 2px; max-width: 0.6em; }
+    /* buttons: on one line, words that don't fit left out */
+    .rosary-presenting .rosary-controls {
+        grid-column: 1; grid-row: 4;
+        flex-wrap: nowrap; justify-content: center; gap: 0.3em;
+    }
+    .rosary-presenting .rosary-btn {
+        flex: 0 1 auto;
+        padding: 0.28em 0.65em;
+        font-size: 0.85em;
+        white-space: nowrap;
+    }
+    .rosary-presenting .rosary-btn--primary { flex-grow: 1; max-width: 7.5em; }
+    .rosary-presenting .rosary-btn-word { display: none; }
     .rosary-presenting .rosary-now { grid-column: 1; grid-row: 5; max-height: none; }
     .rosary-presenting .rosary-mystery-title { font-size: 1.3em; }
     .rosary-presenting .rosary-btn--present { display: none; }
