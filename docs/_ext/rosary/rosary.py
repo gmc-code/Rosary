@@ -33,6 +33,15 @@ Options
     :no-captions:    references only, without the short summary of each passage
     :no-scripture:   leave out the verse text under each reference
     :no-audio:       leave out the read-aloud buttons and options
+                     Recorded voices: each folder in rosary_recordings
+                     (default /_static/female_voice and /_static/male_voice)
+                     becomes a choice in the Voice menu.  Files are named
+                     after the prayer (Our Father.mp3, Hail Mary.mp3, Glory
+                     Be.mp3, Fatima Prayer.mp3, The Apostles' Creed.mp3, The
+                     Sign Of The Cross.mp3, Pray for us.mp3, The Rosary
+                     Prayer.mp3, Hail Holy Queen.mp3, ...; .mp3, .m4a, .ogg or
+                     .wav).  A prayer with no recording, the mystery titles and
+                     the scripture are read by the browser's voice.
     :icons:          picture style: classic, stained, gold, photo (the first
                      picture folder) or photo-<key> for another folder in
                      rosary_image_sets, e.g. photo-sg  [photo-sg]
@@ -53,8 +62,13 @@ Options
     :extra-prayers:  the opening and closing prayers: off, on (Sign of the
                      Cross, Creed, Our Father, three Hail Marys, Glory Be;
                      Hail Holy Queen, versicle, Rosary Prayer, Sign of the
-                     Cross) or full (also the Prayer to St Michael and the
-                     Memorare)  [on]
+                     Cross) or full (on, with St Michael and the Memorare)  [on]
+    :st-michael:     yes or no: the Prayer to St Michael in the closing
+                     prayers  [no; yes with :extra-prayers: full]
+    :memorare:       yes or no: the Memorare in the closing prayers
+                     [no; yes with :extra-prayers: full]
+                     Readers switch each of these with its own tick box in
+                     Options.
     :fatima:         yes or no: the Fatima prayer (O my Jesus) after the
                      Glory Be at the end of each decade  [yes]
     :hide-title:     hide the page's main heading (it still names the page in
@@ -86,9 +100,13 @@ Options
                      mix, separated by commas (e.g. steps, meditation), or
                      all (every one except the steps); the others are in
                      rosary_meditations.py  [none]
-    :read:           what Listen / Pray aloud read for each Hail Mary: step
-                     (the one-line summary), both (summary then scripture)
-                     or scripture  [step]
+    :read:           the parts read aloud, separated by commas, from mystery,
+                     meditation, step, scripture, our-father, hail-mary,
+                     glory-be, fatima, opening, names; or all.  The older
+                     step, both and scripture still work: they set the step
+                     and scripture, with every other part read except the
+                     prayer names  [step]
+                     Readers tick each part in Options -> Reading aloud.
 
 The page is fully readable (and prints) without JavaScript: _static/rosary.js
 adds the tabs, the mystery picker, the clickable beads, the Options panel,
@@ -100,7 +118,7 @@ import json
 import os
 import shutil
 from pathlib import Path
-from urllib.parse import quote_plus
+from urllib.parse import quote, quote_plus
 
 from docutils import nodes
 from docutils.parsers.rst import directives
@@ -114,6 +132,26 @@ from .rosary_meditations import INTENTIONS, MEDITATIONS, MODERN, OFFERINGS, VIRT
 from .rosary_scripture import TEXT, TRANSLATION, TRANSLATION_SHORT
 
 logger = logging.getLogger(__name__)
+
+AUDIO_EXTS = ('.mp3', '.m4a', '.ogg', '.wav')
+# other file names a prayer's recording may have (besides its key and title)
+RECORDING_NAMES = {
+    'sign-of-cross': ['Sign of the Cross'],
+    'creed': ['Apostles Creed', 'Creed'],
+    'fatima': ['Fatima Prayer', 'Fatima', 'O my Jesus'],
+    'versicle': ['Pray for us', 'Versicle'],
+    'hail-holy-queen': ['Hail Holy Queen', 'Salve Regina'],
+    'st-michael': ['St Michael', 'Saint Michael', 'Prayer to Saint Michael'],
+    'memorare': ['Memorare'],
+}
+DEFAULT_RECORDINGS = [('female', 'Recorded (female)', '/_static/female_voice'),
+                      ('male', 'Recorded (male)', '/_static/male_voice')]
+
+
+def _audio_stem(name):
+    """'The Apostles' Creed' -> 'theapostlescreed', for matching file names."""
+    return ''.join(ch for ch in name.lower() if ch.isalnum())
+
 
 SET_ALIASES = {
     'joyful': 'joyful', 'joy': 'joyful',
@@ -199,10 +237,12 @@ class RosaryDirective(SphinxDirective):
         'pictures': lambda a: directives.choice(a, ('yes', 'no')),
         'virtues': lambda a: directives.choice(a, ('yes', 'no')),
         'verses': lambda a: directives.choice(a, ('all', 'current', 'none')),
-        'read': lambda a: directives.choice(a, ('step', 'both', 'scripture')),
+        'read': directives.unchanged,
         'nav-icons': directives.unchanged,
         'hide-title': directives.flag,
         'extra-prayers': lambda a: directives.choice(a, ('off', 'on', 'full')),
+        'st-michael': lambda a: directives.choice(a, ('yes', 'no')),
+        'memorare': lambda a: directives.choice(a, ('yes', 'no')),
         'fatima': lambda a: directives.choice(a, ('yes', 'no')),
         'under': _under,
     }
@@ -353,14 +393,17 @@ class RosaryDirective(SphinxDirective):
         sub = ('Before the first mystery' if kind == 'opening' else 'After the fifth mystery')
         items = []
         for label, name, intent, keys, style, full_only in plan:
+            # St Michael and the Memorare each have their own switch
+            only = ('michael' if keys[0] == 'st-michael' else keys[0]) if full_only else ''
             texts = [PRAYERS[k][1] for k in keys]
             shown = ''.join('<span class="rosary-prayer-text">%s%s</span>' % (
                 ('<em>%s.</em> ' % _esc(PRAYERS[k][0])) if len(keys) > 1 else '', _esc(PRAYERS[k][1]))
                 for k in keys)
             items.append(
-                '<li class="rosary-prayer-item%s" data-label="%s" data-style="%s" data-name="%s" '
+                '<li class="rosary-prayer-item%s"%s data-label="%s" data-style="%s" data-name="%s" '
                 'data-intent="%s" data-text="%s"><strong class="rosary-prayer-name">%s</strong>%s%s</li>' % (
-                    ' rosary-extra-full' if full_only else '', _esc(label), style, _esc(name),
+                    (' rosary-only-' + only) if only else '', (' data-only="%s"' % only) if only else '',
+                    _esc(label), style, _esc(name),
                     _esc(intent), _esc(' '.join(texts)), _esc(name),
                     (' <span class="rosary-cap">%s</span>' % _esc(intent)) if intent else '', shown))
         return (
@@ -467,6 +510,39 @@ class RosaryDirective(SphinxDirective):
                         folder, ', '.join(missing), location=self.get_location())
         return found_set
 
+    def _find_recordings(self):
+        """Each recorded-voice folder -> [key, label, {prayer key: url}]."""
+        self.recordings = []
+        sets = self.config.rosary_recordings
+        if sets is None:
+            sets = DEFAULT_RECORDINGS
+        depth = self.env.docname.count('/')
+        images = self.env.rosary_images.setdefault(self.env.docname, set())
+        for entry in sets or []:
+            key, label, folder = str(entry[0]), str(entry[1]), str(entry[2])
+            rel, abs_path = self.env.relfn2path(folder)
+            if not os.path.isdir(abs_path):
+                continue
+            self.env.note_dependency(abs_path)
+            files = {}
+            for name in os.listdir(abs_path):
+                stem, ext = os.path.splitext(name)
+                if ext.lower() in AUDIO_EXTS:
+                    files.setdefault(_audio_stem(stem), name)
+            found = {}
+            for pkey, (title, _text) in PRAYERS.items():
+                names = [pkey, title] + RECORDING_NAMES.get(pkey, [])
+                for n in names:
+                    stem = _audio_stem(n)
+                    match = files.get(stem) or files.get('the' + stem)
+                    if match:
+                        src_rel = (Path(rel) / match).as_posix()
+                        images.add(src_rel)
+                        found[pkey] = '../' * depth + quote(src_rel)
+                        break
+            if found:
+                self.recordings.append([key, label, found])
+
     def _find_photos(self):
         """Every picture folder that has pictures, first one first."""
         self.photosets = []
@@ -516,6 +592,7 @@ class RosaryDirective(SphinxDirective):
         if not hasattr(self.env, 'rosary_images'):
             self.env.rosary_images = {}
         self._find_photos()
+        self._find_recordings()
         mode = 'all'
         set_key = None
         if self.arguments:
@@ -574,8 +651,11 @@ class RosaryDirective(SphinxDirective):
             'fatima': (self.options['fatima'] == 'yes') if 'fatima' in self.options
                       else bool(self.config.rosary_default_fatima),
             'readTitles': bool(self.config.rosary_default_read_titles),
+            'voice': str(self.config.rosary_default_voice or 'female'),
             'hideTitle': 'hide-title' in self.options,
         }
+        if config['audio']:
+            config['recordings'] = self.recordings
         photo_styles = [ps['style'] for ps in self.photosets]
         style = (self.options.get('icons') or '').strip().lower()
         if not style:
@@ -630,19 +710,34 @@ class RosaryDirective(SphinxDirective):
             pictures = self.options['pictures'] == 'yes'
         else:
             pictures = bool(self.config.rosary_default_pictures)
+        # the opening and closing prayers: on or off, and St Michael and the
+        # Memorare each on or off ("full" = on, with both)
+        full = config['extra'] == 'full'
+        if full:
+            config['extra'] = 'on'
+        def _extra_switch(option, default):
+            if option in self.options:
+                return 'on' if self.options[option] == 'yes' else 'off'
+            if default is not None:
+                return 'on' if default else 'off'
+            return 'on' if full else 'off'
+        michael = _extra_switch('st-michael', self.config.rosary_default_st_michael)
+        memorare = _extra_switch('memorare', self.config.rosary_default_memorare)
         if 'virtues' in self.options:
             virtues = self.options['virtues'] == 'yes'
         else:
             virtues = bool(self.config.rosary_default_virtues)
         html_output = (
             '<div class="rosary-block" data-icons="%s" data-photoset="%s" data-layout-choice="%s" '
-            'data-layout="%s" data-pictures="%s" data-virtues="%s" data-under="%s" data-verses="%s" data-extra="%s" data-config="%s"%s>%s%s%s%s</div>'
+            'data-layout="%s" data-pictures="%s" data-virtues="%s" data-under="%s" data-verses="%s" data-extra="%s" '
+            'data-michael="%s" data-memorare="%s" data-config="%s"%s>%s%s%s%s</div>'
             % (data_icons, photoset, layout,
                # without JavaScript, "auto" shows the iPad layout (it adapts to narrow screens)
                'ipad' if layout == 'auto' else layout, 'on' if pictures else 'off',
                'on' if virtues else 'off',
                self.options.get('under') or self._default_under(),
                self.options.get('verses') or self.config.rosary_default_verses, config['extra'],
+               michael, memorare,
                _esc(json.dumps(config)),
                prayers_attr, title_html, tabs, sets, credit))
         return [nodes.raw('', html_output, format='html')]
@@ -718,6 +813,13 @@ def setup(app):
     # (/_static/rosary-images-trad) and Masterpieces (rosary_images); the
     # Pictures menu lists them in this order, above the drawn styles; folders that are missing or empty are skipped
     app.add_config_value('rosary_image_sets', None, 'env')
+    # recorded voices offered in the Voice menu: [(key, label, folder), ...]
+    # None = Recorded (female) /_static/female_voice and Recorded (male)
+    # /_static/male_voice; [] to use only the browser's voices
+    app.add_config_value('rosary_recordings', None, 'env')
+    # the voice a reader starts with: the key of a recording (female, male) or
+    # "browser" for the browser's own voice
+    app.add_config_value('rosary_default_voice', 'female', 'env')
     # site-wide starting choices; a page's directive options and each reader's
     # own menu choices take over from these
     app.add_config_value('rosary_default_icons', 'photo-sg', 'env')      # classic, stained, gold, photo, photo-sg, photo-cubism, photo-trad
@@ -727,8 +829,10 @@ def setup(app):
     app.add_config_value('rosary_default_virtues', True, 'env')          # False to hide the virtues in the picker
     app.add_config_value('rosary_default_under', 'none', 'env')          # none, all, or any of steps, meditation, virtue, intention, offering, classic, modern (comma-separated)
     app.add_config_value('rosary_default_verses', 'current', 'env')      # all, current, none
-    app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture
+    app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture, all, or a list e.g. 'mystery,step,hail-mary'
     app.add_config_value('rosary_default_extra_prayers', 'on', 'env')    # off, on, full
+    app.add_config_value('rosary_default_st_michael', None, 'env')       # True/False; None = only with full
+    app.add_config_value('rosary_default_memorare', None, 'env')         # True/False; None = only with full
     app.add_config_value('rosary_default_fatima', True, 'env')           # O my Jesus after each Glory Be
     app.add_config_value('rosary_default_read_titles', False, 'env')     # say each opening/closing prayer's name
     app.connect('env-purge-doc', _purge)

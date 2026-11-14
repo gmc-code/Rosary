@@ -1217,9 +1217,12 @@ html.rosary-noscroll, html.rosary-noscroll body { overflow: hidden; }
 }
 
 
-/* opening and closing prayers: data-extra = off | on | full --------------- */
+/* opening and closing prayers: data-extra = on | off; the Prayer to St Michael
+ * and the Memorare each have their own switch (data-michael, data-memorare) */
 .rosary-block:not([data-extra="on"]):not([data-extra="full"]) .rosary-extra { display: none !important; }
-.rosary-block:not([data-extra="full"]) .rosary-extra-full { display: none !important; }
+.rosary-block:not([data-michael="on"]) .rosary-only-michael { display: none !important; }
+.rosary-block:not([data-memorare="on"]) .rosary-only-memorare { display: none !important; }
+.rosary-field-off { opacity: 0.45; cursor: default !important; }
 .rosary-block[data-extra="on"] .rosary-nav,
 .rosary-block[data-extra="full"] .rosary-nav { grid-template-columns: repeat(7, 1fr); }
 .rosary-prayer-name { color: var(--r-ink); }

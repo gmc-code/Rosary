@@ -2,8 +2,9 @@
  *
  * The directive writes every set, mystery, reference and verse into the page,
  * so the page reads and prints without this script.  This script only hides /
- * shows parts, drives the beads and reads aloud with the browser's own voice
- * (the Web Speech API - no audio files):
+ * shows parts, drives the beads and reads aloud: a prayer with a recording
+ * (the recorded voices from the rosary_recordings folders) plays that file,
+ * everything else is read by the browser's own voice (the Web Speech API):
  *
  *   bead 0       Our Father (announce the mystery)
  *   beads 1-10   Hail Marys, each with its scripture passage
@@ -14,6 +15,21 @@
 
     var SPEECH = ('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window);
     var STORE_VOICE = 'rosary-voice';
+    var STORE_REC = 'rosary-recording';     // female, male ... or 'browser'
+    // the parts of the rosary that can be read aloud: [key, tick box, tip]
+    var SAY_PARTS = [
+        ['mystery', 'Mystery and fruit', 'Announce each mystery and its fruit on the Our Father bead'],
+        ['meditation', 'Meditation', 'The meditation chosen under the beads, on the Our Father bead'],
+        ['step', 'Step', 'The short step for each Hail Mary'],
+        ['scripture', 'Scripture', 'The scripture verse for each Hail Mary'],
+        ['our-father', 'Our Father', 'The Our Father at the start of each decade'],
+        ['hail-mary', 'Hail Mary', 'The ten Hail Marys'],
+        ['glory-be', 'Glory Be', 'The Glory Be at the end of each decade'],
+        ['fatima', 'Fatima prayer', 'O my Jesus, after the Glory Be (when the Fatima prayer is on)'],
+        ['opening', 'Opening & closing', 'The words of the opening and closing prayers'],
+        ['names', 'Prayer names', 'Say the name of each opening and closing prayer (and its intention) first']
+    ];
+    var SAY_KEYS = SAY_PARTS.map(function (p) { return p[0]; });
     var STORE_RATE = 'rosary-rate';
     var STORE_ICONS = 'rosary-icons';
     var STORE_LAYOUT = 'rosary-layout';
@@ -109,8 +125,20 @@
         token: 0,
         queue: [],          // keep utterances referenced (Chrome drops onend otherwise)
         voice: null,
-        rate: 0.9
+        rate: 0.9,
+        recording: null,    // key of the recorded voice in use, or null for the browser voice
+        clips: {}           // recording key -> {prayer key: url}
     };
+    var PRAYER_KEYS = {};   // a prayer's words -> its key (our-father, hail-mary ...)
+    var player = null;      // one audio element, reused (iPhone allows it after the first tap)
+
+    function normText(t) { return String(t).replace(/\s+/g, ' ').trim(); }
+    function clipFor(text) {
+        var clips = speech.recording && speech.clips[speech.recording];
+        if (!clips) return null;
+        var key = PRAYER_KEYS[normText(text)];
+        return key && clips[key] ? clips[key] : null;
+    }
 
     function englishVoices() {
         if (!SPEECH) return [];
@@ -160,20 +188,54 @@
         speech.token++;
         speech.queue = [];
         if (SPEECH) window.speechSynthesis.cancel();
+        if (player) { player.onended = player.onerror = null; player.pause(); }
     }
 
-    /* Speak a list of texts in order, then call done() (unless stopped). */
+    /* Speak a list of texts in order, then call done() (unless stopped).
+     * A prayer that has a recording in the chosen recorded voice plays it. */
     function speak(texts, done) {
         stopSpeech();
-        if (!SPEECH) { if (done) done(); return; }
         var token = speech.token;
-        var chunks = [];
-        texts.forEach(function (t) { if (t) chunks = chunks.concat(sentences(t)); });
+        var items = [];
+        function addSpoken(t, at) {
+            if (!SPEECH) return;
+            var chunks = sentences(t).map(function (c) { return { text: c }; });
+            Array.prototype.splice.apply(items, [at === undefined ? items.length : at, 0].concat(chunks));
+        }
+        texts.forEach(function (t) {
+            if (!t) return;
+            var clip = clipFor(t);
+            if (clip) items.push({ clip: clip, words: t });
+            else addSpoken(t);
+        });
         var i = 0;
         function next() {
             if (token !== speech.token) return;
-            if (i >= chunks.length) { if (done) done(); return; }
-            var u = new window.SpeechSynthesisUtterance(chunks[i++]);
+            if (i >= items.length) { if (done) done(); return; }
+            var item = items[i++];
+            if (item.clip) {
+                if (!player) { player = new Audio(); player.preload = 'auto'; }
+                var a = player, over = false;
+                var finish = function (failed) {
+                    if (over) return;
+                    over = true;
+                    a.onended = a.onerror = null;
+                    if (token !== speech.token) return;
+                    if (failed) addSpoken(item.words, i);   // can't play it: read it instead
+                    setTimeout(next, failed ? 0 : 300);
+                };
+                a.onended = function () { finish(false); };
+                a.onerror = function () { finish(true); };
+                // "Calm" (0.9) plays the recording as recorded; the others a little slower or quicker
+                var rate = Math.max(0.5, Math.min(2, speech.rate / 0.9));
+                a.defaultPlaybackRate = rate;
+                a.src = item.clip;
+                a.playbackRate = rate;
+                var played = a.play();
+                if (played && played.catch) played.catch(function () { finish(true); });
+                return;
+            }
+            var u = new window.SpeechSynthesisUtterance(item.text);
             if (speech.voice) { u.voice = speech.voice; u.lang = speech.voice.lang; } else { u.lang = 'en-AU'; }
             u.rate = speech.rate;
             u.onend = function () { setTimeout(next, 120); };
@@ -193,14 +255,47 @@
         try { config = JSON.parse(block.getAttribute('data-config') || '{}'); } catch (e) { config = {}; }
         var prayers = {};
         try { prayers = JSON.parse(block.getAttribute('data-prayers') || '{}'); } catch (e) { prayers = {}; }
+        Object.keys(prayers).forEach(function (k) { PRAYER_KEYS[normText(prayers[k][1])] = k; });
+        var recs = config.recordings || [];
+        recs.forEach(function (r) { speech.clips[r[0]] = r[2]; });
         var state = {
             showPrayers: !!config.prayers,
             auto: false,            // praying aloud, bead after bead
             speaking: null,         // mystery element being read
-            read: ['step', 'both', 'scripture'].indexOf(config.read) !== -1 ? config.read : 'both',
             fatima: config.fatima !== false,     // O my Jesus after each Glory Be
-            readTitles: !!config.readTitles      // announce each opening / closing prayer
+            say: startingSay()                   // the parts read aloud: {step: true, ...}
         };
+        /* the parts that can be read aloud, each with its own tick box */
+        function startingSay() {
+            var say = {};
+            SAY_KEYS.forEach(function (k) { say[k] = k !== 'names'; });
+            say.names = !!config.readTitles;
+            var r = String(config.read || 'step').toLowerCase().replace(/\s+/g, '');
+            if (r === 'step' || r === 'both' || r === 'scripture') {
+                say.step = r !== 'scripture';
+                say.scripture = r !== 'step';
+            } else if (r === 'all') {
+                SAY_KEYS.forEach(function (k) { say[k] = true; });
+            } else if (r) {
+                var list = r.split(',');
+                SAY_KEYS.forEach(function (k) { say[k] = list.indexOf(k) !== -1; });
+            }
+            var saved = store('rosary-say');
+            if (saved !== null && saved !== undefined && saved !== '') {
+                var on = saved === 'none' ? [] : saved.split(',');
+                SAY_KEYS.forEach(function (k) { say[k] = on.indexOf(k) !== -1; });
+            } else {
+                // choices saved by the older Read aloud menu
+                var old = store('rosary-read');
+                if (old === 'step' || old === 'both' || old === 'scripture') {
+                    say.step = old !== 'scripture';
+                    say.scripture = old !== 'step';
+                }
+                var oldTitles = store('rosary-read-titles');
+                if (oldTitles === '1' || oldTitles === '0') say.names = oldTitles === '1';
+            }
+            return say;
+        }
         var refreshers = [];
         function refreshAll() { refreshers.forEach(function (f) { f(); }); }
 
@@ -311,7 +406,7 @@
         block.classList.add('rosary-js');
         var sets = Array.prototype.slice.call(block.querySelectorAll('.rosary-set'));
         var today = todayKey(sets);
-        var audio = config.audio && SPEECH;
+        var audio = config.audio && (SPEECH || recs.length > 0);
 
         /* ---------------- picture style: a drawn style, or a picture folder.
          * A folder's style value is "photo" or "photo-<key>": the block gets
@@ -368,13 +463,31 @@
         }
         applyPhotoset();
 
+        /* opening and closing prayers: data-extra on/off, and the Prayer to
+         * St Michael and the Memorare each on/off (data-michael, data-memorare).
+         * An old "full" (both extras on) still works. */
         function extraOn() {
             var x = block.getAttribute('data-extra');
             return x === 'on' || x === 'full';
         }
-        var savedExtra = store('rosary-extra');
-        if (['off', 'on', 'full'].indexOf(savedExtra) !== -1 && block.querySelector('.rosary-prayers-card')) {
-            block.setAttribute('data-extra', savedExtra);
+        if (block.getAttribute('data-extra') === 'full') {
+            block.setAttribute('data-extra', 'on');
+            block.setAttribute('data-michael', 'on');
+            block.setAttribute('data-memorare', 'on');
+        }
+        if (block.querySelector('.rosary-prayers-card')) {
+            var savedExtra = store('rosary-extra');
+            if (savedExtra === 'full') {
+                block.setAttribute('data-extra', 'on');
+                block.setAttribute('data-michael', 'on');
+                block.setAttribute('data-memorare', 'on');
+            } else if (savedExtra === 'on' || savedExtra === 'off') {
+                block.setAttribute('data-extra', savedExtra);
+            }
+            ['michael', 'memorare'].forEach(function (k) {
+                var v = store('rosary-' + k);
+                if (v === 'on' || v === 'off') block.setAttribute('data-' + k, v);
+            });
         }
 
         /* ---------------- layout: desktop, ipad or iphone; "auto" picks one
@@ -585,6 +698,7 @@
 
             /* under the beads: tick any of the ten steps, the meditations and so on */
             var undLabel = null;
+            var exLabel = null, michaelLabel = null, memorareLabel = null;
             if (block.querySelector('.rosary-meditation')) {
                 var savedUnder = store('rosary-under');
                 if (savedUnder) block.setAttribute('data-under', underValue(parseUnder(savedUnder)));
@@ -596,18 +710,50 @@
 
             /* the opening and closing prayers of the rosary */
             if (block.querySelector('.rosary-prayers-card')) {
-                var exLabel = el('label', 'rosary-audio-field', 'Opening & closing ');
-                var exSelect = el('select', 'rosary-select');
-                [['off', 'Off'], ['on', 'On'], ['full', 'On, with St Michael and Memorare']].forEach(function (v) {
-                    var o = el('option', '', v[1]);
-                    o.value = v[0];
-                    exSelect.appendChild(o);
+                var tick = function (text, tip, on) {
+                    var lab = el('label', 'rosary-audio-field rosary-prayers-field');
+                    lab.title = tip;
+                    var box = el('input');
+                    box.type = 'checkbox';
+                    box.checked = on;
+                    lab.appendChild(box);
+                    lab.appendChild(document.createTextNode(' ' + text));
+                    bar.appendChild(lab);
+                    return [lab, box];
+                };
+                var ex = tick('Opening & closing prayers',
+                    'Sign of the Cross, Creed, Our Father, three Hail Marys and Glory Be before the mysteries; ' +
+                    'Hail Holy Queen, Pray for us and the Rosary Prayer after them', extraOn());
+                var mi = tick('Prayer to St Michael', 'Pray the Prayer to St Michael in the closing prayers',
+                    block.getAttribute('data-michael') === 'on');
+                var me = tick('The Memorare', 'Pray the Memorare in the closing prayers',
+                    block.getAttribute('data-memorare') === 'on');
+                exLabel = ex[0];
+                michaelLabel = mi[0];
+                memorareLabel = me[0];
+                var exSelect = ex[1];
+                var syncExtras = function () {
+                    [mi, me].forEach(function (pair) {
+                        pair[1].disabled = !ex[1].checked;
+                        pair[0].classList.toggle('rosary-field-off', !ex[1].checked);
+                    });
+                };
+                syncExtras();
+                [['michael', mi[1]], ['memorare', me[1]]].forEach(function (pair) {
+                    pair[1].addEventListener('change', function () {
+                        var v = pair[1].checked ? 'on' : 'off';
+                        block.setAttribute('data-' + pair[0], v);
+                        store('rosary-' + pair[0], v);
+                        stopAuto();
+                        refreshAll();
+                    });
                 });
-                exSelect.value = block.getAttribute('data-extra') || 'off';
                 exSelect.addEventListener('change', function () {
                     var wasOn = extraOn();
-                    block.setAttribute('data-extra', exSelect.value);
-                    store('rosary-extra', exSelect.value);
+                    var value = exSelect.checked ? 'on' : 'off';
+                    block.setAttribute('data-extra', value);
+                    store('rosary-extra', value);
+                    syncExtras();
                     stopAuto();
                     sets.forEach(function (set) {
                         if (!set.rosaryShowMystery) return;
@@ -617,8 +763,6 @@
                     });
                     refreshAll();
                 });
-                exLabel.appendChild(exSelect);
-                bar.appendChild(exLabel);
             }
         }
 
@@ -715,39 +859,46 @@
             var voiceLabel = el('label', 'rosary-audio-field', 'Voice ');
             var voiceSelect = el('select', 'rosary-select');
             voiceLabel.appendChild(voiceSelect);
-            var readLabel = el('label', 'rosary-audio-field', 'Read aloud ');
-            var readSelect = el('select', 'rosary-select');
-            [['step', 'Step only'], ['both', 'Step and scripture'], ['scripture', 'Scripture only']].forEach(function (r) {
-                var o = el('option', '', r[1]);
-                o.value = r[0];
-                readSelect.appendChild(o);
+            // Read aloud: a tick box for each part
+            var readLabel = el('div', 'rosary-audio-field rosary-under-field rosary-say-field');
+            readLabel.appendChild(el('span', 'rosary-under-field-title', 'Read aloud'));
+            var sayBox = el('div', 'rosary-under-checks');
+            var sayInputs = {};
+            var hasCards = !!block.querySelector('.rosary-prayers-card');
+            var hasMed = !!block.querySelector('.rosary-under-box');
+            var saveSay = function () {
+                var on = SAY_KEYS.filter(function (k) { return state.say[k]; });
+                store('rosary-say', on.length ? on.join(',') : 'none');
+                stopAuto();
+                refreshAll();
+            };
+            SAY_PARTS.forEach(function (part) {
+                var k = part[0];
+                if ((k === 'opening' || k === 'names') && !hasCards) return;
+                if (k === 'meditation' && !hasMed) return;
+                var lab = el('label', 'rosary-under-check');
+                lab.title = part[2];
+                var cb = el('input');
+                cb.type = 'checkbox';
+                cb.checked = !!state.say[k];
+                cb.addEventListener('change', function () { state.say[k] = cb.checked; saveSay(); });
+                sayInputs[k] = cb;
+                lab.appendChild(cb);
+                lab.appendChild(document.createTextNode(' ' + part[1]));
+                sayBox.appendChild(lab);
             });
-            var savedRead = store('rosary-read');
-            if (['step', 'both', 'scripture'].indexOf(savedRead) !== -1) state.read = savedRead;
-            readSelect.value = state.read;
-            readSelect.addEventListener('change', function () {
-                state.read = readSelect.value;
-                store('rosary-read', state.read);
-            });
-            readLabel.appendChild(readSelect);
-
-            // announce the opening and closing prayers by name before reading them
-            var titlesLabel = null;
-            if (block.querySelector('.rosary-prayers-card')) {
-                var savedTitles = store('rosary-read-titles');
-                if (savedTitles === '1' || savedTitles === '0') state.readTitles = savedTitles === '1';
-                titlesLabel = el('label', 'rosary-audio-field rosary-prayers-field');
-                titlesLabel.title = 'Say the name of each opening and closing prayer (and its intention) before reading it';
-                var titlesBox = el('input');
-                titlesBox.type = 'checkbox';
-                titlesBox.checked = state.readTitles;
-                titlesLabel.appendChild(titlesBox);
-                titlesLabel.appendChild(document.createTextNode(' Read prayer names'));
-                titlesBox.addEventListener('change', function () {
-                    state.readTitles = titlesBox.checked;
-                    store('rosary-read-titles', state.readTitles ? '1' : '0');
+            var sayQuick = el('div', 'rosary-under-quick');
+            [['All', true, 'Read every part aloud'], ['None', false, 'Untick everything']].forEach(function (q) {
+                var qb = button('rosary-under-quick-btn', q[0], q[2]);
+                qb.addEventListener('click', function () {
+                    Object.keys(sayInputs).forEach(function (k) { sayInputs[k].checked = q[1]; state.say[k] = q[1]; });
+                    saveSay();
                 });
-            }
+                sayQuick.appendChild(qb);
+            });
+            sayBox.appendChild(sayQuick);
+            readLabel.appendChild(sayBox);
+            var titlesLabel = null;
             var rateLabel = el('label', 'rosary-audio-field', 'Speed ');
             var rateSelect = el('select', 'rosary-select');
             [['0.75', 'Slow'], ['0.9', 'Calm'], ['1', 'Normal'], ['1.15', 'Quick']].forEach(function (r) {
@@ -764,27 +915,62 @@
             if (titlesLabel) bar.appendChild(titlesLabel);
             bar.appendChild(rateLabel);
 
+            // the recorded voice to start with: the reader's own choice, else the site default
+            var savedRec = store(STORE_REC);
+            if (savedRec === 'browser') speech.recording = null;
+            else if (savedRec && speech.clips[savedRec]) speech.recording = savedRec;
+            else if (config.voice === 'browser' && SPEECH) speech.recording = null;
+            else if (speech.clips[config.voice]) speech.recording = config.voice;
+            else speech.recording = recs.length ? recs[0][0] : null;
+
             var fillVoices = function () {
                 var voices = englishVoices();
-                if (!voices.length) return;
-                var chosen = speech.voice && voices.indexOf(speech.voice) !== -1 ? speech.voice : bestVoice(voices);
-                speech.voice = chosen;
+                if (!voices.length && !recs.length) return;
+                if (voices.length) {
+                    speech.voice = speech.voice && voices.indexOf(speech.voice) !== -1 ? speech.voice : bestVoice(voices);
+                }
                 voiceSelect.textContent = '';
+                if (recs.length) {
+                    var recGroup = el('optgroup');
+                    recGroup.label = 'Recorded prayers';
+                    recs.forEach(function (r) {
+                        var o = el('option', '', r[1]);
+                        o.value = 'rec:' + r[0];
+                        if (speech.recording === r[0]) o.selected = true;
+                        recGroup.appendChild(o);
+                    });
+                    voiceSelect.appendChild(recGroup);
+                }
+                var parent = voiceSelect;
+                if (recs.length && voices.length) {
+                    parent = el('optgroup');
+                    parent.label = 'Browser voices';
+                    voiceSelect.appendChild(parent);
+                }
                 voices.forEach(function (v) {
                     var o = el('option', '', v.name.replace(/^Microsoft /, '').replace(/ - English.*$/, '') + ' (' + v.lang + ')');
                     o.value = v.name;
-                    if (v === chosen) o.selected = true;
-                    voiceSelect.appendChild(o);
+                    if (!speech.recording && v === speech.voice) o.selected = true;
+                    parent.appendChild(o);
                 });
             };
             fillVoices();
-            if (window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged', fillVoices);
+            if (SPEECH && window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged', fillVoices);
+            voiceSelect.title = 'A recorded voice prays the prayers; the mystery titles and scripture are read by the browser voice';
             voiceSelect.addEventListener('change', function () {
-                var voices = englishVoices();
-                for (var i = 0; i < voices.length; i++) if (voices[i].name === voiceSelect.value) speech.voice = voices[i];
-                store(STORE_VOICE, voiceSelect.value);
+                var value = voiceSelect.value;
+                if (value.indexOf('rec:') === 0) {
+                    speech.recording = value.slice(4);
+                    store(STORE_REC, speech.recording);
+                } else {
+                    speech.recording = null;
+                    store(STORE_REC, 'browser');
+                    var voices = englishVoices();
+                    for (var i = 0; i < voices.length; i++) if (voices[i].name === value) speech.voice = voices[i];
+                    store(STORE_VOICE, value);
+                }
                 document.querySelectorAll('.rosary-block .rosary-select[data-kind="voice"]').forEach(function (s) {
-                    if (s !== voiceSelect) s.value = voiceSelect.value;
+                    if (s !== voiceSelect) s.value = value;
                 });
             });
             voiceSelect.setAttribute('data-kind', 'voice');
@@ -817,7 +1003,7 @@
                 groups.appendChild(g);
             };
             addGroup('🖼 Pictures', [picLabel, navLabel, layLabel, spLabel, viLabel]);
-            addGroup('✝ Prayers', [exLabel, undLabel, verLabel, prLabel, faLabel]);
+            addGroup('✝ Prayers', [undLabel, verLabel, prLabel, faLabel, exLabel, michaelLabel, memorareLabel]);
             addGroup('🔊 Reading aloud', [voiceLabel, readLabel, rateLabel, titlesLabel]);
             // anything not placed above stays, in a final group
             var rest = Array.prototype.slice.call(bar.children);
@@ -1012,19 +1198,20 @@
             var pos = -1;
 
             function active(i) {
-                return !items[i].classList.contains('rosary-extra-full') ||
-                       block.getAttribute('data-extra') === 'full';
+                var only = items[i].getAttribute('data-only');   // michael, memorare
+                return !only || block.getAttribute('data-' + only) === 'on';
             }
             function nextIndex(from) { for (var j = from + 1; j < items.length; j++) if (active(j)) return j; return -1; }
             function prevIndex(from) { for (var j = from - 1; j >= 0; j--) if (active(j)) return j; return -1; }
 
             items.forEach(function (li, i) {
                 var st = li.getAttribute('data-style');
-                if (i > 0) decade.appendChild(el('span', 'rosary-chain' + (li.classList.contains('rosary-extra-full') ? ' rosary-extra-full' : '')));
+                var only = li.getAttribute('data-only');
+                if (i > 0) decade.appendChild(el('span', 'rosary-chain' + (only ? ' rosary-only-' + only : '')));
                 var cls = st === 'large' ? 'rosary-bead--large' : (st === 'glory' || st === 'cross') ? 'rosary-bead--glory' : '';
                 var b = button('rosary-bead ' + cls, li.getAttribute('data-label'));
                 b.setAttribute('aria-label', li.getAttribute('data-name'));
-                if (li.classList.contains('rosary-extra-full')) b.classList.add('rosary-extra-full');
+                if (only) b.classList.add('rosary-only-' + only);
                 b.addEventListener('click', function () { go(i, true); });
                 beads.push(b);
                 decade.appendChild(b);
@@ -1104,10 +1291,10 @@
                 if (!li) return;
                 state.speaking = card;
                 refreshAll();
-                // the prayer's name (and intention) only with "Read prayer names"
+                // the prayer's name (and intention), and its words, each with its own tick box
                 var intent = li.getAttribute('data-intent');
-                var title = state.readTitles ? li.getAttribute('data-name') + (intent ? ', ' + intent : '') + '.' : '';
-                speak([title, li.getAttribute('data-text')], function () {
+                var title = state.say.names ? li.getAttribute('data-name') + (intent ? ', ' + intent : '') + '.' : '';
+                speak([title, state.say.opening ? li.getAttribute('data-text') : ''], function () {
                     if (!state.auto) { state.speaking = null; refreshAll(); }
                     if (done) done();
                 });
@@ -1305,25 +1492,25 @@
             }
 
             function beadTexts() {
-                var p = state.showPrayers;
+                var say = state.say;
+                function words(key) { return say[key] && prayers[key] ? prayers[key][1] : ''; }
                 if (pos === 0) {
-                    var med = meditation();
-                    return [ordinal + '. ' + title + '. The fruit of the mystery: ' + fruit + '.']
+                    var med = say.meditation ? meditation() : null;
+                    return [say.mystery ? ordinal + '. ' + title + '. The fruit of the mystery: ' + fruit + '.' : '']
                         .concat(med ? med.spoken : [])
-                        .concat([p && prayers['our-father'] ? prayers['our-father'][1] : '']);
+                        .concat([words('our-father')]);
                 }
                 if (pos >= 1 && pos <= 10) {
                     var li = items[pos - 1];
                     var cap = li ? li.getAttribute('data-cap') : '';
                     var verse = li ? li.getAttribute('data-text') : '';
-                    var read = state.read === 'step' || !verse ? [cap]
-                             : state.read === 'scripture' ? [verse] : [cap + '.', verse];
-                    return read.concat([p && prayers['hail-mary'] ? prayers['hail-mary'][1] : '']);
+                    var read = [];
+                    if (say.step && cap) read.push(cap + (say.scripture && verse ? '.' : ''));
+                    if (say.scripture && verse) read.push(verse);
+                    return read.concat([words('hail-mary')]);
                 }
                 if (pos === 11) {
-                    var fatima = state.fatima && prayers.fatima ? prayers.fatima[1] : '';
-                    return p ? [prayers['glory-be'] ? prayers['glory-be'][1] : '', fatima]
-                             : ['Glory be to the Father, and to the Son, and to the Holy Spirit.', fatima];
+                    return [words('glory-be'), state.fatima ? words('fatima') : ''];
                 }
                 return [];
             }
