@@ -463,29 +463,48 @@ def coronation():
 # ---------------------------------------------------------------- opening / closing
 
 def opening():
-    """A rosary: loop of beads, centre bead and crucifix."""
-    cx, cy, R = 50, 40, 25
+    """The opening prayers: the crucifix and the first beads of the rosary (the Our
+    Father bead and three Hail Marys), up to the centre medal and the loop."""
     out = ['<circle class="ri-soft ri-outline" cx="50" cy="50" r="46"/>',
-           '<circle cx="%d" cy="%d" r="%d" fill="none" class="ri-line-thin"/>' % (cx, cy, R)]
-    for i in range(12):
-        a = math.radians(90 + 30 + 300 * i / 11)
-        out.append('<circle class="ri-fill ri-outline" cx="%s" cy="%s" r="4.6"/>'
-                   % (_f(cx + R * math.cos(a)), _f(cy + R * math.sin(a))))
-    out.append('<circle class="ri-gold ri-outline" cx="50" cy="%d" r="5.6"/>' % (cy + R))
-    out.append(cross(50, cy + R + 6, 22, 15, 4.5, 'ri-fill'))
+           # the loop of the rosary going on from the centre medal
+           '<path class="ri-line-thin" fill="none" d="M50,20 C42,12 32,10 22,18"/>',
+           '<path class="ri-line-thin" fill="none" d="M50,20 C58,12 68,10 78,18"/>',
+           # the chain down to the crucifix
+           '<path class="ri-line-thin" fill="none" d="M50,22 L50,62"/>']
+    for x, y in ((40, 13.5), (31, 13), (23, 18.5), (60, 13.5), (69, 13), (77, 18.5)):
+        out.append('<circle class="ri-fill ri-outline" cx="%s" cy="%s" r="3.4"/>' % (x, y))
+    out.append('<ellipse class="ri-gold ri-outline" cx="50" cy="21" rx="5" ry="6"/>')      # centre medal
+    for y in (32, 40, 48):                                                                    # three Hail Marys
+        out.append('<circle class="ri-fill ri-outline" cx="50" cy="%d" r="4.4"/>' % y)
+    out.append('<circle class="ri-gold ri-outline" cx="50" cy="57.5" r="5.6"/>')             # Our Father bead
+    out.append(cross(50, 64, 28, 20, 5, 'ri-fill'))                                           # crucifix
     return ''.join(out)
 
 
+def _rose(cx, cy, r=5.6):
+    """A small rose: a red flower with a curled centre."""
+    return ('<circle class="ri-wine ri-outline" cx="%s" cy="%s" r="%s"/>'
+            '<path class="ri-line-thin" fill="none" d="M%s,%s c1.6,-1.6 3.4,0 2.2,1.8 c-1.4,2 -4.6,1 -4.2,-1.6 '
+            'c0.4,-3 4.6,-3.6 6,-1"/>' % (_f(cx), _f(cy), r, _f(cx - 1), _f(cy - 0.4)))
+
+
 def closing():
-    """Hail, Holy Queen: a crowned M with stars."""
-    stars = ''.join(star(50 + 38 * math.cos(math.radians(a)), 52 + 38 * math.sin(math.radians(a)), 4, 1.6)
-                    for a in (200, 230, 260, 280, 310, 340))
-    return (
-        '<circle class="ri-soft ri-outline" cx="50" cy="50" r="46"/>' + stars
-        + '<path class="ri-gold ri-outline" d="M34,40 L32,24 L41,32 L50,20 L59,32 L68,24 L66,40 Z"/>'
-        + '<path class="ri-fill ri-outline" d="M27,80 L27,47 L37,47 L50,66 L63,47 L73,47 L73,80 L64,80 '
-          'L64,62 L52,78 L48,78 L36,62 L36,80 Z"/>'
-    )
+    """The closing prayers: a crown of roses (the word rosary means a crown, or
+    garland, of roses) with a small crown above for Mary, Queen of Heaven."""
+    cx, cy, R = 50, 56, 26
+    out = ['<circle class="ri-soft ri-outline" cx="50" cy="50" r="46"/>',
+           '<circle class="ri-green-line" fill="none" cx="%d" cy="%d" r="%d"/>' % (cx, cy, R)]
+    for ang in (-115, -65, -15, 35, 90, 145, 195):            # leaves between the roses
+        a = math.radians(ang)
+        x, y = cx + R * math.cos(a), cy + R * math.sin(a)
+        out.append('<ellipse class="ri-green ri-outline" cx="%s" cy="%s" rx="5" ry="2.4" transform="rotate(%s %s %s)"/>'
+                   % (_f(x), _f(y), ang + 90, _f(x), _f(y)))
+    for ang in (-140, -40, 10, 62, 118, 170):                 # the roses, leaving the top for the crown
+        a = math.radians(ang)
+        out.append(_rose(cx + R * math.cos(a), cy + R * math.sin(a)))
+    out.append(star(50, 58, 6, 2.6))                         # a star in the middle of the garland
+    out.append('<path class="ri-gold ri-outline" d="M38,32 L36,18 L43,24 L50,13 L57,24 L64,18 L62,32 Z"/>')
+    return ''.join(out)
 
 
 EXTRA_ICONS = {'opening': opening, 'closing': closing}

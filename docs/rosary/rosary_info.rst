@@ -133,7 +133,9 @@ mystery. The page remembers the choice.
 The opening and closing prayers have their own pictures too: in the
 paintings, Masaccio's *Holy Trinity* and Piero della Francesca's *Madonna
 della Misericordia*, and a stained-glass window of each. In the drawn styles
-they show a rosary and a crowned M.
+they show the crucifix and first beads of the rosary (opening) and a crown of
+roses, the meaning of the word *rosary*, with a small crown for Mary
+(closing).
 
 
 Layout and full screen
