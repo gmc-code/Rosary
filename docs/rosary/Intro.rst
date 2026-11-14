@@ -18,11 +18,16 @@ Introduction
        Litany of Loreto, a short consecration, the Ave Maria and the four
        seasonal Marian antiphons, in Latin and English
    * - :doc:`A short history of the Rosary </rosary/rosary_history>`
-     - How the Rosary grew, from praying the Psalms on beads to the
-       Luminous Mysteries in 2002
+     - How the Rosary grew, from counting prayers on beads in the 1100s,
+       through St Dominic, Lepanto and Fatima, to the Luminous Mysteries in
+       2002, with a timeline at a glance
    * - :doc:`The theology of the Rosary </rosary/rosary_theology>`
-     - Why the Rosary is a prayer centred on Christ, Mary's place in it, its
-       roots in Scripture, the four sets of mysteries, and why it repeats
+     - Why the Rosary is a Gospel prayer centred on Jesus, how Mary helps us
+       look at him, why it repeats, and how it shapes the way we live
+   * - :doc:`A short theology of Mary </rosary/mary_theology>`
+     - What Catholics believe about Mary: Mother of God, the Immaculate
+       Conception, ever-virgin, the Assumption, Mother of the Church, and
+       why Catholics honour her but do not worship her
    * - :doc:`User guide </rosary/rosary_info>`
      - Praying with the beads, the opening and closing prayers, the Options
        panel, full screen, reading aloud and printing
