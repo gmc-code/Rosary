@@ -97,13 +97,12 @@ taught that when we prayerfully remember Jesus' life, death and Resurrection,
 we open ourselves to the grace he won for us. Little by little, the mysteries
 shape the way we live. [#rvm13]_
 
-The Rosary does not replace the Mass and the Church's other liturgy, or
-reading the Bible. John Paul II saw it as a prayer that sits alongside the
+John Paul II saw the Rosary as a prayer that sits alongside the
 liturgy and leads us more deeply into the Gospel. [#rvm13]_ [#rvm29]_
 
-In the end, the Rosary is both simple and deep: the repeated words keep us
-attentive, Mary teaches us to look at her Son, and the mysteries help us come
-to know Jesus better.
+In the end, the repeated words keep us attentive,
+Mary teaches us to look at her Son,
+and the mysteries help us come to know Jesus better.
 
 
 .. rubric:: References
