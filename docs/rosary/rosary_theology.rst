@@ -2,135 +2,130 @@
 The theology of the Rosary
 ===========================
 
-The Rosary can look like a simple prayer to Mary, said over and over. In
-fact it is a prayer centred on Jesus Christ, built from Scripture and the
-Church's creed, in which we look at Christ through the eyes of his mother.
-This page explains the main ideas behind it.
+The Rosary is a prayer with Mary, but its focus is Jesus Christ. Through a
+sequence of vocal prayers, it invites us to meditate on important moments in
+Christ's life and saving work. Mary accompanies this prayer not as a substitute
+for Christ, but as the one who knew him intimately and teaches us to contemplate
+him with faith. Pope St John Paul II therefore described the Rosary as Marian in
+character but "at heart a Christocentric prayer". [#f1]_
 
+A Gospel prayer centred on Jesus
+--------------------------------
 
-A prayer centred on Christ
-==========================
+The mysteries of the Rosary direct our attention to events in the life of Jesus:
+his birth and presentation, his public ministry, his suffering and death, his
+Resurrection and Ascension, and the gift of the Holy Spirit. Meditating on these
+events helps us attend to who Christ is and what he has done for us. Pope St
+Paul VI called the Rosary a Gospel prayer centred on the mystery of the
+Incarnation and redemption. [#f2]_
 
-Every mystery of the Rosary is an event in the life of Jesus, or flows from
-it: his conception and birth, his public ministry, his suffering and death,
-and his Resurrection and Ascension, with their fruit in the life of Mary and
-the Church. Pope St Paul VI called the Rosary a *compendium of the entire
-Gospel*: the whole story of salvation, in twenty scenes.
+The Rosary is sometimes called a "compendium of the Gospel" - a concise way of
+contemplating its central mysteries, not a complete account of every part of
+Jesus' life or of the whole Bible. The mysteries do not replace the Gospels or
+exhaust their meaning; rather, they can draw us into a wider reflection on what
+the Gospels reveal. [#f1]_ [#f3]_ [#f4]_
 
-The Hail Mary itself turns on its centre, the name of **Jesus**: "blessed is
-the fruit of thy womb, Jesus." Pope St John Paul II called this name the
-"hinge" of the prayer, linking the greeting to Mary with the prayer for her
-help. In *Rosarium Virginis Mariae* (2002) he described the Rosary as
-contemplating the face of Christ in the company of Mary.
+The Hail Marys help carry this contemplation. Their words recall Jesus, the
+"fruit" of Mary's womb, while the mysteries show us the same Jesus in the
+events of his life. Paul VI compared the succession of Hail Marys to the thread
+on which meditation on the mysteries is woven. [#f2]_
 
+With Mary, contemplating Christ
+-------------------------------
 
-With Mary, not instead of Christ
-================================
+The Rosary invites us to look at Christ with Mary. The Gospel portrays Mary as
+keeping and pondering the events of Jesus' life in her heart. John Paul II
+presents her as a model of attentive remembrance: in praying the Rosary,
+Christians enter more deeply into her contemplative way of attending to her Son.
+[#f5]_
 
-Catholics worship God alone. Mary is honoured, not worshipped: she is the
-first and greatest disciple of her Son, and the mother whom Jesus gave to
-the Church from the Cross ("Behold your mother", John 19:27). In the Rosary
-we ask her to pray for us, just as we ask friends on earth to pray for us,
-because the saints in heaven are alive in Christ and part of one family, the
-communion of saints.
+Mary also helps us learn Christ. John Paul II calls her a teacher because,
+among human beings, no one knows Jesus better than his mother. At Cana, she
+directs the servants toward obedience to Jesus: "Do whatever he tells you."
+Meditating on the mysteries with Mary can teach us to listen to Christ and
+respond to him with faith. [#f6]_
 
-John Paul II described the Rosary as a "school of Mary", in which we:
+This Marian character serves the Rosary's Christ-centred purpose. Mary's
+memories and example lead us toward her Son; the prayer's aim is not to stop at
+Mary, but to contemplate Christ more attentively and to let the mysteries shape
+our lives. [#f1]_ [#f5]_
 
-* **remember Christ with Mary**, who "kept all these things, pondering them
-  in her heart" (Luke 2:19);
-* **learn Christ from Mary**, who knew him better than anyone;
-* **are made like Christ with Mary**, growing in the virtues each mystery
-  shows (the *fruits* of the mysteries);
-* **pray to Christ with Mary**, who at Cana told the servants, "Whatever he
-  tells you, do it" (John 2:5);
-* **proclaim Christ with Mary**, as the Rosary tells the Gospel again.
+The Rosary's prayers and its mysteries
+--------------------------------------
 
+The Hail Mary draws on the Gospel's words of greeting to Mary and its blessing
+of the child she bears. Its repeated mention of Jesus connects the prayer to the
+mysteries being contemplated. The Rosary's prayers and mysteries therefore
+belong together: the words are not detached from the Gospel scenes, and the
+scenes are not merely occasions for reciting words. [#f2]_ [#f4]_
 
-Built from Scripture and the creed
-==================================
+The Rosary is traditionally prayed through sets of mysteries that guide
+meditation on central moments in Christ's life. The Luminous Mysteries,
+introduced by John Paul II, draw attention to events in Jesus' public ministry.
+Together, the mysteries offer a path through key aspects of the Gospel, while
+leaving room for deeper reflection on the life and teaching of Jesus. [#f3]_
 
-Almost every word of the Rosary comes from the Bible or the Church's
-teaching:
+Vocal prayer and contemplation
+------------------------------
 
-* the **Sign of the Cross** and the **Glory Be** profess the Trinity,
-  Father, Son and Holy Spirit, into whom Christians are baptised
-  (Matthew 28:19);
-* the **Apostles' Creed** sums up the faith of the Church from its
-  earliest centuries;
-* the **Our Father** is the prayer Jesus taught his disciples
-  (Matthew 6:9–13);
-* the first half of the **Hail Mary** is the words of the angel Gabriel and
-  of Elizabeth (Luke 1:28, 42), and the second half asks Mary, the Mother of
-  God, to pray for us now and at the hour of our death;
-* each **mystery** is a scene from the Gospels or, for the last two Glorious
-  Mysteries, from the Church's faith about Mary.
+The Rosary joins spoken prayer to meditation. The repeated prayers give a steady
+rhythm, while the announcement of each mystery directs the mind and imagination
+toward a particular event in Christ's life. The rhythm is meant to support
+recollection and attention, not to replace them. [#f7]_ [#f3]_
 
-The title *Mother of God* (in Greek, *Theotokos*) was affirmed at the
-Council of Ephesus in 431. It is really a statement about Jesus: the child
-Mary bore is truly God as well as truly man.
+John Paul II quotes Paul VI's warning about praying without contemplation:
 
+   "Without contemplation, the Rosary is a body without a soul, and its
+   recitation runs the risk of becoming a mechanical repetition of formulas."
+   [#f7]_
 
-The four sets of mysteries
-==========================
+The Rosary's repetition, then, is not meant to be empty or mechanical. A quiet
+pace and attentive meditation help the person praying dwell on the mysteries.
+The words and the meditation work together: the prayers keep the mystery before
+us, and reflection allows its meaning to become more deeply understood. [#f7]_
+[#f2]_
 
-Each set looks at one part of the mystery of Christ:
+A prayer that shapes Christian life
+-----------------------------------
 
-.. list-table::
-   :header-rows: 1
-   :widths: 20 80
+Meditating on Christ's life is not only remembering events from the past. John
+Paul II explains that prayerful remembrance opens Christians to the grace won
+through Christ's life, death and Resurrection. The Rosary can help the mysteries
+of the Redeemer become more deeply absorbed into our lives and shape how we
+live. [#f8]_
 
-   * - Set
-     - What it shows
-   * - Joyful
-     - The **Incarnation**: God becomes man in Jesus, and is welcomed by
-       Mary, Joseph, Elizabeth, the shepherds and Simeon.
-   * - Luminous
-     - **Jesus revealing the Kingdom** in his public life: his Baptism, his
-       first sign at Cana, his preaching and call to conversion, his glory
-       at the Transfiguration, and the gift of the Eucharist.
-   * - Sorrowful
-     - The **Redemption**: Jesus' suffering and death, freely accepted out
-       of love, to save us from sin.
-   * - Glorious
-     - The **victory of Christ** over death, the gift of the Holy Spirit to
-       the Church, and in Mary's Assumption and Coronation, the glory God
-       promises to all who follow her Son.
+The Rosary has an important place in Christian prayer, but it does not replace
+the Church's liturgy or the reading of Scripture. John Paul II describes it as
+a form of meditation on Christ with Mary that complements the liturgical life
+of the Church. He also says that the Rosary presupposes and promotes a fuller
+engagement with the Gospel. [#f8]_ [#f3]_
 
-Together they follow the pattern of the Creed: Christ came down, lived
-among us, suffered, died, rose and will bring us to share his glory.
+In this way, the Rosary is both simple and profound: a prayer in which repeated
+words sustain attention, Mary teaches us to contemplate her Son, and the Gospel
+mysteries invite us to know Christ more deeply. [#f1]_ [#f7]_ [#f6]_
 
+.. rubric:: References
 
-Vocal prayer and meditation
-===========================
+.. [#f1] Rosarium Virginis Mariae on the Most Holy Rosary, 1.
+   https://www.magisterium.com/docs/cb8242d1-5d58-41d8-9e25-906abcc1a93f/ref/1
 
-The Rosary joins two kinds of prayer. The **words** (vocal prayer) keep the
-body and mind steady, like a heartbeat; the **mystery** (meditation) gives
-the heart something to look at. The repeated Hail Marys are not meant to be
-listened to word by word, but to form a quiet background while we picture
-the scene, as a person in love repeats a loved one's name.
+.. [#f2] Marialis Cultus, 46.
+   https://www.magisterium.com/docs/c1716af6-053b-489e-a6b0-3e034f6c893c/ref/46
 
-Jesus warned against "vain repetitions" (Matthew 6:7), meaning words heaped
-up to wear God down, as if he did not already know our needs. The Rosary's
-repetition is different: it is the prayer of trust, like the persistent
-widow Jesus praised (Luke 18:1–8), the psalm that repeats "for his mercy
-endures for ever" (Psalm 136), and the angels who cry "Holy, holy, holy"
-without ceasing (Revelation 4:8).
+.. [#f3] Rosarium Virginis Mariae on the Most Holy Rosary, 29.
+   https://www.magisterium.com/docs/cb8242d1-5d58-41d8-9e25-906abcc1a93f/ref/29
 
+.. [#f4] Rosarium Virginis Mariae on the Most Holy Rosary, 24.
+   https://www.magisterium.com/docs/cb8242d1-5d58-41d8-9e25-906abcc1a93f/ref/24
 
-Prayer for the world
-====================
+.. [#f5] Rosarium Virginis Mariae on the Most Holy Rosary, 11.
+   https://www.magisterium.com/docs/cb8242d1-5d58-41d8-9e25-906abcc1a93f/ref/11
 
-The Rosary has always been prayed for others as well as for oneself: for
-peace, for the sick, for families and for the Church. Each decade can be
-offered for an intention (the *intention* option under the beads suggests
-one for each mystery), and many popes have asked Catholics to pray it for
-peace in times of war and danger.
+.. [#f6] Rosarium Virginis Mariae on the Most Holy Rosary, 14.
+   https://www.magisterium.com/docs/cb8242d1-5d58-41d8-9e25-906abcc1a93f/ref/14
 
-It is also a prayer anyone can pray. It needs no book or church, only a
-string of beads or ten fingers, and it can be said alone or together, in a
-few minutes or over an hour, by a child or a scholar. In this way it brings
-the whole Gospel into ordinary daily life.
+.. [#f7] Rosarium Virginis Mariae on the Most Holy Rosary, 12.
+   https://www.magisterium.com/docs/cb8242d1-5d58-41d8-9e25-906abcc1a93f/ref/12
 
-See also :doc:`A short history of the Rosary </rosary/rosary_history>` and
-the :doc:`Marian prayers </rosary/marian_prayers>`, or
-:doc:`pray the mysteries </rosary/rosary>`.
+.. [#f8] Rosarium Virginis Mariae on the Most Holy Rosary, 13.
+   https://www.magisterium.com/docs/cb8242d1-5d58-41d8-9e25-906abcc1a93f/ref/13
