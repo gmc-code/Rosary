@@ -154,7 +154,7 @@ For over four hundred years the Rosary had fifteen mysteries. Then, in
 October 2002, Pope St John Paul II added five more: the Luminous Mysteries,
 or Mysteries of Light. They cover Jesus' public life, from his Baptism in the
 Jordan to the first Eucharist at the Last Supper. This brought the total to
-twenty, in the four sets of five you can pray on this site. [#rvm]_
+twenty, in the four sets of five. [#rvm]_
 
 John Paul II suggested praying the Luminous Mysteries on Thursdays, [#rvm38]_
 and named October 2002 to October 2003 the Year of the Rosary. [#rvm3]_
