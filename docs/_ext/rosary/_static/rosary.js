@@ -204,6 +204,110 @@
         var refreshers = [];
         function refreshAll() { refreshers.forEach(function (f) { f(); }); }
 
+        /* ---------------- quick switch in each mystery's control row: a book-icon
+         * button that drops down a panel of tick boxes (the same choices as
+         * "Under the beads" in Options); any mix can be shown, in this order */
+        var UNDER_KEYS = ['steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern'];
+        var UNDER_SHORT = {steps: 'Steps', meditation: 'Meditation', virtue: 'Virtue', intention: 'Intention',
+                           offering: 'Offering', classic: 'Classic (1915)', modern: 'Modern'};
+        var UNDER_LONG = {steps: 'The ten steps', meditation: 'A meditation', virtue: 'A meditation on the virtue',
+                          intention: 'An intention', offering: 'A Montfort-style offering',
+                          classic: 'A classic meditation (1915)', modern: 'A modern reflection'};
+        var underSyncs = [];
+        // "none", "all" (the six alternatives to the steps), one key, or a list
+        function parseUnder(v) {
+            v = (v || '').toLowerCase();
+            if (v === 'all') return UNDER_KEYS.slice(1);
+            var words = v.split(/[\s,]+/);
+            return UNDER_KEYS.filter(function (k) { return words.indexOf(k) !== -1; });
+        }
+        function underValue(keys) { return keys.length ? keys.join(' ') : 'none'; }
+        function underNow() { return parseUnder(block.getAttribute('data-under')); }
+        block.setAttribute('data-under', underValue(underNow()));   // e.g. "all" -> the list
+        function setUnder(keys) {
+            var v = underValue(keys);
+            block.setAttribute('data-under', v);
+            store('rosary-under', v);
+            underSyncs.forEach(function (f) { f(); });
+            refreshAll();
+        }
+        // a list of tick boxes (with All and None) kept in step with every other list
+        function underChecks(names) {
+            var box = el('div', 'rosary-under-checks');
+            var inputs = {};
+            UNDER_KEYS.forEach(function (k) {
+                var lab = el('label', 'rosary-under-check');
+                var cb = el('input');
+                cb.type = 'checkbox';
+                cb.value = k;
+                cb.addEventListener('change', function () {
+                    setUnder(UNDER_KEYS.filter(function (x) { return inputs[x].checked; }));
+                });
+                inputs[k] = cb;
+                lab.appendChild(cb);
+                lab.appendChild(document.createTextNode(' ' + names[k]));
+                box.appendChild(lab);
+            });
+            var quick = el('div', 'rosary-under-quick');
+            var allB = button('rosary-under-quick-btn', 'All', 'Tick all the meditations (not the steps)');
+            var noneB = button('rosary-under-quick-btn', 'None', 'Untick everything');
+            allB.addEventListener('click', function () { setUnder(UNDER_KEYS.slice(1)); });
+            noneB.addEventListener('click', function () { setUnder([]); });
+            quick.appendChild(allB);
+            quick.appendChild(noneB);
+            box.appendChild(quick);
+            function sync() {
+                var on = underNow();
+                UNDER_KEYS.forEach(function (k) { inputs[k].checked = on.indexOf(k) !== -1; });
+            }
+            underSyncs.push(sync);
+            sync();
+            return box;
+        }
+        var openUnderPanel = null;
+        function closeUnderPanel() {
+            if (!openUnderPanel) return;
+            openUnderPanel.panel.hidden = true;
+            openUnderPanel.btn.setAttribute('aria-expanded', 'false');
+            openUnderPanel = null;
+        }
+        document.addEventListener('click', function (e) {
+            if (openUnderPanel && !openUnderPanel.wrap.contains(e.target)) closeUnderPanel();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && openUnderPanel) { var b = openUnderPanel.btn; closeUnderPanel(); b.focus(); }
+        });
+        function underPicker() {
+            var wrap = el('div', 'rosary-under-pick');
+            var btn = button('rosary-under-btn', '', 'Show under the beads');
+            btn.setAttribute('aria-label', 'Show under the beads');
+            btn.setAttribute('aria-haspopup', 'true');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.appendChild(el('span', 'rosary-under-pick-icon', '\uD83D\uDCD6'));
+            btn.appendChild(el('span', 'rosary-under-caret', '\u25BE'));
+            var panel = el('div', 'rosary-under-panel');
+            panel.hidden = true;
+            panel.appendChild(el('p', 'rosary-under-panel-title', 'Show under the beads'));
+            panel.appendChild(underChecks(UNDER_SHORT));
+            btn.addEventListener('click', function () {
+                if (openUnderPanel && openUnderPanel.panel === panel) { closeUnderPanel(); return; }
+                closeUnderPanel();
+                panel.hidden = false;
+                panel.classList.remove('rosary-under-panel--right');
+                btn.setAttribute('aria-expanded', 'true');
+                openUnderPanel = {wrap: wrap, panel: panel, btn: btn};
+                // keep it on screen
+                var r = panel.getBoundingClientRect();
+                if (r.right > (window.innerWidth || document.documentElement.clientWidth) - 4) {
+                    panel.classList.add('rosary-under-panel--right');
+                }
+            });
+            wrap.appendChild(btn);
+            wrap.appendChild(panel);
+            return wrap;
+        }
+
+
         block.classList.add('rosary-js');
         var sets = Array.prototype.slice.call(block.querySelectorAll('.rosary-set'));
         var today = todayKey(sets);
@@ -479,25 +583,14 @@
                 bar.appendChild(verLabel);
             }
 
-            /* under the beads: the ten steps, or a meditation on the mystery */
+            /* under the beads: tick any of the ten steps, the meditations and so on */
+            var undLabel = null;
             if (block.querySelector('.rosary-meditation')) {
-                var undLabel = el('label', 'rosary-audio-field', 'Under the beads ');
-                var undSelect = el('select', 'rosary-select');
-                [['none', 'None'], ['steps', 'The ten steps'], ['meditation', 'A meditation'],
-                 ['virtue', 'A meditation on the virtue'], ['intention', 'An intention'],
-                 ['offering', 'A Montfort-style offering'], ['classic', 'A classic meditation (1915)'],
-                 ['modern', 'A modern reflection'], ['all', 'All of these']].forEach(function (v) {
-                    var o = el('option', '', v[1]);
-                    o.value = v[0];
-                    undSelect.appendChild(o);
-                });
                 var savedUnder = store('rosary-under');
-                var UNDER = ['none', 'steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern', 'all'];
-                if (UNDER.indexOf(savedUnder) !== -1) block.setAttribute('data-under', savedUnder);
-                undSelect.value = UNDER.indexOf(block.getAttribute('data-under')) !== -1
-                    ? block.getAttribute('data-under') : 'none';
-                undSelect.addEventListener('change', function () { setUnder(undSelect.value); });
-                undLabel.appendChild(undSelect);
+                if (savedUnder) block.setAttribute('data-under', underValue(parseUnder(savedUnder)));
+                undLabel = el('div', 'rosary-audio-field rosary-under-field');
+                undLabel.appendChild(el('span', 'rosary-under-field-title', 'Under the beads'));
+                undLabel.appendChild(underChecks(UNDER_LONG));
                 bar.appendChild(undLabel);
             }
 
@@ -701,39 +794,6 @@
             });
         }
 
-        /* ---------------- quick switch in each mystery's control row: a small
-         * drop-down (book icon) for Steps, Meditation, Virtue, Intention,
-         * Offering, Classic, Modern - the same choice as "Under the beads" */
-        var UNDER_CHOICES = [['none', 'None'], ['steps', 'Steps'], ['meditation', 'Meditation'], ['virtue', 'Virtue'],
-                             ['intention', 'Intention'], ['offering', 'Offering'],
-                             ['classic', 'Classic'], ['modern', 'Modern'], ['all', 'All']];
-        var underPickers = [];
-        function setUnder(v) {
-            block.setAttribute('data-under', v);
-            store('rosary-under', v);
-            if (undSelect) undSelect.value = v;
-            underPickers.forEach(function (s) { s.value = v; });
-            refreshAll();
-        }
-        function underPicker() {
-            var wrap = el('label', 'rosary-under-pick');
-            wrap.title = 'Show under the beads';
-            wrap.appendChild(el('span', 'rosary-under-pick-icon', '\uD83D\uDCD6'));
-            var sel = el('select', 'rosary-under-select');
-            sel.setAttribute('aria-label', 'Show under the beads');
-            UNDER_CHOICES.forEach(function (c) {
-                var o = el('option', '', c[1]);
-                o.value = c[0];
-                sel.appendChild(o);
-            });
-            sel.value = block.getAttribute('data-under') || 'none';
-            if (!sel.value) sel.value = 'none';
-            sel.addEventListener('change', function () { setUnder(sel.value); });
-            underPickers.push(sel);
-            wrap.appendChild(sel);
-            return wrap;
-        }
-
         /* ---------------- tidy the Options panel into labelled groups */
         if (bar) {
             var oldIcon = bar.querySelector('.rosary-audio-icon');
@@ -748,7 +808,9 @@
                 var selects = el('div', 'rosary-opt-selects');
                 var checks = el('div', 'rosary-opt-checks');
                 items.forEach(function (lab) {
-                    (lab.querySelector('input[type="checkbox"]') ? checks : selects).appendChild(lab);
+                    // the Under the beads tick boxes sit with the drop-downs, as one field
+                    var isCheck = lab.querySelector('input[type="checkbox"]') && !lab.classList.contains('rosary-under-field');
+                    (isCheck ? checks : selects).appendChild(lab);
                 });
                 if (selects.children.length) g.appendChild(selects);
                 if (checks.children.length) g.appendChild(checks);
@@ -1191,18 +1253,25 @@
             // meditation, offering, classic meditation or modern reflection): its
             // parts marked rosary-say are shown and read on the Our Father bead
             function meditation() {
-                var under = block.getAttribute('data-under');
-                // nothing extra is read for none, steps or all (all would be too long)
-                if (!under || under === 'steps' || under === 'none' || under === 'all') return null;
-                var box = mystery.querySelector('.rosary-under-box.rosary-' + under);
-                if (!box) return null;
-                var parts = Array.prototype.map.call(box.querySelectorAll('.rosary-say'), function (e) {
-                    return e.textContent;
+                var keys = underNow().filter(function (k) { return k !== 'steps'; });
+                var parts = [], spoken = [], labels = [];
+                keys.forEach(function (k) {
+                    var box = mystery.querySelector('.rosary-under-box.rosary-' + k);
+                    if (!box) return;
+                    var says = box.querySelectorAll('.rosary-say');
+                    if (!says.length) return;
+                    if (keys.length > 1) {
+                        var lab = box.querySelector('.rosary-meditation-label');
+                        if (lab) { labels[parts.length] = true; parts.push(lab.textContent); spoken.push(lab.textContent + '.'); }
+                    }
+                    Array.prototype.forEach.call(says, function (e) {
+                        parts.push(e.textContent);
+                        // read aloud without the bracketed references, e.g. "(St. Mark, XIV, 36.)"
+                        spoken.push(e.textContent.replace(/\s*\([^()]*\d[^()]*\)\.?/g, '').replace(/\s+([.,;:!?])/g, '$1'));
+                    });
                 });
-                // read aloud without the bracketed references, e.g. "(St. Mark, XIV, 36.)"
-                parts.spoken = parts.map(function (t) {
-                    return t.replace(/\s*\([^()]*\d[^()]*\)\.?/g, '').replace(/\s+([.,;:!?])/g, '$1');
-                });
+                parts.spoken = spoken;
+                parts.labels = labels;   // which parts are headings (more than one ticked)
                 return parts.length ? parts : null;
             }
 
@@ -1275,7 +1344,9 @@
                     line.appendChild(document.createTextNode(' – fruit: ' + fruit));
                     // the meditation, in the panel only in full screen (it is under the beads otherwise)
                     var md = meditation();
-                    if (md) md.forEach(function (t) { extra.push(el('p', 'rosary-now-meditation', t)); });
+                    if (md) md.forEach(function (t, i) {
+                        extra.push(el('p', 'rosary-now-meditation' + (md.labels[i] ? ' rosary-now-meditation-head' : ''), t));
+                    });
                     if (state.showPrayers) extra.push(prayer('our-father'));
                 } else if (pos <= 10) {
                     var li = items[pos - 1];

@@ -1270,26 +1270,25 @@ html.dark .rosary-verse, html.dark .rosary-now-verse { color: #e6e6e6; }
 }
 
 
-/* Under the beads: nothing (data-under="none"), the ten steps ("steps"), one of a
-   meditation, offering, classic meditation or modern reflection, or all of
-   them one after another ("all") ------------------------------------------ */
-/* all: in the same order as the menu */
-.rosary-block[data-under="all"] .rosary-under-wrap { display: flex; flex-direction: column; gap: 0.7em; }
-.rosary-block[data-under="all"] .rosary-meditation { order: 1; }
-.rosary-block[data-under="all"] .rosary-virtue { order: 2; }
-.rosary-block[data-under="all"] .rosary-intention { order: 3; }
-.rosary-block[data-under="all"] .rosary-offering { order: 4; }
-.rosary-block[data-under="all"] .rosary-classic { order: 5; }
-.rosary-block[data-under="all"] .rosary-modern { order: 6; }
+/* Under the beads: any mix of the ten steps and the alternatives to them, ticked
+   in the 📖 panel or Options; data-under lists them, e.g. "steps meditation",
+   or is "none". They are shown in the menu's order --------------------------- */
+.rosary-under-wrap { display: flex; flex-direction: column; gap: 0.7em; }
+.rosary-under-wrap > ol.rosary-refs { order: 0; }
+.rosary-meditation { order: 1; }
+.rosary-virtue { order: 2; }
+.rosary-intention { order: 3; }
+.rosary-offering { order: 4; }
+.rosary-classic { order: 5; }
+.rosary-modern { order: 6; }
 .rosary-under-box { display: none; }
-.rosary-block:not([data-under="steps"]) .rosary-mystery:not(.rosary-prayers-card) ol.rosary-refs { display: none; }
-.rosary-block[data-under="meditation"] .rosary-meditation,
-.rosary-block[data-under="virtue"] .rosary-virtue,
-.rosary-block[data-under="intention"] .rosary-intention,
-.rosary-block[data-under="offering"] .rosary-offering,
-.rosary-block[data-under="classic"] .rosary-classic,
-.rosary-block[data-under="modern"] .rosary-modern,
-.rosary-block[data-under="all"] .rosary-under-box {
+.rosary-block:not([data-under~="steps"]) .rosary-mystery:not(.rosary-prayers-card) ol.rosary-refs { display: none; }
+.rosary-block[data-under~="meditation"] .rosary-meditation,
+.rosary-block[data-under~="virtue"] .rosary-virtue,
+.rosary-block[data-under~="intention"] .rosary-intention,
+.rosary-block[data-under~="offering"] .rosary-offering,
+.rosary-block[data-under~="classic"] .rosary-classic,
+.rosary-block[data-under~="modern"] .rosary-modern {
     display: block;
     padding: 0.7em 1em 0.8em;
     border-radius: 0.5em;
@@ -1349,6 +1348,15 @@ html.dark .rosary-classic-title, html.dark .rosary-modern-question { color: #f2f
     line-height: 1.5;
     color: var(--r-text);
 }
+.rosary-presenting .rosary-now-meditation-head {
+    margin-top: 0.9em !important;
+    font-family: inherit;
+    font-size: 0.72em;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--r-gold);
+}
 .rosary-presenting .rosary-now-meditation-prayer { font-family: inherit; font-style: italic; color: #fff; }
 @media print {
     .rosary-under-box { break-inside: avoid; }
@@ -1361,42 +1369,74 @@ html.dark .rosary-classic-title, html.dark .rosary-modern-question { color: #f2f
 .rosary-btn--present .rosary-btn-word { display: none; }
 .rosary-set .rosary-btn--present { padding-left: 0.55em; padding-right: 0.55em; }
 
-/* the under-the-beads drop-down in each mystery's control row (made by
-   rosary.js): only the book icon and a small arrow show; the real select lies
-   invisibly on top, so a click opens the usual list of choices */
+/* the under-the-beads button in each mystery's control row (made by rosary.js):
+   the book icon and a small arrow; it drops down a panel of tick boxes */
 .rosary-under-pick {
     position: relative;
     display: inline-flex;
-    align-items: center;
     align-self: stretch;   /* as tall as the buttons beside it */
+}
+.rosary-under-btn {
+    display: inline-flex;
+    align-items: center;
     gap: 0.15em;
     padding: 0.3em 0.45em;
     border: 2px solid var(--r-c);
     border-radius: 0.5em;
     background: var(--r-paper);
     color: var(--r-ink);
+    font: inherit;
     font-weight: 700;
     line-height: 1.2;
     cursor: pointer;
 }
+.rosary-under-btn[aria-expanded="true"] { background: var(--r-soft); }
 .rosary-under-pick-icon { font-size: 1.05em; line-height: 1; }
-.rosary-under-pick::after { content: "\25BE"; font-size: 0.8em; }
-.rosary-under-select {
+.rosary-under-caret { font-size: 0.8em; }
+.rosary-under-panel {
     position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    border: 0;
+    top: calc(100% + 0.3em);
+    left: 0;
+    z-index: 50;
+    min-width: 12em;
+    padding: 0.55em 0.8em 0.6em;
+    border: 1px solid var(--r-soft2);
+    border-radius: 0.6em;
+    background: var(--r-paper);
+    color: var(--r-ink);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+    font-size: 0.9rem;
+    font-weight: 400;
+    text-align: left;
+}
+.rosary-under-panel[hidden] { display: none; }
+.rosary-under-panel--right { left: auto; right: 0; }
+.rosary-under-panel-title { white-space: nowrap; margin: 0 0 0.35em !important; font-size: 0.78em; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--r-c); }
+.rosary-under-checks { display: flex; flex-direction: column; gap: 0.15em; }
+.rosary-under-check { display: flex; align-items: center; gap: 0.35em; white-space: nowrap; cursor: pointer; }
+.rosary-under-check input { margin: 0; accent-color: var(--r-c); }
+.rosary-under-quick { display: flex; gap: 0.4em; margin-top: 0.4em; }
+.rosary-under-quick-btn {
+    padding: 0.1em 0.7em;
+    border: 1px solid var(--r-soft2);
+    border-radius: 1em;
+    background: transparent;
+    color: inherit;
     font: inherit;
+    font-size: 0.85em;
     cursor: pointer;
 }
-.rosary-under-select option { color: #111; background: #fff; }
-.rosary-under-pick:focus-within { outline: 2px solid var(--r-c); outline-offset: 2px; }
-html.dark .rosary-under-pick { color: #f2f2f2; }
-.rosary-presenting .rosary-under-pick { background: transparent; border-color: rgba(255, 255, 255, 0.55); color: #fff; padding: 0.25em 0.4em; }
+.rosary-under-quick-btn:hover { border-color: var(--r-c); }
+/* in Options: the tick boxes in two columns */
+.rosary-opt-selects > .rosary-under-field { align-items: flex-start; }
+.rosary-under-field .rosary-under-check { font-size: 1em; }
+.rosary-under-field .rosary-under-checks { display: grid; grid-template-columns: repeat(2, auto); gap: 0.15em 1em; }
+.rosary-under-field .rosary-under-quick { grid-column: 1 / -1; margin-top: 0.2em; }
+html.dark .rosary-under-btn, html.dark .rosary-under-panel { color: #f2f2f2; }
+.rosary-presenting .rosary-under-btn { background: transparent; border-color: rgba(255, 255, 255, 0.55); color: #fff; padding: 0.25em 0.4em; }
+.rosary-presenting .rosary-under-panel { background: #222; color: #f2f2f2; border-color: #555; }
 @media screen {
-    .rosary-block[data-layout="iphone"] .rosary-under-pick { padding: 0.15em 0.3em; border-width: 1.5px; }
+    .rosary-block[data-layout="iphone"] .rosary-under-btn { padding: 0.15em 0.3em; border-width: 1.5px; }
     .rosary-block[data-layout="iphone"] .rosary-btn--back { padding-left: 0.45em; padding-right: 0.45em; }
     /* no room in the phone's full-screen row */
     .rosary-block[data-layout="iphone"] .rosary-presenting .rosary-under-pick { display: none; }

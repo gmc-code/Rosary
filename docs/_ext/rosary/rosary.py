@@ -82,9 +82,10 @@ Options
                      meditation on the mystery's fruit), intention (who and
                      what the decade is offered for), classic (a classic
                      meditation from The Rosary, 1915; rosary_classic.py) or
-                     modern (a modern reflection with a question), or all
-                     (every one of these, one after another); the others
-                     are in rosary_meditations.py  [none]
+                     modern (a modern reflection with a question); any
+                     mix, separated by commas (e.g. steps, meditation), or
+                     all (every one except the steps); the others are in
+                     rosary_meditations.py  [none]
     :read:           what Listen / Pray aloud read for each Hail Mary: step
                      (the one-line summary), both (summary then scripture)
                      or scripture  [step]
@@ -149,7 +150,21 @@ def days_text(days):
     return names[0] if len(names) == 1 else ' and '.join(names)
 
 
-UNDER = ('none', 'steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern', 'all')   # under the beads
+UNDER = ('steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern')   # under the beads
+
+
+def _under(value):
+    """none, all (the six alternatives to the steps), or any of UNDER separated
+    by commas or spaces -> the data-under value, e.g. 'steps meditation'."""
+    words = [w for w in str(value or '').lower().replace(',', ' ').split() if w]
+    if words == ['none']:
+        return 'none'
+    if words == ['all']:
+        return ' '.join(UNDER[1:])
+    bad = [w for w in words if w not in UNDER]
+    if bad:
+        raise ValueError('"%s" is not one of none, all, %s' % (bad[0], ', '.join(UNDER)))
+    return ' '.join(k for k in UNDER if k in words) or 'none'
 LAYOUTS = ('auto', 'desktop', 'ipad', 'iphone')
 # layouts from earlier versions, mapped to the nearest new one
 OLD_LAYOUTS = {'phone': 'ipad', 'large': 'ipad', 'side': 'desktop', 'compact': 'iphone'}
@@ -189,7 +204,7 @@ class RosaryDirective(SphinxDirective):
         'hide-title': directives.flag,
         'extra-prayers': lambda a: directives.choice(a, ('off', 'on', 'full')),
         'fatima': lambda a: directives.choice(a, ('yes', 'no')),
-        'under': lambda a: directives.choice(a, UNDER),
+        'under': _under,
     }
 
     def _warn(self, message, *args):
@@ -239,6 +254,12 @@ class RosaryDirective(SphinxDirective):
                 icon(key, index, _esc(m['title'])) + self._photo_html(key, index, m['title']),
                 _esc(ordinal), _esc(m['title']), _esc(m['fruit']),
                 self._credit_html(key, index), decade, refs, meditation))
+
+    def _default_under(self):
+        try:
+            return _under(self.config.rosary_default_under)
+        except ValueError:
+            return 'none'
 
     def _under_html(self, key, index):
         """The alternatives to the ten steps: a meditation, a Montfort-style offering,
@@ -621,8 +642,7 @@ class RosaryDirective(SphinxDirective):
                # without JavaScript, "auto" shows the iPad layout (it adapts to narrow screens)
                'ipad' if layout == 'auto' else layout, 'on' if pictures else 'off',
                'on' if virtues else 'off',
-               self.options.get('under') or (self.config.rosary_default_under
-                                             if self.config.rosary_default_under in UNDER else 'none'),
+               self.options.get('under') or self._default_under(),
                self.options.get('verses') or self.config.rosary_default_verses, config['extra'],
                _esc(json.dumps(config)),
                prayers_attr, title_html, tabs, sets, credit))
@@ -707,7 +727,7 @@ def setup(app):
     app.add_config_value('rosary_default_layout', 'auto', 'env')         # auto, desktop, ipad, iphone
     app.add_config_value('rosary_default_pictures', True, 'env')         # False to start with the pictures hidden
     app.add_config_value('rosary_default_virtues', True, 'env')          # False to hide the virtues in the picker
-    app.add_config_value('rosary_default_under', 'none', 'env')          # none, steps, meditation, virtue, intention, offering, classic, modern, all
+    app.add_config_value('rosary_default_under', 'none', 'env')          # none, all, or any of steps, meditation, virtue, intention, offering, classic, modern (comma-separated)
     app.add_config_value('rosary_default_verses', 'current', 'env')      # all, current, none
     app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture
     app.add_config_value('rosary_default_extra_prayers', 'on', 'env')    # off, on, full

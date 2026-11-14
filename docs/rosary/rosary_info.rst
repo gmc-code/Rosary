@@ -49,9 +49,9 @@ Under each mystery is a decade of beads:
 Click **Begin**, then **Next** for each prayer, or click any bead to jump to
 it. After the Glory Be, **Finish decade** moves on to the next mystery of the
 set, so all five decades can be prayed in order. **◀** (Back) goes back one
-bead, and **⛶** opens *Full screen*. The 📖 drop-down beside them (just the
-book icon; click it for the list) chooses
-what is shown under the beads (see *Meditations, offerings and reflections*).
+bead, and **⛶** opens *Full screen*. The 📖 button beside them drops down a
+panel of tick boxes for what is shown under the beads (see *Meditations,
+offerings and reflections*).
 
 With **The ten steps** chosen under the beads, click a step in the list to go
 to its bead.
@@ -210,7 +210,7 @@ screen:
   * The picture runs across the top, as large as fits, then the title.
   * The beads, from the Our Father to the Glory Be, fit on one line.
   * The buttons fit on one line too: **◀** (Back), **Next**, the 📖
-    drop-down, ⛶ (Full screen) and 🔊 **Bead** | **All**. In Full screen the 📖 drop-down is left out to
+    button, ⛶ (Full screen) and 🔊 **Bead** | **All**. In Full screen the 📖 button is left out to
     make room.
   * The mystery picker becomes one row that scrolls sideways.
 
@@ -267,11 +267,10 @@ Use **Hide menus** as well to remove the page title and menus.
 Meditations, offerings and reflections
 ======================================
 
-**Under the beads** (under **Options**) chooses what each mystery shows under
-its beads:
+**Under the beads** (under **Options**) has a tick box for each thing a
+mystery can show under its beads. Tick any mix of them; they appear in this
+order:
 
-* **None** (the starting choice): nothing, for a clean page. The current
-  step and its passage still show in the panel at the top on each bead.
 * **The ten steps**: the ten scripture references, one for each Hail Mary.
 * **A meditation**: a short meditation on the mystery, about a hundred words,
   ending with a one-line prayer. Each one draws on the mystery's scripture
@@ -303,20 +302,26 @@ its beads:
   connecting the mystery to ordinary life (being honest with God, turning up
   for people, standing up for someone who is being picked on), ending with a
   question to think about. These suit students well.
-* **All of these**: every one of the above, one after another, each with its
-  heading, for reading or comparing them.
 
-To switch quickly, use the 📖 drop-down beside **Next** in each mystery:
-**None**, **Steps**, **Meditation**, **Virtue**, **Intention**,
-**Offering**, **Classic**, **Modern** and **All**. The choice applies to every mystery, and
-**Under the beads** in **Options** changes to match.
+With nothing ticked (the starting choice), nothing is shown, for a clean page:
+the current step and its passage still show in the panel at the top on each
+bead. **All** ticks every meditation (all but the steps), for reading or
+comparing them, and **None** unticks everything.
+
+To change them quickly, click the 📖 button beside **Next** in any mystery.
+It drops down the same tick boxes (**Steps**, **Meditation**, **Virtue**,
+**Intention**, **Offering**, **Classic (1915)** and **Modern**, with **All**
+and **None**). Click anywhere else, or press Esc, to close it. The choice
+applies to every mystery, and **Under the beads** in **Options** changes to
+match.
 
 The beads, buttons and the panel at the top work the same whichever is
-chosen. With a single meditation, offering or reflection chosen, the Listen buttons read it on
-the Our Father bead, after announcing the mystery, and in **Full screen** it
-appears in the panel beside the picture on that bead. Bible references in
-brackets in the classic meditations are left out when they are read aloud.
-With **All of these**, nothing extra is read aloud (it would be too long).
+chosen. The Listen buttons read whatever meditations are ticked on the Our
+Father bead, after announcing the mystery, each introduced by its heading when
+more than one is ticked, and in **Full screen** they appear in the panel
+beside the picture on that bead (scroll the panel for the rest). Bible
+references in brackets in the classic meditations are left out when they are
+read aloud. Ticking many makes the Our Father bead long to listen to.
 The opening and closing prayers still show their list of prayers.
 
 The meditations, offerings and reflections were written for this site, so

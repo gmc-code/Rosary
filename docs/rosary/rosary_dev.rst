@@ -170,12 +170,13 @@ Options
        The old names still work: ``phone`` and ``large`` give ``ipad``,
        ``side`` gives ``desktop`` and ``compact`` gives ``iphone``.
    * - ``:under:``
-     - ``none``, ``steps``, ``meditation``, ``virtue``, ``intention``,
-       ``offering``, ``classic``, ``modern`` or ``all``: show nothing under
-       the beads (the starting choice), the ten steps, all of the
-       alternatives one after another, or the mystery's meditation, meditation on its virtue, intention,
-       Montfort-style offering, classic (1915) meditation or modern
-       reflection.
+     - What is shown under the beads: ``none`` (the starting choice),
+       ``all`` (every alternative to the steps), or any of ``steps``,
+       ``meditation``, ``virtue``, ``intention``, ``offering``, ``classic``
+       and ``modern``, separated by commas, e.g. ``:under: steps, meditation``.
+       They are the ten steps, and the mystery's meditation, meditation on its
+       virtue, intention, Montfort-style offering, classic (1915) meditation
+       and modern reflection, shown in that order.
    * - ``:virtues:``
      - ``yes`` or ``no``: show each mystery's virtue (its fruit) under its
        name in the mystery picker. Readers can change it with the **Show
@@ -400,7 +401,7 @@ choices for every rosary on the site are built into ``rosary.py``, so
     rosary_default_layout = "auto"           # auto, desktop, ipad, iphone
     rosary_default_pictures = True           # False to start with the pictures hidden
     rosary_default_virtues = True            # False to hide the virtues in the mystery picker
-    rosary_default_under = "none"            # none, steps, meditation, virtue, intention, offering, classic, modern, all
+    rosary_default_under = "none"            # none, all, or e.g. "steps, meditation" (steps, meditation, virtue, intention, offering, classic, modern)
     rosary_default_verses = "current"        # all, current, none
     rosary_default_read = "step"             # step, both, scripture
     rosary_default_extra_prayers = "on"      # off, on, full
@@ -434,9 +435,12 @@ side in a CSS grid (``.rosary-opt-groups``) and stack on a narrow screen.
 Each alternative to the steps is a ``.rosary-under-box`` (``.rosary-meditation``,
 ``.rosary-virtue``, ``.rosary-intention``, ``.rosary-offering``, ``.rosary-classic``,
 ``.rosary-modern``) written by
-``_under_html`` in ``rosary.py``; CSS shows the one matching the block's
-``data-under``, and ``rosary.js`` reads its parts marked ``rosary-say`` aloud
-on the Our Father bead.
+``_under_html`` in ``rosary.py``. The block's ``data-under`` lists what is
+ticked, e.g. ``"steps meditation"``, or is ``"none"``; CSS shows each listed
+one (``[data-under~="meditation"]``) in a fixed order, and ``rosary.js`` reads
+the parts marked ``rosary-say`` of each ticked box aloud on the Our Father
+bead. The 📖 panel and the Options tick boxes are made by ``underChecks`` and
+kept in step through ``setUnder``.
 
 The block keeps the reader's layout choice in ``data-layout-choice``
 (``auto``, ``desktop``, ``ipad`` or ``iphone``) and the layout in use in
