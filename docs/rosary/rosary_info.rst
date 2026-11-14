@@ -174,11 +174,20 @@ screen:
 * **iPad**: the picture on the left, about the size of a tablet, with the
   title, beads and the ten steps beside it. The picture stays in view while
   the steps are scrolled.
-* **iPhone**: the picture across the top, as large as fits, then the title,
-  smaller beads and buttons in one row (**Full screen** shows as just its ⛶
-  icon), the current passage and the steps. The set tabs shorten to
-  *Joyful*, *Luminous* and so on, and the mystery picker becomes one row that
-  scrolls sideways.
+* **iPhone**: built to fit a phone, with the page margins kept to a
+  minimum:
+
+  * The four sets fit on one line as *Joyful*, *Luminous*, *Sorrowful* and
+    *Glorious*; a gold dot marks today's set.
+  * Under them, **‹** and **›** move to the previous or next mystery
+    (including the opening and closing prayers), carrying on into the next
+    set at the end of one. They stay beside **Menus** when the menus are
+    hidden.
+  * The picture runs across the top, as large as fits, then the title.
+  * The beads, from the Our Father to the Glory Be, fit on one line.
+  * The buttons fit on one line too: **Back**, **Next**, 🔊 (Listen),
+    **▶ Pray** (Pray aloud) and ⛶ (Full screen).
+  * The mystery picker becomes one row that scrolls sideways.
 
 On a narrow screen, Desktop and iPad put the details under the picture.
 

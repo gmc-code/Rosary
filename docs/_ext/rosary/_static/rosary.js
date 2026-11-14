@@ -29,12 +29,32 @@
         return node;
     }
 
-    // the Full screen button: on the iPhone layout only its icon shows
-    function fullLabel(b) {
-        b.textContent = '\u26F6';
-        b.appendChild(el('span', 'rosary-btn-word', ' Full screen'));
-        b.setAttribute('aria-label', 'Full screen');
+    /* button labels: parts marked true are words that the iPhone layout hides,
+     * so the buttons fit on one line there */
+    var LBL = {
+        back: [['\u25C0'], [' Back']],
+        begin: [['Begin'], [' \u25B6']],
+        next: [['Next'], [' \u25B6']],
+        finish: [['Finish'], [' \u2714']],
+        finishDecade: [['Finish'], [' decade', true], [' \u2714']],
+        listen: [['\uD83D\uDD0A'], [' Listen', true]],
+        stop: [['\u25A0'], [' Stop', true]],
+        pray: [['\u25B6'], [' Pray'], [' aloud', true]],
+        prayStop: [['\u25A0'], [' Stop']],
+        full: [['\u26F6'], [' Full screen', true]]
+    };
+    function setLabel(b, parts) {
+        var key = parts.map(function (p) { return p[0] + (p[1] ? '*' : ''); }).join('|');
+        if (b.getAttribute('data-lbl') === key) return;
+        b.setAttribute('data-lbl', key);
+        b.textContent = '';
+        parts.forEach(function (p) {
+            if (p[1]) b.appendChild(el('span', 'rosary-btn-word', p[0]));
+            else b.appendChild(document.createTextNode(p[0]));
+        });
+        b.setAttribute('aria-label', parts.map(function (p) { return p[0]; }).join('').replace(/^\s+|\s+$/g, ''));
     }
+    function fullLabel(b) { setLabel(b, LBL.full); }
 
     function button(cls, text, title) {
         var b = el('button', cls, text);
@@ -248,6 +268,7 @@
             }
             block.setAttribute('data-layout-choice', layoutChoice);
             if (block.getAttribute('data-layout') !== use) block.setAttribute('data-layout', use);
+            document.documentElement.classList.toggle('rosary-layout-iphone', use === 'iphone');
             if (block.rosaryWiden) block.rosaryWiden();
         }
         applyLayout();
@@ -284,8 +305,27 @@
         }
         var hideBtn = button('rosary-top-btn', '\u2922 Hide menus', 'Hide the menus to give the picture more room');
         topbar.appendChild(hideBtn);
+        var showRow = el('div', 'rosary-show-row');
         var showBtn = button('rosary-show-menus', '\u2630 Menus', 'Show the menus again');
-        block.insertBefore(showBtn, topbar);
+        showRow.appendChild(showBtn);
+        block.insertBefore(showRow, topbar);
+        // previous / next mystery, for moving quickly on a phone (iPhone layout)
+        function quickButtons() {
+            var q = el('span', 'rosary-quick');
+            var back = button('rosary-top-btn rosary-quick-btn', '\u2039', 'Previous mystery');
+            var fwd = button('rosary-top-btn rosary-quick-btn', '\u203A', 'Next mystery');
+            back.setAttribute('aria-label', 'Previous mystery');
+            fwd.setAttribute('aria-label', 'Next mystery');
+            back.addEventListener('click', function () { stepMystery(-1); });
+            fwd.addEventListener('click', function () { stepMystery(1); });
+            q.appendChild(back);
+            q.appendChild(fwd);
+            return q;
+        }
+        if (config.beads) {
+            topbar.insertBefore(quickButtons(), topbar.querySelector('.rosary-topbar-gap').nextSibling);
+            showRow.appendChild(quickButtons());
+        }
         // Hide menus also hides the page title and the site's header bar
         var setMenus = function (hidden) {
             block.classList.toggle('rosary-menus-hidden', hidden);
@@ -652,6 +692,7 @@
                 if (small) t.title = 'Prayed on ' + small.textContent;
                 if (t.getAttribute('data-set') === today) {
                     t.insertBefore(el('span', 'rosary-today-badge', 'Today'), t.querySelector('small'));
+                    t.classList.add('rosary-tab-today');
                 }
                 t.addEventListener('click', function () {
                     stopAuto();
@@ -666,6 +707,37 @@
                     s.style.display = 'none';
                 }
             });
+        }
+
+        /* the previous or next mystery (or opening / closing prayers); past the
+         * end of a set it carries on into the next set */
+        function stepMystery(d) {
+            var visible = sets.filter(function (s) { return s.style.display !== 'none'; });
+            var set = visible[0];
+            if (!set || !set.rosaryShowMystery) return;
+            var cards = Array.prototype.slice.call(set.querySelectorAll('.rosary-mystery')).filter(function (m) {
+                return !m.classList.contains('rosary-extra') || extraOn();
+            });
+            var act = set.querySelector('.rosary-mystery.rosary-active');
+            var i = cards.indexOf(act) + d;
+            stopAuto();
+            if (i < 0 || i >= cards.length) {
+                if (config.mode !== 'all' || !tabs.length) {
+                    i = (i + cards.length) % cards.length;
+                } else {
+                    var keys = tabs.map(function (t) { return t.getAttribute('data-set'); });
+                    var k = (keys.indexOf(set.getAttribute('data-set')) + d + keys.length) % keys.length;
+                    showSet(keys[k]);
+                    set = sets.filter(function (s) { return s.getAttribute('data-set') === keys[k]; })[0];
+                    cards = Array.prototype.slice.call(set.querySelectorAll('.rosary-mystery')).filter(function (m) {
+                        return !m.classList.contains('rosary-extra') || extraOn();
+                    });
+                    i = d > 0 ? 0 : cards.length - 1;
+                }
+            }
+            set.rosaryShowMystery(Number(cards[i].getAttribute('data-index')));
+            var r = set.getBoundingClientRect();
+            if (r.top < 0) set.scrollIntoView({ block: 'start' });
         }
 
         function stopAuto() {
@@ -756,12 +828,16 @@
 
             var prev = button('rosary-btn', '\u25C0 Back');
             var next = button('rosary-btn rosary-btn--primary', 'Begin \u25B6');
+            setLabel(prev, LBL.back);
+            setLabel(next, LBL.begin);
             controls.appendChild(prev);
             controls.appendChild(next);
             var listen = null, auto = null;
             if (audio) {
                 listen = button('rosary-btn rosary-btn--audio', '\uD83D\uDD0A Listen', 'Read this prayer aloud');
                 auto = button('rosary-btn rosary-btn--audio', '\u25B6 Pray aloud', 'Read the prayers aloud, one after another');
+                setLabel(listen, LBL.listen);
+                setLabel(auto, LBL.pray);
                 controls.appendChild(listen);
                 controls.appendChild(auto);
             }
@@ -830,14 +906,14 @@
                 });
                 items.forEach(function (li, i) { li.classList.toggle('rosary-here', i === pos); });
                 prev.disabled = prevIndex(pos) === -1;
-                next.textContent = pos < 0 ? 'Begin \u25B6' : (nextIndex(pos) === -1 ? 'Finish \u2714' : 'Next \u25B6');
+                setLabel(next, pos < 0 ? LBL.begin : (nextIndex(pos) === -1 ? LBL.finish : LBL.next));
                 var speakingHere = state.speaking === card;
                 if (listen) {
-                    listen.textContent = speakingHere && !state.auto ? '\u25A0 Stop' : '\uD83D\uDD0A Listen';
+                    setLabel(listen, speakingHere && !state.auto ? LBL.stop : LBL.listen);
                     listen.classList.toggle('rosary-on', speakingHere && !state.auto);
                 }
                 if (auto) {
-                    auto.textContent = state.auto && speakingHere ? '\u25A0 Stop' : '\u25B6 Pray aloud';
+                    setLabel(auto, state.auto && speakingHere ? LBL.prayStop : LBL.pray);
                     auto.classList.toggle('rosary-on', state.auto && speakingHere);
                 }
                 now.classList.toggle('rosary-speaking', speakingHere);
@@ -895,6 +971,8 @@
 
             var prev = button('rosary-btn', '◀ Back');
             var next = button('rosary-btn rosary-btn--primary', 'Begin ▶');
+            setLabel(prev, LBL.back);
+            setLabel(next, LBL.begin);
             controls.appendChild(prev);
             controls.appendChild(next);
 
@@ -902,6 +980,8 @@
             if (audio) {
                 listen = button('rosary-btn rosary-btn--audio', '🔊 Listen', 'Read this bead aloud');
                 auto = button('rosary-btn rosary-btn--audio', '▶ Pray aloud', 'Read the whole decade aloud, bead by bead');
+                setLabel(listen, LBL.listen);
+                setLabel(auto, LBL.pray);
                 controls.appendChild(listen);
                 controls.appendChild(auto);
             }
@@ -1019,14 +1099,14 @@
                 });
                 items.forEach(function (li, i) { li.classList.toggle('rosary-here', i + 1 === pos); });
                 prev.disabled = pos <= 0;
-                next.textContent = pos < 0 ? 'Begin ▶' : (pos >= 11 ? 'Finish decade ✔' : 'Next ▶');
+                setLabel(next, pos < 0 ? LBL.begin : (pos >= 11 ? LBL.finishDecade : LBL.next));
                 var speakingHere = state.speaking === mystery;
                 if (listen) {
-                    listen.textContent = speakingHere && !state.auto ? '■ Stop' : '🔊 Listen';
+                    setLabel(listen, speakingHere && !state.auto ? LBL.stop : LBL.listen);
                     listen.classList.toggle('rosary-on', speakingHere && !state.auto);
                 }
                 if (auto) {
-                    auto.textContent = state.auto && speakingHere ? '■ Stop' : '▶ Pray aloud';
+                    setLabel(auto, state.auto && speakingHere ? LBL.prayStop : LBL.pray);
                     auto.classList.toggle('rosary-on', state.auto && speakingHere);
                 }
                 now.classList.toggle('rosary-speaking', speakingHere);

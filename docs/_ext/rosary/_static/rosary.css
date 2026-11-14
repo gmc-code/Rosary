@@ -740,15 +740,19 @@ a.rosary-ref { text-decoration: underline dotted; }
 }
 .rosary-top-btn.rosary-on { background: rgba(127, 127, 127, 0.15); }
 .rosary-audio-bar[hidden] { display: none !important; }
-.rosary-show-menus { display: none; }
+.rosary-show-row { display: none; }
+.rosary-quick { display: none; }
+.rosary-quick-btn { min-width: 2.2em; padding-left: 0.5em !important; padding-right: 0.5em !important; font-weight: 700; }
 /* Hide menus: only the mystery itself stays */
 .rosary-menus-hidden .rosary-topbar,
 .rosary-menus-hidden .rosary-audio-bar,
 .rosary-menus-hidden .rosary-set-title,
 .rosary-menus-hidden .rosary-nav,
 .rosary-menus-hidden .rosary-credit { display: none !important; }
-.rosary-menus-hidden .rosary-show-menus {
-    display: inline-block;
+.rosary-menus-hidden .rosary-show-row {
+    display: flex;
+    align-items: center;
+    gap: 0.3em;
     position: sticky;
     top: 0.5em;
     z-index: 5;
@@ -846,7 +850,7 @@ a.rosary-ref { text-decoration: underline dotted; }
     }
 }
 @media print {
-    .rosary-topbar, .rosary-show-menus { display: none !important; }
+    .rosary-topbar, .rosary-show-row { display: none !important; }
 }
 
 
@@ -922,12 +926,13 @@ ol.rosary-refs > li.rosary-step:hover:not(.rosary-here) { background: rgba(127, 
 /* iPhone layout: picture on top, as large as fits, then small controls
    (screen only: printing keeps the plain layout) ------------------------- */
 @media screen {
-.rosary-block[data-layout="iphone"] .rosary-set { padding: 0.5em 0.45em 0.6em; border-width: 1px; border-radius: 0.7em; }
+.rosary-block[data-layout="iphone"] .rosary-set { padding: 0.35em 0.3em 0.4em; border-width: 1px; border-radius: 0.6em; margin-bottom: 0.6em; }
 .rosary-block[data-layout="iphone"] .rosary-set-title { font-size: 0.95em; text-align: center; }
 .rosary-block[data-layout="iphone"] .rosary-days { display: block; margin: 0; }
 .rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-mystery {
-    padding: 0.5em 0.55em 0.6em;
-    border-radius: 0.6em;
+    padding: 0.35em 0.3em 0.45em;
+    border: 0;
+    border-radius: 0.5em;
 }
 .rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-head {
     flex-direction: column;
@@ -980,23 +985,30 @@ ol.rosary-refs > li.rosary-step:hover:not(.rosary-here) { background: rgba(127, 
 .rosary-block[data-layout="iphone"] .rosary-head .rosary-credit { font-size: 0.72em; }
 /* beads and buttons: smaller, centred, in one or two rows */
 .rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-decade {
+    flex-wrap: nowrap;
     justify-content: center;
-    gap: 0.22em;
+    gap: 0.12em;
     margin: 0.3em 0 0.35em;
-    font-size: 0.78em;
+    font-size: min(0.8em, 3vw);
 }
-.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-chain { width: 0.5em; }
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-bead { flex-shrink: 0; }
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-bead--glory { padding: 0 0.4em; white-space: nowrap; }
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-chain { flex: 1 1 0; width: auto; min-width: 2px; max-width: 0.6em; }
 .rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-controls {
+    flex-wrap: nowrap;
     justify-content: center;
     gap: 0.25em;
     margin: 0.2em 0 0.45em;
 }
 .rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-btn {
-    padding: 0.2em 0.45em;
+    flex: 0 1 auto;
+    padding: 0.28em 0.6em;
     border-width: 1.5px;
     border-radius: 0.45em;
-    font-size: 0.72em;
+    font-size: 0.8em;
+    white-space: nowrap;
 }
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-btn--primary { flex-grow: 1; max-width: 7em; }
 .rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-toggle { margin-left: 0; font-size: 0.78em; }
 /* the passage panel and the list of steps: tighter */
 .rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-now {
@@ -1028,14 +1040,60 @@ ol.rosary-refs > li.rosary-step:hover:not(.rosary-here) { background: rgba(127, 
 .rosary-block[data-layout="iphone"] .rosary-nav-btn span { display: block; }
 .rosary-block[data-layout="iphone"] .rosary-nav-btn .rosary-svg,
 .rosary-block[data-layout="iphone"] .rosary-nav-btn .rosary-photo { width: 3em !important; height: 3em !important; }
-/* top row and options: smaller */
-.rosary-block[data-layout="iphone"] .rosary-topbar { gap: 0.25em; }
-.rosary-block[data-layout="iphone"] .rosary-topbar .rosary-tab { padding: 0.18em 0.55em; font-size: 0.78em; }
-.rosary-block[data-layout="iphone"] .rosary-tab-word { display: none; }
-.rosary-block[data-layout="iphone"] .rosary-btn-word { display: none; }
+/* top row: the four sets on one line, then previous / next mystery,
+   Options and Hide menus on a second line */
+.rosary-block[data-layout="iphone"] .rosary-topbar { gap: 0.3em 0.25em; margin-bottom: 0.4em; }
+.rosary-block[data-layout="iphone"] .rosary-topbar .rosary-tabs {
+    display: flex;
+    flex: 1 1 100%;
+    flex-wrap: nowrap;
+    gap: 0.2em;
+}
+.rosary-block[data-layout="iphone"] .rosary-topbar .rosary-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+    padding: 0.22em 0.2em;
+    font-size: 0.74em;
+    white-space: nowrap;
+}
+.rosary-block[data-layout="iphone"] .rosary-tab-word,
+.rosary-block[data-layout="iphone"] .rosary-today-badge { display: none; }
+/* today's set: a gold dot instead of the "Today" label */
+.rosary-block[data-layout="iphone"] .rosary-tab-today::after {
+    content: "";
+    display: inline-block;
+    flex: 0 0 auto;
+    width: 0.42em;
+    height: 0.42em;
+    margin-left: 0.25em;
+    border-radius: 50%;
+    background: var(--r-gold);
+}
+.rosary-block[data-layout="iphone"] .rosary-quick { display: inline-flex; gap: 0.25em; }
+.rosary-block[data-layout="iphone"] .rosary-topbar-gap { display: none; }
+.rosary-block[data-layout="iphone"] .rosary-topbar .rosary-quick { margin-right: auto; }
+.rosary-block[data-layout="iphone"] .rosary-top-btn,
+.rosary-block[data-layout="iphone"] .rosary-show-menus { padding: 0.2em 0.6em; font-size: 0.78em; }
+.rosary-block[data-layout="iphone"].rosary-menus-hidden .rosary-show-row { top: 0.3em; margin-bottom: 0.3em; }
+/* button words hidden so the buttons fit on one line */
+.rosary-block[data-layout="iphone"] .rosary-set:not(.rosary-presenting) .rosary-btn-word { display: none; }
 .rosary-block[data-layout="iphone"] .rosary-top-btn { padding: 0.18em 0.6em; font-size: 0.76em; }
 }
 
+
+/* iPhone layout: the theme's page margins and title kept small ---------- */
+@media screen {
+    html.rosary-layout-iphone main div.relative.min-w-0,      /* Shibuya */
+    html.rosary-layout-iphone .wy-nav-content,                  /* Read the Docs theme */
+    html.rosary-layout-iphone .bd-article-container {            /* PyData theme */
+        padding-left: 0.35rem !important;
+        padding-right: 0.35rem !important;
+        padding-top: 0.5rem !important;
+    }
+    html.rosary-layout-iphone .sy-breadcrumbs { padding-left: 0.35rem; padding-right: 0.35rem; }
+    html.rosary-layout-iphone article h1 { font-size: 1.45em !important; margin: 0.15em 0 0.35em !important; }
+}
 
 /* Show pictures unticked: no main picture, the text takes the whole width -- */
 .rosary-block[data-pictures="off"] .rosary-mystery .rosary-icon { display: none !important; }
