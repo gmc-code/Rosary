@@ -463,21 +463,15 @@ def coronation():
 # ---------------------------------------------------------------- opening / closing
 
 def opening():
-    """The opening prayers: the crucifix and the first beads of the rosary (the Our
-    Father bead and three Hail Marys), up to the centre medal and the loop."""
+    """The opening prayers begin with the Sign of the Cross: a cross with a gold
+    dot at each place it is traced (forehead, breast, left and right shoulder),
+    and a faint line showing the order."""
     out = ['<circle class="ri-soft ri-outline" cx="50" cy="50" r="46"/>',
-           # the loop of the rosary going on from the centre medal
-           '<path class="ri-line-thin" fill="none" d="M50,20 C42,12 32,10 22,18"/>',
-           '<path class="ri-line-thin" fill="none" d="M50,20 C58,12 68,10 78,18"/>',
-           # the chain down to the crucifix
-           '<path class="ri-line-thin" fill="none" d="M50,22 L50,62"/>']
-    for x, y in ((40, 13.5), (31, 13), (23, 18.5), (60, 13.5), (69, 13), (77, 18.5)):
-        out.append('<circle class="ri-fill ri-outline" cx="%s" cy="%s" r="3.4"/>' % (x, y))
-    out.append('<ellipse class="ri-gold ri-outline" cx="50" cy="21" rx="5" ry="6"/>')      # centre medal
-    for y in (32, 40, 48):                                                                    # three Hail Marys
-        out.append('<circle class="ri-fill ri-outline" cx="50" cy="%d" r="4.4"/>' % y)
-    out.append('<circle class="ri-gold ri-outline" cx="50" cy="57.5" r="5.6"/>')             # Our Father bead
-    out.append(cross(50, 64, 28, 20, 5, 'ri-fill'))                                           # crucifix
+           # the path of the hand: forehead, down to the breast, then shoulder to shoulder
+           '<path class="ri-gold-dash" fill="none" d="M50,17 L50,83 M26,40 L74,40"/>',
+           cross(50, 21, 58, 40, 9, 'ri-fill')]
+    for x, y in ((50, 15), (50, 85), (24, 40), (76, 40)):
+        out.append('<circle class="ri-gold ri-outline" cx="%d" cy="%d" r="6"/>' % (x, y))
     return ''.join(out)
 
 
@@ -507,7 +501,10 @@ def closing():
     return ''.join(out)
 
 
-EXTRA_ICONS = {'opening': opening, 'closing': closing}
+# The closing prayers end with the Sign of the Cross too, so they use the same
+# icon.  closing() (the crown of roses) is kept above in case it is wanted again:
+# use {'closing': closing} to bring it back.
+EXTRA_ICONS = {'opening': opening, 'closing': opening}
 
 
 def extra_icon(kind, label):

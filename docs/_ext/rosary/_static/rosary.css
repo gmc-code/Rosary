@@ -695,14 +695,20 @@ a.rosary-ref { text-decoration: underline dotted; }
 .rosary-presenting .rosary-btn.rosary-on { background: var(--r-gold); color: #3b2a00; }
 .rosary-presenting .rosary-now-ref, .rosary-presenting .rosary-now-verse { color: #fff; }
 .rosary-presenting .rosary-now-prayer { color: var(--r-text); }
-/* iPad-sized screens in landscape: like the iPad layout, a narrower picture
-   on the left and a wide text column (about 60%) on the right */
+/* iPad-sized screens in landscape: the text column as wide and large as
+   possible (about two-thirds of the screen), the picture narrowed to fit
+   beside it but still shown whole, at full height */
 @media screen and (min-width: 700px) and (max-width: 1400px) and (orientation: landscape) {
     .rosary-presenting .rosary-mystery.rosary-active {
-        grid-template-columns: minmax(0, 2fr) minmax(22em, 3fr);
-        column-gap: 2.5vw;
+        grid-template-columns: minmax(15em, 1fr) minmax(0, 2fr);
+        column-gap: 2vw;
     }
-    .rosary-presenting .rosary-now { font-size: 1.2em; }
+    .rosary-set.rosary-presenting { padding-left: 1.5vw; padding-right: 2vw; }
+    .rosary-presenting .rosary-mystery-title { font-size: clamp(1.6em, 2.6vw, 2.2em); }
+    .rosary-presenting .rosary-head > div:last-child { font-size: clamp(1em, 1.35vw, 1.25em); }
+    .rosary-presenting .rosary-decade { font-size: clamp(1em, 1.4vw, 1.3em); }
+    .rosary-presenting .rosary-btn { font-size: clamp(0.95em, 1.25vw, 1.15em); }
+    .rosary-presenting .rosary-now { font-size: clamp(1.2em, 1.75vw, 1.6em); }
 }
 /* portrait screens: picture on top (75%), text below */
 @media (orientation: portrait) {
