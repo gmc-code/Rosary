@@ -41,11 +41,11 @@
         next: [['Next'], [' \u25B6']],
         finish: [['Finish'], [' \u2714']],
         finishDecade: [['Finish'], [' decade', true], [' \u2714']],
-        // the Listen control: 'Listen: [This bead] [Whole decade]', on iPhone '[Bead] [All]'
-        listenBead: [['This bead', true], ['Bead', 'short']],
-        listenPrayer: [['This prayer', true], ['Prayer', 'short']],
-        allDecade: [['Whole decade', true], ['All', 'short']],
-        allPrayers: [['All prayers', true], ['All', 'short']],
+        // the Listen control, the same in every layout: '🔊 [Bead] [All]'
+        listenBead: [['Bead']],
+        listenPrayer: [['Bead']],
+        allDecade: [['All']],
+        allPrayers: [['All']],
         stop: [['\u25A0 Stop']],
         full: [['\u26F6'], [' Full screen', true]]
     };
@@ -64,13 +64,14 @@
     }
     function fullLabel(b) { setLabel(b, LBL.full); }
 
-    // "🔊 Listen: [one] [all]": both audio buttons in one labelled group
+    // "🔊 [Bead] [All]": both audio buttons in one group, named Listen
     function audioGroup(one, all) {
         var g = el('span', 'rosary-audio-group');
         g.setAttribute('role', 'group');
         g.setAttribute('aria-label', 'Listen');
+        g.title = 'Listen';
         var lab = el('span', 'rosary-audio-group-label', '\uD83D\uDD0A');
-        lab.appendChild(el('span', 'rosary-btn-word', ' Listen:'));
+        lab.setAttribute('aria-hidden', 'true');
         g.appendChild(lab);
         g.appendChild(one);
         g.appendChild(all);

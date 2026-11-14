@@ -49,7 +49,8 @@ Under each mystery is a decade of beads:
 Click **Begin**, then **Next** for each prayer, or click any bead to jump to
 it. After the Glory Be, **Finish decade** moves on to the next mystery of the
 set, so all five decades can be prayed in order. **◀** (Back) goes back one
-bead, and **⛶** opens *Full screen*. The 📖 drop-down beside them chooses
+bead, and **⛶** opens *Full screen*. The 📖 drop-down beside them (just the
+book icon; click it for the list) chooses
 what is shown under the beads (see *Meditations, offerings and reflections*).
 
 Click a step in the list to go to its bead.
@@ -77,7 +78,7 @@ prayers, so a whole set can be prayed from start to finish:
 
 They appear as **Opening prayers** and **Closing prayers** at each end of the
 mystery picker, each with its own beads and the words of every prayer.
-**Listen: All prayers** runs straight through: opening prayers, the five
+🔊 **All** on the opening prayers runs straight through: opening prayers, the five
 mysteries, then the closing prayers.
 
 Reading aloud reads only the words of each opening and closing
@@ -206,8 +207,7 @@ screen:
   * The picture runs across the top, as large as fits, then the title.
   * The beads, from the Our Father to the Glory Be, fit on one line.
   * The buttons fit on one line too: **◀** (Back), **Next**, the 📖
-    drop-down, ⛶ (Full screen) and the Listen control, shortened to
-    🔊 **Bead** | **All**. In Full screen the 📖 drop-down is left out to
+    drop-down, ⛶ (Full screen) and 🔊 **Bead** | **All**. In Full screen the 📖 drop-down is left out to
     make room.
   * The mystery picker becomes one row that scrolls sideways.
 
@@ -338,18 +338,18 @@ Listening
 The rosary can be read aloud by the computer's own voice. Nothing has to be
 downloaded, but sound must be on.
 
-The **🔊 Listen** control under the beads has two buttons:
+The 🔊 Listen control under the beads, 🔊 **Bead** | **All**, has two buttons
+(the same in every layout):
 
-* **This bead** reads the current bead once: the mystery on the Our Father
-  bead, the step (and its passage, if chosen) on a Hail Mary bead. On the
-  opening and closing prayers it is called **This prayer**.
-* **Whole decade** prays aloud bead by bead, moving on by itself, then
-  carries on to the next mystery of the set. On the opening and closing
-  prayers it is called **All prayers**.
+* **Bead** reads the current bead once: the mystery on the Our Father bead,
+  the step (and its passage, if chosen) on a Hail Mary bead, or the current
+  prayer on the opening and closing prayers.
+* **All** prays aloud bead by bead, moving on by itself, then carries on to
+  the next mystery of the set. On the opening and closing prayers it reads
+  all the prayers in turn.
 
 While it is reading, the button becomes **■ Stop**; click it to stop.
-Clicking a bead while it is praying aloud carries on from that bead. On the
-iPhone layout the control is shortened to 🔊 **Bead** | **All**.
+Clicking a bead while it is praying aloud carries on from that bead.
 
 * **Read aloud** (under **Options**) sets what is read on each Hail Mary
   bead: **Step only** (the one-line summary), **Step and scripture**, or
