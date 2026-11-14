@@ -483,7 +483,7 @@
             if (block.querySelector('.rosary-meditation')) {
                 var undLabel = el('label', 'rosary-audio-field', 'Under the beads ');
                 var undSelect = el('select', 'rosary-select');
-                [['steps', 'The ten steps'], ['meditation', 'A meditation'],
+                [['none', 'None'], ['steps', 'The ten steps'], ['meditation', 'A meditation'],
                  ['virtue', 'A meditation on the virtue'], ['intention', 'An intention'],
                  ['offering', 'A Montfort-style offering'], ['classic', 'A classic meditation (1915)'],
                  ['modern', 'A modern reflection']].forEach(function (v) {
@@ -492,10 +492,10 @@
                     undSelect.appendChild(o);
                 });
                 var savedUnder = store('rosary-under');
-                var UNDER = ['steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern'];
+                var UNDER = ['none', 'steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern'];
                 if (UNDER.indexOf(savedUnder) !== -1) block.setAttribute('data-under', savedUnder);
                 undSelect.value = UNDER.indexOf(block.getAttribute('data-under')) !== -1
-                    ? block.getAttribute('data-under') : 'steps';
+                    ? block.getAttribute('data-under') : 'none';
                 undSelect.addEventListener('change', function () { setUnder(undSelect.value); });
                 undLabel.appendChild(undSelect);
                 bar.appendChild(undLabel);
@@ -704,7 +704,7 @@
         /* ---------------- quick switch in each mystery's control row: a small
          * drop-down (book icon) for Steps, Meditation, Virtue, Intention,
          * Offering, Classic, Modern - the same choice as "Under the beads" */
-        var UNDER_CHOICES = [['steps', 'Steps'], ['meditation', 'Meditation'], ['virtue', 'Virtue'],
+        var UNDER_CHOICES = [['none', 'None'], ['steps', 'Steps'], ['meditation', 'Meditation'], ['virtue', 'Virtue'],
                              ['intention', 'Intention'], ['offering', 'Offering'],
                              ['classic', 'Classic'], ['modern', 'Modern']];
         var underPickers = [];
@@ -726,8 +726,8 @@
                 o.value = c[0];
                 sel.appendChild(o);
             });
-            sel.value = block.getAttribute('data-under') || 'steps';
-            if (!sel.value) sel.value = 'steps';
+            sel.value = block.getAttribute('data-under') || 'none';
+            if (!sel.value) sel.value = 'none';
             sel.addEventListener('change', function () { setUnder(sel.value); });
             underPickers.push(sel);
             wrap.appendChild(sel);
@@ -1192,7 +1192,7 @@
             // parts marked rosary-say are shown and read on the Our Father bead
             function meditation() {
                 var under = block.getAttribute('data-under');
-                if (!under || under === 'steps') return null;
+                if (!under || under === 'steps' || under === 'none') return null;
                 var box = mystery.querySelector('.rosary-under-box.rosary-' + under);
                 if (!box) return null;
                 var parts = Array.prototype.map.call(box.querySelectorAll('.rosary-say'), function (e) {

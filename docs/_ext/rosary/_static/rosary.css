@@ -1270,7 +1270,7 @@ html.dark .rosary-verse, html.dark .rosary-now-verse { color: #e6e6e6; }
 }
 
 
-/* Under the beads: the ten steps (data-under="steps"), or instead one of a
+/* Under the beads: nothing (data-under="none"), the ten steps ("steps"), or one of a
    meditation, offering, classic meditation or modern reflection ----------- */
 .rosary-under-box { display: none; }
 .rosary-block:not([data-under="steps"]) .rosary-mystery:not(.rosary-prayers-card) ol.rosary-refs { display: none; }

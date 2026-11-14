@@ -53,7 +53,8 @@ bead, and **⛶** opens *Full screen*. The 📖 drop-down beside them (just the
 book icon; click it for the list) chooses
 what is shown under the beads (see *Meditations, offerings and reflections*).
 
-Click a step in the list to go to its bead.
+With **The ten steps** chosen under the beads, click a step in the list to go
+to its bead.
 
 Tick **Show the prayers** (under **Options**) to see the words of the Our
 Father, Hail Mary and Glory Be (and the Fatima prayer, if it is on) on each
@@ -96,7 +97,8 @@ Starting choices
 ================
 
 The first time someone opens the site, it starts on **Stained glass
-windows** pictures, **Classic** icons in the mystery picker, the
+windows** pictures (the mystery picker matching them), nothing under the
+beads, the
 **Automatic** layout (which picks Desktop, iPad or iPhone to fit the
 screen), with pictures shown, **Current step, in the panel** verses and **Step
 only** read aloud, with the opening and closing prayers and the Fatima
@@ -180,8 +182,8 @@ The top row holds the four sets (hover over one to see its days), then:
 
 **Mystery picker** (under **Options**) sets the small pictures in the row of
 mysteries. *Same as pictures* matches the main pictures; choose another style
-to mix them, e.g. simple **Classic** icons (the starting choice) in the picker
-with **Stained glass windows** as the main pictures.
+to mix them, e.g. simple **Classic** icons in the picker with **Stained glass
+windows** as the main pictures. *Same as pictures* is the starting choice.
 
 **Layout** (under **Options**) arranges each mystery for the size of
 screen:
@@ -268,8 +270,9 @@ Meditations, offerings and reflections
 **Under the beads** (under **Options**) chooses what each mystery shows under
 its beads:
 
-* **The ten steps** (the starting choice): the ten scripture references, one
-  for each Hail Mary.
+* **None** (the starting choice): nothing, for a clean page. The current
+  step and its passage still show in the panel at the top on each bead.
+* **The ten steps**: the ten scripture references, one for each Hail Mary.
 * **A meditation**: a short meditation on the mystery, about a hundred words,
   ending with a one-line prayer. Each one draws on the mystery's scripture
   and leads to its fruit.
@@ -302,12 +305,12 @@ its beads:
   question to think about. These suit students well.
 
 To switch quickly, use the 📖 drop-down beside **Next** in each mystery:
-**Steps**, **Meditation**, **Virtue**, **Intention**, **Offering**,
-**Classic** and **Modern**. The choice applies to every mystery, and
+**None**, **Steps**, **Meditation**, **Virtue**, **Intention**,
+**Offering**, **Classic** and **Modern**. The choice applies to every mystery, and
 **Under the beads** in **Options** changes to match.
 
 The beads, buttons and the panel at the top work the same whichever is
-chosen. With any choice other than the steps, the Listen buttons read it on
+chosen. With any choice other than **None** or the steps, the Listen buttons read it on
 the Our Father bead, after announcing the mystery, and in **Full screen** it
 appears in the panel beside the picture on that bead. Bible references in
 brackets in the classic meditations are left out when they are read aloud.

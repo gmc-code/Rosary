@@ -157,7 +157,7 @@ Options
        and the browser tab.
    * - ``:nav-icons:``
      - Picture style for the mystery picker's small pictures: ``same`` (as
-       the main pictures), ``classic``, ``stained``, ``gold``, ``photo`` or
+       the main pictures, the starting choice), ``classic``, ``stained``, ``gold``, ``photo`` or
        ``photo-sg``.
    * - ``:layout:``
      - ``auto``: picks ``iphone`` below 700 pixels wide, ``ipad`` up to 1200
@@ -170,9 +170,9 @@ Options
        The old names still work: ``phone`` and ``large`` give ``ipad``,
        ``side`` gives ``desktop`` and ``compact`` gives ``iphone``.
    * - ``:under:``
-     - ``steps``, ``meditation``, ``virtue``, ``intention``, ``offering``,
-       ``classic`` or ``modern``: show the ten steps under the beads, or
-       instead the mystery's meditation, meditation on its virtue, intention,
+     - ``none``, ``steps``, ``meditation``, ``virtue``, ``intention``,
+       ``offering``, ``classic`` or ``modern``: show nothing under the beads
+       (the starting choice), the ten steps, or the mystery's meditation, meditation on its virtue, intention,
        Montfort-style offering, classic (1915) meditation or modern
        reflection.
    * - ``:virtues:``
@@ -395,11 +395,11 @@ choices for every rosary on the site are built into ``rosary.py``, so
 .. code-block:: python
 
     rosary_default_icons = "photo-sg"        # classic, stained, gold, photo, photo-sg, photo-cubism, photo-modaus, photo-trad
-    rosary_default_nav_icons = "classic"     # same, classic, stained, gold, photo, photo-sg
+    rosary_default_nav_icons = "same"        # same, classic, stained, gold, photo, photo-sg
     rosary_default_layout = "auto"           # auto, desktop, ipad, iphone
     rosary_default_pictures = True           # False to start with the pictures hidden
     rosary_default_virtues = True            # False to hide the virtues in the mystery picker
-    rosary_default_under = "steps"           # steps, meditation, virtue, intention, offering, classic, modern
+    rosary_default_under = "none"            # none, steps, meditation, virtue, intention, offering, classic, modern
     rosary_default_verses = "current"        # all, current, none
     rosary_default_read = "step"             # step, both, scripture
     rosary_default_extra_prayers = "on"      # off, on, full

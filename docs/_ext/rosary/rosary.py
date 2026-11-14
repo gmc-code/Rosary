@@ -61,7 +61,7 @@ Options
                      the menu and the browser tab)
     :nav-icons:      style of the small pictures in the mystery picker: same
                      (as the main pictures), classic, stained, gold, photo or
-                     photo-<key>  [classic]
+                     photo-<key>  [same]
     :layout:         auto (picks desktop, ipad or iphone from the width of
                      the screen), desktop (a large picture on the left, with
                      the details in a column beside it), ipad (a
@@ -74,15 +74,16 @@ Options
     :verses:         where the scripture is shown: all (under each step),
                      current (only the step being prayed, in the panel at
                      the top) or none  [current]
-    :under:          what is shown under the beads: steps (the ten scripture
-                     steps), meditation (a short meditation on the mystery
+    :under:          what is shown under the beads: none (nothing; the
+                     current step still shows in the panel), steps (the ten
+                     scripture steps), meditation (a short meditation on the mystery
                      and a prayer), offering (an offering of the decade in
                      the manner of St Louis de Montfort), virtue (a
                      meditation on the mystery's fruit), intention (who and
                      what the decade is offered for), classic (a classic
                      meditation from The Rosary, 1915; rosary_classic.py) or
                      modern (a modern reflection with a question); the
-                     others are in rosary_meditations.py  [steps]
+                     others are in rosary_meditations.py  [none]
     :read:           what Listen / Pray aloud read for each Hail Mary: step
                      (the one-line summary), both (summary then scripture)
                      or scripture  [step]
@@ -147,7 +148,7 @@ def days_text(days):
     return names[0] if len(names) == 1 else ' and '.join(names)
 
 
-UNDER = ('steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern')   # under the beads
+UNDER = ('none', 'steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern')   # under the beads
 LAYOUTS = ('auto', 'desktop', 'ipad', 'iphone')
 # layouts from earlier versions, mapped to the nearest new one
 OLD_LAYOUTS = {'phone': 'ipad', 'large': 'ipad', 'side': 'desktop', 'compact': 'iphone'}
@@ -620,7 +621,7 @@ class RosaryDirective(SphinxDirective):
                'ipad' if layout == 'auto' else layout, 'on' if pictures else 'off',
                'on' if virtues else 'off',
                self.options.get('under') or (self.config.rosary_default_under
-                                             if self.config.rosary_default_under in UNDER else 'steps'),
+                                             if self.config.rosary_default_under in UNDER else 'none'),
                self.options.get('verses') or self.config.rosary_default_verses, config['extra'],
                _esc(json.dumps(config)),
                prayers_attr, title_html, tabs, sets, credit))
@@ -701,11 +702,11 @@ def setup(app):
     # site-wide starting choices; a page's directive options and each reader's
     # own menu choices take over from these
     app.add_config_value('rosary_default_icons', 'photo-sg', 'env')      # classic, stained, gold, photo, photo-sg, photo-cubism, photo-modaus, photo-trad
-    app.add_config_value('rosary_default_nav_icons', 'classic', 'env')   # same, classic, stained, gold, photo...
+    app.add_config_value('rosary_default_nav_icons', 'same', 'env')      # same (as the pictures), classic, stained, gold, photo...
     app.add_config_value('rosary_default_layout', 'auto', 'env')         # auto, desktop, ipad, iphone
     app.add_config_value('rosary_default_pictures', True, 'env')         # False to start with the pictures hidden
     app.add_config_value('rosary_default_virtues', True, 'env')          # False to hide the virtues in the picker
-    app.add_config_value('rosary_default_under', 'steps', 'env')         # steps, meditation, virtue, intention, offering, classic, modern
+    app.add_config_value('rosary_default_under', 'none', 'env')          # none, steps, meditation, virtue, intention, offering, classic, modern
     app.add_config_value('rosary_default_verses', 'current', 'env')      # all, current, none
     app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture
     app.add_config_value('rosary_default_extra_prayers', 'on', 'env')    # off, on, full
