@@ -1324,3 +1324,46 @@ html.dark .rosary-classic-title, html.dark .rosary-modern-question { color: #f2f
 @media print {
     .rosary-under-box { break-inside: avoid; }
 }
+
+/* quick switch above the steps (made by rosary.js); the chosen one is
+   highlighted from the block's data-under, so every mystery stays in step */
+.rosary-under-switch {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25em;
+    margin: 0.2em 0 0.5em;
+}
+.rosary-under-chip {
+    padding: 0.18em 0.7em;
+    border: 1px solid var(--r-soft2);
+    border-radius: 2em;
+    background: var(--r-paper);
+    color: var(--r-ink);
+    font: inherit;
+    font-size: 0.8em;
+    cursor: pointer;
+}
+.rosary-under-chip:hover { border-color: var(--r-c); }
+.rosary-block[data-under="steps"] .rosary-under-chip[data-v="steps"],
+.rosary-block[data-under="meditation"] .rosary-under-chip[data-v="meditation"],
+.rosary-block[data-under="offering"] .rosary-under-chip[data-v="offering"],
+.rosary-block[data-under="classic"] .rosary-under-chip[data-v="classic"],
+.rosary-block[data-under="modern"] .rosary-under-chip[data-v="modern"] {
+    background: var(--r-c);
+    border-color: var(--r-c);
+    color: #fff;
+}
+html.dark .rosary-under-chip { color: #f2f2f2; }
+@media screen {
+    .rosary-block[data-layout="iphone"] .rosary-under-switch { flex-wrap: nowrap; justify-content: center; gap: 0.2em; }
+    .rosary-block[data-layout="iphone"] .rosary-under-chip { padding: 0.2em 0.5em; font-size: 0.72em; white-space: nowrap; }
+}
+/* the steps and their alternatives sit in the details column on iPad and Desktop */
+@media screen and (min-width: 700px) {
+    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-under-wrap { grid-column: 2; grid-row: 5; }
+}
+@media screen and (min-width: 800px) {
+    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-under-wrap { grid-column: 2; grid-row: 5; }
+}
+.rosary-presenting .rosary-under-wrap { display: none !important; }
+@media print { .rosary-under-switch { display: none !important; } }

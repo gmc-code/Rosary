@@ -268,6 +268,11 @@ its beads:
   for people, standing up for someone who is being picked on), ending with a
   question to think about. These suit students well.
 
+To switch quickly, use the row of buttons above the steps in each mystery:
+**Steps**, **Meditation**, **Offering**, **Classic** and **Modern**. The
+chosen one is highlighted, the choice applies to every mystery, and
+**Under the beads** in **Options** changes to match.
+
 The beads, buttons and the panel at the top work the same whichever is
 chosen. With any of the last four, **Listen** and **Pray aloud** read it on
 the Our Father bead, after announcing the mystery, and in **Full screen** it

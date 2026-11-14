@@ -452,11 +452,7 @@
                 if (UNDER.indexOf(savedUnder) !== -1) block.setAttribute('data-under', savedUnder);
                 undSelect.value = UNDER.indexOf(block.getAttribute('data-under')) !== -1
                     ? block.getAttribute('data-under') : 'steps';
-                undSelect.addEventListener('change', function () {
-                    block.setAttribute('data-under', undSelect.value);
-                    store('rosary-under', undSelect.value);
-                    refreshAll();
-                });
+                undSelect.addEventListener('change', function () { setUnder(undSelect.value); });
                 undLabel.appendChild(undSelect);
                 bar.appendChild(undLabel);
             }
@@ -641,6 +637,30 @@
                 store(STORE_RATE, rateSelect.value);
             });
         }
+
+        /* ---------------- quick switch above the steps: Steps, Meditation, Offering,
+         * Classic, Modern (the same choice as "Under the beads" in Options) */
+        function setUnder(v) {
+            block.setAttribute('data-under', v);
+            store('rosary-under', v);
+            if (undSelect) undSelect.value = v;
+            refreshAll();
+        }
+        block.querySelectorAll('.rosary-mystery:not(.rosary-prayers-card) .rosary-under-wrap').forEach(function (wrap) {
+            if (!wrap.querySelector('.rosary-under-box')) return;
+            var row = el('div', 'rosary-under-switch');
+            row.setAttribute('role', 'group');
+            row.setAttribute('aria-label', 'Show under the beads');
+            [['steps', 'Steps', 'The ten scripture steps'], ['meditation', 'Meditation', 'A meditation'],
+             ['offering', 'Offering', 'A Montfort-style offering'], ['classic', 'Classic', 'A classic meditation (1915)'],
+             ['modern', 'Modern', 'A modern reflection']].forEach(function (c) {
+                var b = button('rosary-under-chip', c[1], c[2]);
+                b.setAttribute('data-v', c[0]);
+                b.addEventListener('click', function () { setUnder(c[0]); });
+                row.appendChild(b);
+            });
+            wrap.insertBefore(row, wrap.firstChild);
+        });
 
         /* ---------------- tidy the Options panel into labelled groups */
         if (bar) {

@@ -225,7 +225,7 @@ class RosaryDirective(SphinxDirective):
             '<h4 class="rosary-mystery-title">%s</h4>'
             '<p class="rosary-fruit">Fruit of the mystery: <strong>%s</strong></p>%s</div>'
             '</div>%s'
-            '<ol class="rosary-refs">%s</ol>%s'
+            '<div class="rosary-under-wrap"><ol class="rosary-refs">%s</ol>%s</div>'
             '</article>' % (
                 ' rosary-active' if active else '', index,
                 ' rosary-has-photo' if self._photo(key, index) else '',
