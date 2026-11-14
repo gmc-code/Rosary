@@ -20,6 +20,8 @@ with the opening and closing prayers.
     :caption: Rosary:
 
     rosary/rosary.rst
+    rosary/marian_prayers.rst
+    rosary/rosary_history.rst
 
 
 .. toctree::
@@ -38,5 +40,4 @@ with the opening and closing prayers.
     rosary/gallery_stained_glass.rst
     rosary/gallery_cubism.rst
     rosary/gallery_renaissance.rst
-    rosary/gallery_modern_australian.rst
     rosary/gallery_masterpieces.rst

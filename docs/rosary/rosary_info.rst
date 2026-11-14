@@ -130,9 +130,6 @@ order.
    * - Renaissance style
      - Newly painted pictures in the style of traditional Catholic sacred
        art, with Mary, Jesus and Joseph looking the same in every mystery
-   * - Modern Australian
-     - Each mystery set in the Australian bush, in thick, bold brushwork
-       in the style of Australian modernist painting
    * - Masterpieces
      - A famous painting of each mystery, such as Fra Angelico's
        *Annunciation* or Raphael's *Transfiguration*, with the artist and

@@ -393,7 +393,6 @@ class RosaryDirective(SphinxDirective):
             sets = [('sg', 'Stained glass windows', '/_static/rosary-images-sg'),
                     ('cubism', 'Cubism', '/_static/rosary-images-cubism'),
                     ('trad', 'Renaissance style', '/_static/rosary-images-trad'),
-                    ('modaus', 'Modern Australian', '/_static/rosary-images-mod-aus'),
                     ('photo', 'Masterpieces', self.config.rosary_images)]
         out = []
         for entry in sets:
@@ -716,13 +715,12 @@ def setup(app):
     # every picture folder offered in the Pictures menu: [(key, label, folder), ...]
     # None = Stained glass windows (/_static/rosary-images-sg), Cubism
     # (/_static/rosary-images-cubism), Renaissance style
-    # (/_static/rosary-images-trad), Modern Australian
-    # (/_static/rosary-images-mod-aus) and Masterpieces (rosary_images); the
+    # (/_static/rosary-images-trad) and Masterpieces (rosary_images); the
     # Pictures menu lists them in this order, above the drawn styles; folders that are missing or empty are skipped
     app.add_config_value('rosary_image_sets', None, 'env')
     # site-wide starting choices; a page's directive options and each reader's
     # own menu choices take over from these
-    app.add_config_value('rosary_default_icons', 'photo-sg', 'env')      # classic, stained, gold, photo, photo-sg, photo-cubism, photo-modaus, photo-trad
+    app.add_config_value('rosary_default_icons', 'photo-sg', 'env')      # classic, stained, gold, photo, photo-sg, photo-cubism, photo-trad
     app.add_config_value('rosary_default_nav_icons', 'same', 'env')      # same (as the pictures), classic, stained, gold, photo...
     app.add_config_value('rosary_default_layout', 'auto', 'env')         # auto, desktop, ipad, iphone
     app.add_config_value('rosary_default_pictures', True, 'env')         # False to start with the pictures hidden

@@ -13,6 +13,13 @@ Introduction
      - What it shows
    * - :doc:`All the mysteries </rosary/rosary>`
      - All four sets, with a tab for each set, opening on today's set
+   * - :doc:`Marian prayers </rosary/marian_prayers>`
+     - The Angelus, Regina Caeli, Sub tuum praesidium, the Magnificat, the
+       Litany of Loreto, a short consecration, the Ave Maria and the four
+       seasonal Marian antiphons, in Latin and English
+   * - :doc:`A short history of the Rosary </rosary/rosary_history>`
+     - How the Rosary grew, from praying the Psalms on beads to the
+       Luminous Mysteries in 2002
    * - :doc:`User guide </rosary/rosary_info>`
      - Praying with the beads, the opening and closing prayers, the Options
        panel, full screen, reading aloud and printing
@@ -34,8 +41,6 @@ Introduction
      - Bold, broken planes of colour with strong outlines
    * - :doc:`Renaissance style </rosary/gallery_renaissance>`
      - New paintings in the style of traditional Catholic sacred art
-   * - :doc:`Modern Australian </rosary/gallery_modern_australian>`
-     - The mysteries set in the Australian landscape
    * - :doc:`Masterpieces </rosary/gallery_masterpieces>`
      - Famous public-domain paintings
 
