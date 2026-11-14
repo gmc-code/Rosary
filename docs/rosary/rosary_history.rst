@@ -101,12 +101,17 @@ of Loreto. October has been the month of the Rosary ever since. In his last,
 Fatima
 ======
 
-In 1917, at Fatima in Portugal, three shepherd children, Lucia, Francisco and
-Jacinta, reported that Mary appeared to them six times. In the last
-appearance, on 13 October, she called herself "the Lady of the Rosary", and
-throughout she asked them to pray the Rosary every day for peace. The Church
-approved the apparitions in 1930. The short Fatima prayer said after each
-Glory Be ("O my Jesus, forgive us our sins…") comes from there.
+In 1917, at Fatima in Portugal, three shepherd children, Lucia dos Santos and
+her cousins Francisco and Jacinta Marto, reported that Mary appeared to them
+six times, on the 13th of each month from May to October. Throughout, she
+asked them to pray the Rosary every day for peace and the end of the war, and
+in the last appearance, on 13 October, she called herself "the Lady of the
+Rosary". [#f8]_ [#f9]_ The short Fatima prayer said after each Glory Be
+("O my Jesus, forgive us our sins…") comes from the July appearance. [#f9]_
+
+On 13 October 1930, after a long investigation, the Bishop of Leiria
+declared the visions of the children "worthy of credit" and officially
+permitted devotion to Our Lady of Fatima. [#f10]_
 
 
 The Luminous Mysteries
@@ -121,8 +126,9 @@ For more than four centuries the Rosary had fifteen mysteries. On 16 October
 II added the five Luminous Mysteries, or Mysteries of Light, on Jesus'
 public life, from his Baptism in the Jordan to the institution of the
 Eucharist at the Last Supper. This brought the total to twenty, in the four
-sets of five prayed on this site. He suggested praying them on Thursdays,
-and declared October 2002 to October 2003 the Year of the Rosary. [#f7]_
+sets of five prayed on this site. [#f7]_ He suggested praying them on
+Thursdays, [#f11]_ and declared October 2002 to October 2003 the Year of the
+Rosary. [#f12]_
 
 
 The Rosary today
@@ -166,5 +172,23 @@ the opening and closing prayers, read other
    https://www.vatican.va/content/paul-vi/en/apost_exhortations/documents/hf_p-vi_exh_19740202_marialis-cultus.html
 
 .. [#f7] John Paul II, *Rosarium Virginis Mariae*, apostolic letter on the
-   Most Holy Rosary (16 October 2002), 3, 19, 21, 38.
+   Most Holy Rosary (16 October 2002), 19, 21.
+   https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html
+
+.. [#f8] Congregation for the Doctrine of the Faith, *The Message of Fatima*
+   (26 June 2000), with Sister Lucia's account of the apparitions.
+   https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_con_cfaith_doc_20000626_message-fatima_en.html
+
+.. [#f9] Sister Lucia, *Fatima in Lucia's Own Words* (Fourth Memoir),
+   Secretariado dos Pastorinhos, Fatima.
+
+.. [#f10] Bishop José Alves Correia da Silva of Leiria, pastoral letter
+   *A Divina Providência* (13 October 1930); summarised in "Fátima and the
+   Church", Fatima museum.
+   https://www.newsmuseum.pt/en/node/749
+
+.. [#f11] John Paul II, *Rosarium Virginis Mariae*, 38.
+   https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html
+
+.. [#f12] John Paul II, *Rosarium Virginis Mariae*, 3.
    https://www.vatican.va/content/john-paul-ii/en/apost_letters/2002/documents/hf_jp-ii_apl_20021016_rosarium-virginis-mariae.html
