@@ -919,6 +919,35 @@
             if (r.top < 0) set.scrollIntoView({ block: 'start' });
         }
 
+        // swipe left = next mystery, swipe right = previous mystery (normal view;
+        // present mode has its own bead-by-bead swipe)
+        (function () {
+            var x0 = null, y0 = null;
+            block.addEventListener('touchstart', function (e) {
+                x0 = null;
+                if (e.touches.length !== 1) return;
+                if (block.querySelector('.rosary-presenting')) return;
+                var t = e.target;
+                if (t.closest && t.closest('select, input, textarea, button, .rosary-topbar, .rosary-audio-bar')) return;
+                // leave sideways-scrolling areas (e.g. bead strips) alone
+                for (var n = t; n && n !== block; n = n.parentNode) {
+                    if (n.scrollWidth > n.clientWidth + 2) {
+                        var ox = window.getComputedStyle(n).overflowX;
+                        if (ox === 'auto' || ox === 'scroll') return;
+                    }
+                }
+                x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
+            }, { passive: true });
+            block.addEventListener('touchend', function (e) {
+                if (x0 === null) return;
+                var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+                x0 = null;
+                var sel = window.getSelection && window.getSelection();
+                if (sel && String(sel).length) return;   // was selecting text
+                if (Math.abs(dx) > 60 && Math.abs(dx) > 2 * Math.abs(dy)) stepMystery(dx < 0 ? 1 : -1);
+            }, { passive: true });
+        })();
+
         function stopAuto() {
             state.auto = false;
             state.speaking = null;
