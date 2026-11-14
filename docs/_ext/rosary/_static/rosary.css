@@ -1260,6 +1260,8 @@ html.dark .rosary-verse, html.dark .rosary-now-verse { color: #e6e6e6; }
 .rosary-under-box { display: none; }
 .rosary-block:not([data-under="steps"]) .rosary-mystery:not(.rosary-prayers-card) ol.rosary-refs { display: none; }
 .rosary-block[data-under="meditation"] .rosary-meditation,
+.rosary-block[data-under="virtue"] .rosary-virtue,
+.rosary-block[data-under="intention"] .rosary-intention,
 .rosary-block[data-under="offering"] .rosary-offering,
 .rosary-block[data-under="classic"] .rosary-classic,
 .rosary-block[data-under="modern"] .rosary-modern {
@@ -1301,6 +1303,8 @@ html.dark .rosary-verse, html.dark .rosary-now-verse { color: #e6e6e6; }
 .rosary-classic-note { margin: 0.6em 0 0 !important; font-size: 0.8em; color: var(--r-muted); }
 .rosary-classic-note { margin: 0 0 0.5em !important; font-style: italic; }
 .rosary-modern-text { font-family: inherit; font-size: 1.02em; }
+.rosary-intention-line { margin: 0 0 0.4em !important; font-weight: 700; color: var(--r-ink); }
+html.dark .rosary-intention-line { color: #f2f2f2; }
 .rosary-modern-question { margin: 0.4em 0 0 !important; color: var(--r-ink); }
 .rosary-modern-question strong { color: var(--r-c); }
 html.dark .rosary-under-box { background: rgba(255, 255, 255, 0.07) !important; }
@@ -1346,6 +1350,8 @@ html.dark .rosary-classic-title, html.dark .rosary-modern-question { color: #f2f
 .rosary-under-chip:hover { border-color: var(--r-c); }
 .rosary-block[data-under="steps"] .rosary-under-chip[data-v="steps"],
 .rosary-block[data-under="meditation"] .rosary-under-chip[data-v="meditation"],
+.rosary-block[data-under="virtue"] .rosary-under-chip[data-v="virtue"],
+.rosary-block[data-under="intention"] .rosary-under-chip[data-v="intention"],
 .rosary-block[data-under="offering"] .rosary-under-chip[data-v="offering"],
 .rosary-block[data-under="classic"] .rosary-under-chip[data-v="classic"],
 .rosary-block[data-under="modern"] .rosary-under-chip[data-v="modern"] {
@@ -1355,7 +1361,7 @@ html.dark .rosary-classic-title, html.dark .rosary-modern-question { color: #f2f
 }
 html.dark .rosary-under-chip { color: #f2f2f2; }
 @media screen {
-    .rosary-block[data-layout="iphone"] .rosary-under-switch { flex-wrap: nowrap; justify-content: center; gap: 0.2em; }
+    .rosary-block[data-layout="iphone"] .rosary-under-switch { justify-content: center; gap: 0.25em 0.2em; }
     .rosary-block[data-layout="iphone"] .rosary-under-chip { padding: 0.2em 0.5em; font-size: 0.72em; white-space: nowrap; }
 }
 /* the steps and their alternatives sit in the details column on iPad and Desktop */

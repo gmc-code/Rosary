@@ -77,7 +77,9 @@ Options
     :under:          what is shown under the beads: steps (the ten scripture
                      steps), meditation (a short meditation on the mystery
                      and a prayer), offering (an offering of the decade in
-                     the manner of St Louis de Montfort), classic (a classic
+                     the manner of St Louis de Montfort), virtue (a
+                     meditation on the mystery's fruit), intention (who and
+                     what the decade is offered for), classic (a classic
                      meditation from The Rosary, 1915; rosary_classic.py) or
                      modern (a modern reflection with a question); the
                      others are in rosary_meditations.py  [steps]
@@ -105,7 +107,7 @@ from sphinx.util.docutils import SphinxDirective
 from .rosary_data import CLOSING, DAY_NAMES, OPENING, ORDINALS, PRAYERS, SET_ORDER, SETS
 from .rosary_icons import extra_icon, icon
 from .rosary_classic import CLASSIC, SOURCE as CLASSIC_SOURCE
-from .rosary_meditations import MEDITATIONS, MODERN, OFFERINGS
+from .rosary_meditations import INTENTIONS, MEDITATIONS, MODERN, OFFERINGS, VIRTUES
 from .rosary_scripture import TEXT, TRANSLATION, TRANSLATION_SHORT
 
 logger = logging.getLogger(__name__)
@@ -145,7 +147,7 @@ def days_text(days):
     return names[0] if len(names) == 1 else ' and '.join(names)
 
 
-UNDER = ('steps', 'meditation', 'offering', 'classic', 'modern')   # what is shown under the beads
+UNDER = ('steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern')   # under the beads
 LAYOUTS = ('auto', 'desktop', 'ipad', 'iphone')
 # layouts from earlier versions, mapped to the nearest new one
 OLD_LAYOUTS = {'phone': 'ipad', 'large': 'ipad', 'side': 'desktop', 'compact': 'iphone'}
@@ -263,6 +265,16 @@ class RosaryDirective(SphinxDirective):
                        '<p class="rosary-classic-note">The 1915 book of classic meditations was written before '
                        'the Luminous Mysteries were added in 2002, so this mystery\u2019s meditation is shown '
                        'instead.</p>' + med_inner)
+        v_text, v_prayer = VIRTUES[key][index]
+        out += box('virtue', 'The virtue: %s' % _esc(SETS[key]['mysteries'][index]['fruit']),
+                   '<p class="rosary-meditation-text rosary-say">%s</p>'
+                   '<p class="rosary-meditation-prayer rosary-say">%s</p>' % (_esc(v_text), _esc(v_prayer)))
+        i_line, i_text, i_prayer = INTENTIONS[key][index]
+        out += box('intention', 'Intention for this decade',
+                   '<p class="rosary-intention-line rosary-say">%s</p>'
+                   '<p class="rosary-meditation-text rosary-say">%s</p>'
+                   '<p class="rosary-meditation-prayer rosary-say">%s</p>' % (
+                       _esc(i_line), _esc(i_text), _esc(i_prayer)))
         text, question = MODERN[key][index]
         out += box('modern', 'Reflection',
                    '<p class="rosary-meditation-text rosary-modern-text rosary-say">%s</p>'
@@ -679,7 +691,7 @@ def setup(app):
     app.add_config_value('rosary_default_layout', 'auto', 'env')         # auto, desktop, ipad, iphone
     app.add_config_value('rosary_default_pictures', True, 'env')         # False to start with the pictures hidden
     app.add_config_value('rosary_default_virtues', True, 'env')          # False to hide the virtues in the picker
-    app.add_config_value('rosary_default_under', 'steps', 'env')         # steps, meditation, offering, classic, modern
+    app.add_config_value('rosary_default_under', 'steps', 'env')         # steps, meditation, virtue, intention, offering, classic, modern
     app.add_config_value('rosary_default_verses', 'current', 'env')      # all, current, none
     app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture
     app.add_config_value('rosary_default_extra_prayers', 'on', 'env')    # off, on, full

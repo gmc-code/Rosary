@@ -252,6 +252,16 @@ its beads:
 * **A meditation**: a short meditation on the mystery, about a hundred words,
   ending with a one-line prayer. Each one draws on the mystery's scripture
   and leads to its fruit.
+* **A meditation on the virtue**: about 80 words on the mystery's fruit:
+  what the virtue is, how the mystery shows it, and how to practise it,
+  ending with a short prayer for it. It is headed with the virtue, e.g.
+  *The virtue: Humility*.
+* **An intention**: who and what the decade is offered for, linked to the
+  mystery, e.g. the Annunciation is offered for expectant mothers, unborn
+  children and all discerning God's call, and the Carrying of the Cross for
+  the sick, carers and all who carry heavy burdens. A short reflection and
+  prayer follow. The last Glorious Mystery is left for the reader's own
+  intentions.
 * **A Montfort-style offering**: a short prayer offering the decade, in the
   manner of St Louis de Montfort's *The Secret of the Rosary*. It offers the
   decade to Jesus in honour of the mystery and asks, through Mary's prayers,
@@ -271,12 +281,13 @@ its beads:
   question to think about. These suit students well.
 
 To switch quickly, use the row of buttons above the steps in each mystery:
-**Steps**, **Meditation**, **Offering**, **Classic** and **Modern**. The
+**Steps**, **Meditation**, **Virtue**, **Intention**, **Offering**,
+**Classic** and **Modern**. The
 chosen one is highlighted, the choice applies to every mystery, and
 **Under the beads** in **Options** changes to match.
 
 The beads, buttons and the panel at the top work the same whichever is
-chosen. With any of the last four, **Listen** and **Pray aloud** read it on
+chosen. With any choice other than the steps, **Listen** and **Pray aloud** read it on
 the Our Father bead, after announcing the mystery, and in **Full screen** it
 appears in the panel beside the picture on that bead. Bible references in
 brackets in the classic meditations are left out when they are read aloud.

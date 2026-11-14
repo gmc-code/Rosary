@@ -460,6 +460,7 @@
                 var undLabel = el('label', 'rosary-audio-field', 'Under the beads ');
                 var undSelect = el('select', 'rosary-select');
                 [['steps', 'The ten steps'], ['meditation', 'A meditation'],
+                 ['virtue', 'A meditation on the virtue'], ['intention', 'An intention'],
                  ['offering', 'A Montfort-style offering'], ['classic', 'A classic meditation (1915)'],
                  ['modern', 'A modern reflection']].forEach(function (v) {
                     var o = el('option', '', v[1]);
@@ -467,7 +468,7 @@
                     undSelect.appendChild(o);
                 });
                 var savedUnder = store('rosary-under');
-                var UNDER = ['steps', 'meditation', 'offering', 'classic', 'modern'];
+                var UNDER = ['steps', 'meditation', 'virtue', 'intention', 'offering', 'classic', 'modern'];
                 if (UNDER.indexOf(savedUnder) !== -1) block.setAttribute('data-under', savedUnder);
                 undSelect.value = UNDER.indexOf(block.getAttribute('data-under')) !== -1
                     ? block.getAttribute('data-under') : 'steps';
@@ -657,8 +658,8 @@
             });
         }
 
-        /* ---------------- quick switch above the steps: Steps, Meditation, Offering,
-         * Classic, Modern (the same choice as "Under the beads" in Options) */
+        /* ---------------- quick switch above the steps: Steps, Meditation, Virtue,
+         * Intention, Offering, Classic, Modern (the same choice as "Under the beads") */
         function setUnder(v) {
             block.setAttribute('data-under', v);
             store('rosary-under', v);
@@ -671,6 +672,7 @@
             row.setAttribute('role', 'group');
             row.setAttribute('aria-label', 'Show under the beads');
             [['steps', 'Steps', 'The ten scripture steps'], ['meditation', 'Meditation', 'A meditation'],
+             ['virtue', 'Virtue', 'A meditation on the virtue'], ['intention', 'Intention', 'An intention'],
              ['offering', 'Offering', 'A Montfort-style offering'], ['classic', 'Classic', 'A classic meditation (1915)'],
              ['modern', 'Modern', 'A modern reflection']].forEach(function (c) {
                 var b = button('rosary-under-chip', c[1], c[2]);

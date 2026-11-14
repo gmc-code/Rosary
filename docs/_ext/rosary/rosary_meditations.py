@@ -12,6 +12,13 @@ beads" in the Options panel:
                                 everyday English, about seventy words, ending
                                 with a question to think about
                                 (:under: modern)
+  "A meditation on the virtue"  VIRTUES: (meditation, prayer) on the
+                                mystery's fruit: what the virtue is, how the
+                                mystery shows it, how to practise it
+                                (:under: virtue)
+  "An intention"                INTENTIONS: (intention, reflection, prayer),
+                                the people and needs this decade is offered
+                                for (:under: intention)
 
 The classic 1915 meditations are in rosary_classic.py.
 
@@ -417,3 +424,257 @@ MODERN = {
 }
 
 assert all(len(v) == 5 for v in MODERN.values()), 'five modern reflections per set'
+
+
+# Meditations on the virtue (the fruit of each mystery): what it is, how the
+# mystery shows it, and how to practise it.  Written fresh for this site.
+VIRTUES = {
+    'joyful': [
+        ("Humility is the truth about ourselves before God: everything we have is gift. It is not "
+         "thinking little of ourselves but thinking of ourselves less, and of God more. Mary shows it "
+         "at the Annunciation: greeted as full of grace, she calls herself the Lord\u2019s servant and "
+         "makes room for his will. Humility is the ground of every other virtue, because only an open "
+         "hand can receive. We practise it by giving thanks, admitting our faults, accepting "
+         "correction and letting others go first.",
+         "Lord, make me humble of heart, so that I may receive all you wish to give."),
+        ("Love of neighbour is charity turned outward: wanting the good of another and acting on it. "
+         "Jesus joins it to the love of God as the greatest commandment, and asks us to see him in the "
+         "least of our brothers and sisters. At the Visitation Mary goes in haste to serve, without "
+         "fuss or reward. Love of neighbour is practical: it notices, serves and forgives, and it "
+         "begins with the people nearest to us, at home, at school and at work.",
+         "Lord, teach me to love my neighbour as you have loved me."),
+        ("Poverty of spirit is the first beatitude: knowing that we depend on God for everything, and "
+         "setting our hearts on him rather than on possessions, status or comfort. It frees us to be "
+         "generous and content. In the stable at Bethlehem the Son of God chooses to have nothing, so "
+         "that we might have him. We grow in it by living simply, sharing what we have, resisting the "
+         "urge always to want more, and trusting God with tomorrow.",
+         "Jesus, free my heart from every attachment, and be my treasure."),
+        ("Obedience comes from a word meaning to listen. It is hearing God\u2019s will and doing it, "
+         "freely and with love, through his commandments, the Church, our conscience and those rightly "
+         "placed over us. At the Presentation, Mary and Joseph keep the Law, and Jesus, the Lawgiver "
+         "himself, submits to it. True obedience is not fear but trust that God\u2019s way leads to "
+         "life. We practise it by doing our duties well, keeping our promises, and saying yes to God "
+         "in small things.",
+         "Father, give me a listening heart, quick to do your will."),
+        ("Christian joy is not mere cheerfulness; it is the delight of being with the One we love. It "
+         "can live alongside sorrow, because it rests on Christ, not on circumstances. Mary and "
+         "Joseph\u2019s anguished search ends in the joy of finding Jesus in his Father\u2019s house. We "
+         "too lose him and find him again and again. We seek him in prayer, in the Scriptures and in "
+         "the sacraments, above all the Eucharist and Reconciliation, and we share our joy with "
+         "others.",
+         "Lord Jesus, when I find you, let my joy be full and lasting."),
+    ],
+    'luminous': [
+        ("Openness to the Holy Spirit is the readiness to let God lead: to listen for his promptings "
+         "and follow where he guides. The Spirit given in baptism and confirmation brings the gifts of "
+         "wisdom, understanding, counsel, fortitude, knowledge, piety and fear of the Lord. At the "
+         "Jordan the Spirit rests on Jesus, and from there he is led into his mission. We grow in "
+         "openness through silence and prayer, and a willingness to change our plans when God asks.",
+         "Come, Holy Spirit; make me attentive to your voice and ready to follow."),
+        ("Going to Jesus through Mary means trusting her as a mother who always leads us to her Son. "
+         "She never keeps our attention for herself. At Cana she notices the need, brings it to Jesus, "
+         "and tells the servants to do whatever he says. Devotion to Mary is real when it makes us "
+         "more like Christ. We practise it by praying the Rosary, entrusting our needs to her, and "
+         "imitating her faith, purity and readiness to serve.",
+         "Mary, my Mother, lead me always to your Son."),
+        ("Repentance, or conversion, is turning the whole heart back to God; trust is resting in his "
+         "mercy rather than in ourselves. The two belong together: we can only face our sins honestly "
+         "when we are sure of being forgiven. Jesus begins his preaching with this call, and shows the "
+         "Father\u2019s mercy to sinners. We grow in it by examining our conscience, going to Confession, "
+         "making amends, and beginning again each day without discouragement.",
+         "Lord, turn my heart to you, and teach me to trust your mercy."),
+        ("Holiness is not for a few; it is the call of every baptised person: to share God\u2019s own "
+         "life and become more like Christ. The desire for holiness is the longing that keeps us "
+         "growing. On the mountain the disciples glimpse the glory to which we are all called. We "
+         "nourish this desire by daily prayer and the sacraments, by reading the lives of the saints, "
+         "and by doing ordinary things with great love.",
+         "Lord, set my heart on fire with longing to be holy."),
+        ("Adoration is the first act of the virtue of religion: acknowledging God as God, our Creator "
+         "and Saviour, and giving him praise, thanks and love. In the Eucharist Jesus gives himself to "
+         "us, truly present, body and blood, soul and divinity, and adoration answers with wonder and "
+         "gratitude. We practise it by genuflecting with care, receiving Communion reverently, keeping "
+         "silence before God, and spending time with him before the tabernacle.",
+         "My Lord and my God, I adore you, present in the Most Holy Sacrament."),
+    ],
+    'sorrowful': [
+        ("Sorrow for sin, or contrition, is grief at having offended God, with the resolve not to sin "
+         "again. It is perfect when it comes from love of God, and imperfect when it comes from fear of "
+         "sin\u2019s consequences; both lead us back to him. In Gethsemane Jesus feels the weight of "
+         "every sin, including ours. True sorrow is not despair but hope, because it turns towards the "
+         "Father\u2019s mercy. We practise it in a nightly examination of conscience and in regular "
+         "Confession.",
+         "Lord, give me true sorrow for my sins and the grace to amend my life."),
+        ("Purity, or chastity, is the virtue that orders our love and desires, so that we see others "
+         "as persons to be loved, never as objects to be used. It respects the body as a temple of the "
+         "Holy Spirit. In the scourging, Christ\u2019s body is torn to heal the wounds of sin, including "
+         "sins against purity. We grow in purity by guarding what we look at and watch, choosing good "
+         "friends, praying for help, and going to Confession when we fall.",
+         "Jesus, give me a pure heart, and help me to see others as you see them."),
+        ("Courage, the virtue of fortitude, gives firmness in difficulty and steadiness in doing good, "
+         "even in the face of fear, mockery or loss. It is not the absence of fear but the choice to do "
+         "what is right anyway. Crowned with thorns and mocked, Jesus endures in silence and dignity. "
+         "We practise courage by speaking the truth with kindness, standing up for those who are "
+         "picked on, owning our faith, and keeping going when it is hard.",
+         "Lord, strengthen me to stand for what is right, whatever the cost."),
+        ("Patience is the strength to bear difficulties, delays and other people\u2019s faults without "
+         "bitterness or giving up. It is love that waits. Jesus carries the cross step by step, falls "
+         "and rises, and accepts help along the way. Patience grows when we accept what we cannot "
+         "change, offer our sufferings with his, pause before reacting, and are gentle with others "
+         "and with ourselves.",
+         "Jesus, teach me to carry my cross patiently, and to be patient with others."),
+        ("Perseverance is faithfulness to the end: continuing in grace and goodness through every "
+         "trial, until death. It is a gift we ask for daily, because no one perseveres by willpower "
+         "alone. On the cross Jesus completes his mission and gives himself to the last. We grow in "
+         "perseverance by staying faithful to daily prayer, coming back to God at once when we fall, "
+         "and asking Mary to pray for us at the hour of our death.",
+         "Lord, keep me faithful to you all the days of my life."),
+    ],
+    'glorious': [
+        ("Faith is the theological virtue by which we believe in God and all that he has revealed, "
+         "because he is truth itself. It is both a gift and our free response: trusting God with our "
+         "whole lives. The Resurrection is the foundation of our faith; Christ has truly risen. Faith "
+         "grows when we pray, read the Scriptures, learn what the Church teaches, ask honest "
+         "questions, and act on what we believe.",
+         "Lord, I believe; help my unbelief."),
+        ("Hope is the theological virtue by which we desire heaven and eternal life as our happiness, "
+         "trusting in Christ\u2019s promises and the help of the Holy Spirit, not in our own strength. It "
+         "guards us from both despair and presumption. In the Ascension our human nature enters "
+         "heaven with Christ, a sign of where we are going. We practise hope by keeping heaven in "
+         "view, persevering in difficulty, and bringing hope to others.",
+         "Lord, fill me with hope in your promises."),
+        ("Charity, the greatest of the theological virtues, is love of God above all things for his "
+         "own sake, and love of our neighbour for love of him. It gives life to every other virtue. At "
+         "Pentecost the Holy Spirit pours God\u2019s love into the hearts of the apostles. We grow in "
+         "the love of God through prayer and worship, by keeping his commandments, and by loving those "
+         "around us, for everyone who loves is born of God.",
+         "My God, I love you above all things; make my love grow."),
+        ("A happy death is dying in God\u2019s friendship, at peace and ready to meet him. It is the "
+         "greatest grace of all, because it seals a whole life. Mary, taken up into heaven, shows the "
+         "destiny God wills for us. We prepare for a happy death by living each day in grace, going "
+         "to Confession often, receiving the Anointing of the Sick when seriously ill, and asking Mary "
+         "in every Hail Mary to pray for us at the hour of our death.",
+         "Jesus, Mary and Joseph, be with me at the hour of my death."),
+        ("Trust in Mary\u2019s intercession is confidence that the Mother of God, crowned in heaven, "
+         "prays for us with a mother\u2019s love. Her prayer adds nothing to Christ\u2019s power but shares "
+         "in it, and she always leads us to him. As Queen and Mother she still notices what we lack. "
+         "We practise this trust by turning to her in every need, praying the Rosary, entrusting "
+         "ourselves to her care, and imitating her faith.",
+         "Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death."),
+    ],
+}
+
+# Intentions: who and what each decade is offered for, with a short
+# reflection linking the intention to the mystery.  Written fresh for this site.
+INTENTIONS = {
+    'joyful': [
+        ("For expectant mothers, unborn children, and all who are discerning God\u2019s call.",
+         "Mary welcomed the Son of God and said yes to her vocation. We pray for mothers awaiting "
+         "their children, for the protection of every unborn life, and for young people listening for "
+         "what God is asking of them.",
+         "Lord, bless every new life, and give us generous hearts to answer your call."),
+        ("For families, and for all who care for the elderly, the sick and the lonely.",
+         "Mary hurried to help her older cousin. We pray for our families and friendships, for carers, "
+         "nurses and volunteers, and for the lonely, that someone will visit them as Mary visited "
+         "Elizabeth.",
+         "Lord, make us quick to visit and serve those who need us."),
+        ("For the poor, the homeless, refugees and all who are far from home.",
+         "Jesus was born where there was no room at the inn. We pray for the homeless and the poor, "
+         "for refugees and migrants, and for all who have nowhere to belong, and for generous hearts "
+         "to welcome them.",
+         "Jesus, born poor, open our hearts and our homes to those in need."),
+        ("For parents and children, and for the elderly who wait in faith.",
+         "Mary and Joseph offered their child to God, and Simeon and Anna had waited a lifetime to see "
+         "him. We pray for parents raising their children in faith, for godparents and grandparents, "
+         "and for the elderly, that their faithfulness may be honoured.",
+         "Lord, bless our families, young and old, and keep them in your love."),
+        ("For students and teachers, and for those who have lost their way or their faith.",
+         "Jesus was found among the teachers, listening and asking questions. We pray for students "
+         "and teachers and our school communities, and for anyone who has drifted from God, that they "
+         "will search for Jesus and find him again.",
+         "Lord, guide all who learn and teach, and bring the lost back home."),
+    ],
+    'luminous': [
+        ("For the newly baptised, those preparing to enter the Church, and their godparents.",
+         "At the Jordan the Father called Jesus his beloved Son. We pray for those being baptised and "
+         "confirmed, for adults preparing to join the Church, and for parents and godparents, that "
+         "all may live as God\u2019s beloved children.",
+         "Holy Spirit, renew in all of us the grace of our baptism."),
+        ("For married couples, and for those preparing for marriage.",
+         "Jesus worked his first sign at a wedding, at his mother\u2019s request. We pray for husbands "
+         "and wives, for couples preparing to marry, for marriages under strain, and for all who are "
+         "grieving the loss of a husband or wife.",
+         "Lord, bless marriages with your love, and fill whatever is lacking."),
+        ("For sinners, for those who proclaim the Gospel, and for peace and justice.",
+         "Jesus proclaimed God\u2019s Kingdom, forgave sinners and lifted up the poor. We pray for all who "
+         "need conversion, beginning with ourselves, for missionaries, priests and catechists, and for "
+         "all who work for peace and justice in our world.",
+         "Lord, may your Kingdom come in our hearts and in our world."),
+        ("For those who are suffering or discouraged, and for growth in holiness.",
+         "Jesus showed his glory to strengthen his friends before the cross. We pray for anyone going "
+         "through a dark time, for those struggling with illness, anxiety or depression, and for the "
+         "grace to grow in holiness ourselves.",
+         "Lord, let your light shine on all who walk in darkness."),
+        ("For priests, for vocations, and for reverence for the Eucharist.",
+         "At the Last Supper Jesus gave us his body and blood, and the priesthood to make him present. "
+         "We pray for our priests, for vocations to the priesthood and religious life, and for those "
+         "who no longer come to Mass.",
+         "Lord, send labourers into your harvest, and draw all people to your table."),
+    ],
+    'sorrowful': [
+        ("For those who are anxious, afraid or facing hard decisions.",
+         "In the garden Jesus faced fear and anguish, and he prayed. We pray for all who are anxious "
+         "or afraid, for anyone facing a difficult decision, for those struggling with temptation, and "
+         "for those tempted to lose hope.",
+         "Lord, give strength and peace to all who are in anguish."),
+        ("For victims of violence and abuse, and for an end to cruelty.",
+         "Jesus was beaten and treated with contempt. We pray for victims of violence, abuse and "
+         "bullying, for the healing of their wounds in body and spirit, and for a change of heart in "
+         "those who cause harm.",
+         "Jesus, heal the wounded and bring an end to cruelty."),
+        ("For all who are mocked, bullied or left out, and for those who lead.",
+         "Jesus was mocked as a king. We pray for everyone who is ridiculed, bullied or excluded, "
+         "online or in person, and for those in authority, that they will lead with humility and "
+         "serve the common good.",
+         "Christ our King, protect the humiliated and guide our leaders."),
+        ("For the sick, for carers, and for all who carry heavy burdens.",
+         "Simon of Cyrene helped Jesus carry his cross. We pray for the sick and those living with "
+         "pain or disability, for carers and health workers, and for all weighed down by grief, worry "
+         "or hardship.",
+         "Jesus, help all who carry heavy crosses, and make us their Simon."),
+        ("For the dying, for those who mourn, and for the grace to forgive.",
+         "On the cross Jesus forgave his enemies, promised paradise to a thief, and entrusted his "
+         "mother to John. We pray for the dying, for all who grieve, for the gift of forgiveness, and "
+         "for the souls of the faithful departed.",
+         "Lord, have mercy on the dying, comfort those who mourn, and grant eternal rest to the dead."),
+    ],
+    'glorious': [
+        ("For the faithful departed, and for all who need new hope.",
+         "Christ is risen, and death does not have the last word. We pray for those who have died, "
+         "especially our own family and friends, and for anyone who has lost hope, that the risen "
+         "Lord will meet them.",
+         "Risen Lord, grant eternal life to the dead and new hope to the living."),
+        ("For the mission of the Church, and for persecuted Christians.",
+         "Before ascending, Jesus sent his disciples to all the nations. We pray for the Church\u2019s "
+         "mission and for missionaries, for Christians who suffer for their faith, and for ourselves, "
+         "that we will share our faith with courage and joy.",
+         "Lord, make us faithful witnesses to you wherever we go."),
+        ("For the Church, for unity among Christians, and for the gifts of the Holy Spirit.",
+         "The Holy Spirit came upon the apostles and Mary, and the Church was born. We pray for the "
+         "Pope and the bishops, for unity among all Christians, for those being confirmed, and for "
+         "the gifts of the Spirit in our own lives.",
+         "Come, Holy Spirit, and renew the face of the earth."),
+        ("For the elderly and the dying, and for the grace of a holy death.",
+         "Mary was taken body and soul into heaven. We pray for the elderly and those near the end of "
+         "their lives, for those who care for them, and for the grace of a holy death for ourselves "
+         "and those we love.",
+         "Holy Mary, pray for us now and at the hour of our death."),
+        ("For our own intentions, entrusted to Mary.",
+         "Mary, Queen of heaven, is still the mother who notices our needs. In this decade we bring "
+         "her our own intentions: the people we love, the worries we carry and the hopes we hold, "
+         "knowing she will bring them to her Son.",
+         "Mary, Queen and Mother, receive our intentions and present them to Jesus."),
+    ],
+}
+
+assert all(len(v) == 5 for v in VIRTUES.values()), 'five virtue meditations per set'
+assert all(len(v) == 5 for v in INTENTIONS.values()), 'five intentions per set'

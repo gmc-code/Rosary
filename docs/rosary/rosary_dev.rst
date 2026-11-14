@@ -48,7 +48,9 @@ Folder contents
        (``OFFERINGS``), shown when **Under the beads** is set to *A
        meditation* or *A Montfort-style offering*, and a modern reflection
        with a question (``MODERN``) for *A modern reflection*. Original
-       text; edit freely (a clean build is needed afterwards).
+       text; edit freely (a clean build is needed afterwards). It also holds
+       ``VIRTUES`` (a meditation on each mystery's fruit) and ``INTENTIONS``
+       (an intention, reflection and prayer for each decade).
    * - ``rosary_classic.py``
      - The classic meditations for the 15 traditional mysteries (``CLASSIC``:
        title, paragraphs, invocation), from *The Rosary* (San Francisco,
@@ -167,8 +169,9 @@ Options
        The old names still work: ``phone`` and ``large`` give ``ipad``,
        ``side`` gives ``desktop`` and ``compact`` gives ``iphone``.
    * - ``:under:``
-     - ``steps``, ``meditation``, ``offering``, ``classic`` or ``modern``: show
-       the ten steps under the beads, or instead the mystery's meditation,
+     - ``steps``, ``meditation``, ``virtue``, ``intention``, ``offering``,
+       ``classic`` or ``modern``: show the ten steps under the beads, or
+       instead the mystery's meditation, meditation on its virtue, intention,
        Montfort-style offering, classic (1915) meditation or modern
        reflection.
    * - ``:virtues:``
@@ -385,7 +388,7 @@ choices for every rosary on the site are built into ``rosary.py``, so
     rosary_default_layout = "auto"           # auto, desktop, ipad, iphone
     rosary_default_pictures = True           # False to start with the pictures hidden
     rosary_default_virtues = True            # False to hide the virtues in the mystery picker
-    rosary_default_under = "steps"           # steps, meditation, offering, classic, modern
+    rosary_default_under = "steps"           # steps, meditation, virtue, intention, offering, classic, modern
     rosary_default_verses = "current"        # all, current, none
     rosary_default_read = "step"             # step, both, scripture
     rosary_default_extra_prayers = "on"      # off, on, full
@@ -417,7 +420,8 @@ added to one of the three lists in the grouping code. The cards sit side by
 side in a CSS grid (``.rosary-opt-groups``) and stack on a narrow screen.
 
 Each alternative to the steps is a ``.rosary-under-box`` (``.rosary-meditation``,
-``.rosary-offering``, ``.rosary-classic``, ``.rosary-modern``) written by
+``.rosary-virtue``, ``.rosary-intention``, ``.rosary-offering``, ``.rosary-classic``,
+``.rosary-modern``) written by
 ``_under_html`` in ``rosary.py``; CSS shows the one matching the block's
 ``data-under``, and ``rosary.js`` reads its parts marked ``rosary-say`` aloud
 on the Our Father bead.
