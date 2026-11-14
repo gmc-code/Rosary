@@ -7,6 +7,12 @@
 */
 /* ========================================== */
 
+/* Hide the "Show table of contents" (right sidebar) toggle */
+div:has(> button.js-menu[aria-controls="rside"]) {
+  display: none !important;
+}
+
+
 /* Expand the main content grid area */
 .sy-content,
 .sy-body,
