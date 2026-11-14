@@ -8,6 +8,12 @@ beads" in the Options panel:
   "A Montfort-style offering"   OFFERINGS: one offering of the decade, in the
                                 manner of St Louis de Montfort's first method
                                 (:under: offering)
+  "A modern reflection"         MODERN: (reflection, question), plain
+                                everyday English, about seventy words, ending
+                                with a question to think about
+                                (:under: modern)
+
+The classic 1915 meditations are in rosary_classic.py.
 
 Original text written for this site; free to use and edit.
 """
@@ -278,3 +284,136 @@ OFFERINGS = {
 
 assert all(len(v) == 5 for v in MEDITATIONS.values()), 'five meditations per set'
 assert all(len(v) == 5 for v in OFFERINGS.values()), 'five offerings per set'
+
+
+# Modern reflections: plain, everyday English, connecting each mystery to
+# ordinary life, with a question to think about.  Written fresh for this site.
+MODERN = {
+    'joyful': [
+        ("Mary\u2019s life changed in a single conversation. She had plans, like anyone, and then God "
+         "asked for everything. She didn\u2019t have the full picture. She asked an honest question, "
+         "\u201cHow can this be?\u201d, and then said yes anyway. Humility isn\u2019t putting yourself down; "
+         "it\u2019s being honest about who you are and letting God be bigger than your plans. Most of "
+         "God\u2019s invitations don\u2019t come with angels. They come in ordinary moments: a need we "
+         "notice, a quiet nudge to do the right thing.",
+         "Where might God be asking for my yes today?"),
+        ("As soon as Mary hears that her older cousin is pregnant, she sets off on a long, tiring "
+         "journey to help. She doesn\u2019t wait to be asked, and she doesn\u2019t make it about herself, "
+         "even though her own news is enormous. When they meet, both women are filled with joy. Love "
+         "of neighbour often looks like turning up: sending the message, giving the lift, sitting "
+         "with someone who\u2019s struggling. Carrying Jesus means taking him to the people around us.",
+         "Who needs me to turn up for them this week?"),
+        ("God arrives not in a palace but in a shed, born to a young couple far from home with "
+         "nowhere to stay. The first visitors are shepherds, people others looked down on. We are "
+         "surrounded by messages that we need more: more things, more followers, more success. "
+         "Poverty of spirit means knowing that what matters most can\u2019t be bought, and making room "
+         "for God and for the people who get left out.",
+         "What could I let go of to make more room for what really matters?"),
+        ("Mary and Joseph do what faithful families did: they bring their baby to the Temple and give "
+         "him to God. An old man, Simeon, who has waited his whole life, recognises Jesus straight "
+         "away, and warns Mary that love will cost her. Obedience can sound like just following "
+         "rules, but at heart it\u2019s trust: believing God\u2019s way is good even when it\u2019s hard, "
+         "and keeping our promises when we\u2019d rather not.",
+         "Where is God asking me to trust him and keep going?"),
+        ("For three days Mary and Joseph search for their missing twelve-year-old, sick with worry. "
+         "When they find him, he is in the Temple, calmly listening and asking questions. Even Mary "
+         "doesn\u2019t fully understand. Everyone has times when God feels far away or life doesn\u2019t "
+         "make sense. Keep looking. Jesus is found in prayer, in the Church and in honest questions, "
+         "and the joy of finding him again is real.",
+         "Where do I go looking for Jesus when he feels far away?"),
+    ],
+    'luminous': [
+        ("Jesus lines up at the river with ordinary people who knew they needed a fresh start. He "
+         "didn\u2019t need to, but he chose to stand with us. Then the sky opens and the Father says: "
+         "this is my beloved Son. At our baptism those words were spoken over us too. Before we "
+         "achieve anything, we are loved. Being open to the Holy Spirit means living from that truth "
+         "rather than trying to earn it.",
+         "What would change if I really believed I am God\u2019s beloved?"),
+        ("A wedding is about to turn into an embarrassment: the wine has run out. Mary notices, tells "
+         "Jesus, and then tells the servants, \u201cDo whatever he tells you.\u201d Jesus turns water into "
+         "the best wine of the night. Mary still notices what we need and points us to her Son. Her "
+         "advice is as simple, and as hard, as ever: listen to Jesus, and do what he says.",
+         "What is Jesus asking me to do that I\u2019ve been putting off?"),
+        ("Jesus\u2019 first message is short: the Kingdom of God is close, so turn around and trust the "
+         "good news. He shows what that Kingdom looks like by spending time with outsiders, healing "
+         "the sick and forgiving people everyone else had written off. Repentance isn\u2019t about "
+         "feeling miserable; it\u2019s about changing direction. God isn\u2019t waiting to catch us out but "
+         "to welcome us home.",
+         "Where do I need to turn around and start again?"),
+        ("Jesus takes three friends up a mountain, and for a moment they see him as he really is, "
+         "shining with God\u2019s glory. Peter wants to stay there for ever, but they have to come back "
+         "down to ordinary life and, soon, to the cross. We all have mountain-top moments: a retreat, "
+         "a beautiful Mass, a time when God felt close. They are given to keep us going in the "
+         "valleys. Holiness grows as we listen to Jesus every day.",
+         "When have I glimpsed God\u2019s glory, and how can I hold on to it?"),
+        ("At his last meal with his friends, Jesus washes their feet like a servant, then gives them "
+         "bread and wine: his body and blood. He knows what the next day will bring, and he chooses "
+         "to give himself completely. At every Mass that same gift is offered to us. Adoration is "
+         "simply noticing how much we are loved and answering with thanks, then going out to serve "
+         "as he did.",
+         "How can I receive Jesus in the Eucharist with more attention and thanks?"),
+    ],
+    'sorrowful': [
+        ("In the garden Jesus is overwhelmed. He knows what is coming, and he asks his Father if "
+         "there is any other way. He doesn\u2019t hide his fear, yet he chooses to trust: not my will, "
+         "but yours. Meanwhile his friends fall asleep. Sorrow for sin starts when we see that the "
+         "things we do wrong really hurt others and God. And Jesus shows us that we can bring our "
+         "fear to God honestly.",
+         "What am I afraid of that I need to hand over to God?"),
+        ("Jesus is beaten by soldiers while a crowd watches, and he doesn\u2019t hit back. His body, "
+         "which God made good, is treated as worthless. We live in a world that often judges bodies, "
+         "our own and other people\u2019s, by how they look, or uses people for what they can give. "
+         "Purity means seeing every person, including ourselves, as precious and worth respecting, "
+         "because Jesus thought we were worth his suffering.",
+         "How do I show respect for my own body and for other people?"),
+        ("The soldiers make a joke of Jesus: a cloak, a crown of thorns, mock bows. He is humiliated, "
+         "laughed at and alone. Many people know what it\u2019s like to be mocked, online or in person. "
+         "Jesus stays silent, not because he is weak but because he refuses to answer cruelty with "
+         "cruelty. Courage sometimes means standing up for someone who is being picked on, and "
+         "sometimes it means not passing on the joke.",
+         "When have I laughed along when I should have stood up?"),
+        ("Exhausted and bleeding, Jesus carries his cross through the streets. A stranger, Simon, is "
+         "pulled out of the crowd to help him. Women weep for him, and he still finds the strength to "
+         "speak to them. Everyone carries something heavy: illness, worry, grief, trouble at home. "
+         "Patience isn\u2019t pretending things are fine; it\u2019s keeping going one step at a time, "
+         "letting others help us, and helping them in turn.",
+         "Whose cross could I help to carry right now?"),
+        ("On the cross, in terrible pain, Jesus forgives the people killing him, promises paradise to "
+         "a criminal who asks for mercy, and makes sure his mother will be cared for. Then he gives "
+         "up his life. This is what love looks like when it goes all the way. Perseverance means not "
+         "giving up on faith, or on people, when it gets hard, because Jesus never gave up on us.",
+         "Who do I need to forgive, or keep loving, even when it\u2019s hard?"),
+    ],
+    'glorious': [
+        ("Early on Sunday morning the women come to the tomb expecting to grieve, and find it empty. "
+         "Jesus is alive! Death, failure and sin don\u2019t get the final say. Faith isn\u2019t pretending "
+         "everything is fine; it\u2019s trusting that God can bring new life out of the worst "
+         "situations, including ours. The same Jesus who rose that morning walks with us now.",
+         "Where in my life do I need to trust that God can bring new life?"),
+        ("Jesus returns to his Father, but he doesn\u2019t leave his friends empty-handed. He gives them "
+         "a mission, to share the good news everywhere, and a promise: \u201cI am with you always.\u201d "
+         "It\u2019s easy to stand staring at the sky, or at our screens, and wait for something to "
+         "happen. Hope means knowing where we are headed, and getting on with the job in the "
+         "meantime.",
+         "What part of Jesus\u2019 mission can I carry out this week?"),
+        ("The disciples are hiding behind locked doors when the Holy Spirit comes like wind and fire. "
+         "Suddenly these frightened people are out in the streets, speaking so that everyone "
+         "understands. The same Spirit was given to us in baptism and confirmation. The love of God "
+         "isn\u2019t something we have to manufacture; it\u2019s God\u2019s own love poured into our hearts, "
+         "ready to overflow.",
+         "Where do I need the Holy Spirit\u2019s courage?"),
+        ("At the end of her life Mary is taken, body and soul, into heaven, where Jesus has gone "
+         "before her. It shows what God has planned for all of us: not just our souls but our whole "
+         "selves, made new. Death is real and can be frightening, but for those who belong to Jesus "
+         "it is a doorway, not a dead end. That is why we ask Mary to pray for us \u201cat the hour of "
+         "our death\u201d.",
+         "How does the hope of heaven change the way I live now?"),
+        ("Mary is honoured as Queen of heaven and earth, but she is a queen who still acts like a "
+         "mother: she notices, cares and prays for her children. Everything she has points back to "
+         "Jesus. When we are struggling we can ask her to pray for us, as we would ask a friend, "
+         "knowing that she brings our needs to her Son.",
+         "What do I want to ask Mary to pray for today?"),
+    ],
+}
+
+assert all(len(v) == 5 for v in MODERN.values()), 'five modern reflections per set'

@@ -619,8 +619,7 @@ a.rosary-ref { text-decoration: underline dotted; }
 .rosary-presenting .rosary-set-title,
 .rosary-presenting .rosary-nav,
 .rosary-presenting ol.rosary-refs,
-.rosary-presenting .rosary-meditation,
-.rosary-presenting .rosary-offering,
+.rosary-presenting .rosary-under-box,
 .rosary-presenting .rosary-toggle { display: none !important; }
 .rosary-presenting .rosary-mystery.rosary-active {
     display: grid;
@@ -828,8 +827,7 @@ a.rosary-ref { text-decoration: underline dotted; }
     .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-decade { grid-column: 2; grid-row: 2; margin-top: 0.8em; }
     .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-controls { grid-column: 2; grid-row: 3; }
     .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-now { grid-column: 2; grid-row: 4; margin-bottom: 0.4em; }
-    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-meditation,
-    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-offering { grid-column: 2; grid-row: 5; }
+    .rosary-block[data-layout="desktop"] .rosary-set:not(.rosary-presenting) .rosary-under-box { grid-column: 2; grid-row: 5; }
     .rosary-block[data-layout="desktop"] ol.rosary-refs {
         grid-column: 2;
         grid-row: 5;
@@ -917,8 +915,7 @@ ol.rosary-refs > li.rosary-step:hover:not(.rosary-here) { background: rgba(127, 
     .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-controls { grid-column: 2; grid-row: 3; }
     .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-now { grid-column: 2; grid-row: 4; }
     .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) ol.rosary-refs,
-    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-meditation,
-    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-offering { grid-column: 2; grid-row: 5; }
+    .rosary-block[data-layout="ipad"] .rosary-set:not(.rosary-presenting) .rosary-under-box { grid-column: 2; grid-row: 5; }
 }
 @media screen and (max-width: 699px) {
     .rosary-block[data-layout="ipad"] .rosary-head { flex-direction: column; align-items: center; text-align: center; }
@@ -1258,12 +1255,14 @@ html.dark .rosary-verse, html.dark .rosary-now-verse { color: #e6e6e6; }
 }
 
 
-/* Under the beads: the ten steps (data-under="steps") or a meditation ---- */
-.rosary-meditation, .rosary-offering { display: none; }
-.rosary-block[data-under="meditation"] .rosary-mystery:not(.rosary-prayers-card) ol.rosary-refs,
-.rosary-block[data-under="offering"] .rosary-mystery:not(.rosary-prayers-card) ol.rosary-refs { display: none; }
+/* Under the beads: the ten steps (data-under="steps"), or instead one of a
+   meditation, offering, classic meditation or modern reflection ----------- */
+.rosary-under-box { display: none; }
+.rosary-block:not([data-under="steps"]) .rosary-mystery:not(.rosary-prayers-card) ol.rosary-refs { display: none; }
 .rosary-block[data-under="meditation"] .rosary-meditation,
-.rosary-block[data-under="offering"] .rosary-offering {
+.rosary-block[data-under="offering"] .rosary-offering,
+.rosary-block[data-under="classic"] .rosary-classic,
+.rosary-block[data-under="modern"] .rosary-modern {
     display: block;
     padding: 0.7em 1em 0.8em;
     border-radius: 0.5em;
@@ -1279,7 +1278,7 @@ html.dark .rosary-verse, html.dark .rosary-now-verse { color: #e6e6e6; }
     color: var(--r-c);
 }
 .rosary-meditation-text {
-    margin: 0 !important;
+    margin: 0 0 0.5em !important;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 1.05em;
     line-height: 1.6;
@@ -1297,14 +1296,19 @@ html.dark .rosary-verse, html.dark .rosary-now-verse { color: #e6e6e6; }
     font-style: italic;
     color: var(--r-ink);
 }
-html.dark .rosary-block[data-under="meditation"] .rosary-meditation,
-html.dark .rosary-block[data-under="offering"] .rosary-offering { background: rgba(255, 255, 255, 0.07); }
-html.dark .rosary-offering-text { color: #f2f2f2; }
+.rosary-classic-title { margin: 0 0 0.35em !important; font-weight: 700; font-size: 1.05em; color: var(--r-ink); }
+.rosary-classic-source,
+.rosary-classic-note { margin: 0.6em 0 0 !important; font-size: 0.8em; color: var(--r-muted); }
+.rosary-classic-note { margin: 0 0 0.5em !important; font-style: italic; }
+.rosary-modern-text { font-family: inherit; font-size: 1.02em; }
+.rosary-modern-question { margin: 0.4em 0 0 !important; color: var(--r-ink); }
+.rosary-modern-question strong { color: var(--r-c); }
+html.dark .rosary-under-box { background: rgba(255, 255, 255, 0.07) !important; }
 html.dark .rosary-meditation-text { color: #e6e6e6; }
-html.dark .rosary-meditation-prayer { color: #f2f2f2; }
+html.dark .rosary-meditation-prayer, html.dark .rosary-offering-text,
+html.dark .rosary-classic-title, html.dark .rosary-modern-question { color: #f2f2f2; }
 @media screen {
-    .rosary-block[data-layout="iphone"] .rosary-meditation,
-    .rosary-block[data-layout="iphone"] .rosary-offering { padding: 0.5em 0.65em 0.6em; }
+    .rosary-block[data-layout="iphone"] .rosary-under-box { padding: 0.5em 0.65em 0.6em !important; }
     .rosary-block[data-layout="iphone"] .rosary-meditation-text { font-size: 0.98em; line-height: 1.5; }
 }
 /* in the panel at the top only in full screen, on the Our Father bead */
@@ -1318,6 +1322,5 @@ html.dark .rosary-meditation-prayer { color: #f2f2f2; }
 }
 .rosary-presenting .rosary-now-meditation-prayer { font-family: inherit; font-style: italic; color: #fff; }
 @media print {
-    .rosary-block[data-under="meditation"] .rosary-meditation,
-    .rosary-block[data-under="offering"] .rosary-offering { break-inside: avoid; }
+    .rosary-under-box { break-inside: avoid; }
 }

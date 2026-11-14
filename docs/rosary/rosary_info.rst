@@ -239,8 +239,8 @@ full-screen rosary with no Safari bars:
 Use **Hide menus** as well to remove the page title and menus.
 
 
-Meditations and offerings
-=========================
+Meditations, offerings and reflections
+======================================
 
 **Under the beads** (under **Options**) chooses what each mystery shows under
 its beads:
@@ -255,15 +255,29 @@ its beads:
   decade to Jesus in honour of the mystery and asks, through Mary's prayers,
   for the mystery's fruit, e.g. "We offer you, Lord Jesus, this first decade
   in honour of your Incarnation... we ask of you a deep humility of heart."
+* **A classic meditation (1915)**: the meditations from *The Rosary*, a
+  Dominican booklet printed in San Francisco in 1915, now in the public
+  domain. Each has a title (the virtue it teaches, e.g. *Mary's Humility*), a
+  reflection of about 80 to 150 words in the language of its day, and an
+  invocation to Mary. The book has the fifteen traditional mysteries only, so
+  the Luminous Mysteries, added in 2002, show the meditation instead, with a
+  note saying so. Its virtues sometimes differ from the fruits used
+  elsewhere on the site, e.g. *Zeal for Souls* for the Finding in the Temple.
+* **A modern reflection**: about 70 words in plain, everyday English,
+  connecting the mystery to ordinary life (being honest with God, turning up
+  for people, standing up for someone who is being picked on), ending with a
+  question to think about. These suit students well.
 
 The beads, buttons and the panel at the top work the same whichever is
-chosen. With a meditation or an offering, **Listen** and **Pray aloud** read
-it on the Our Father bead, after announcing the mystery, and in **Full
-screen** it appears in the panel beside the picture on that bead. The
-opening and closing prayers still show their list of prayers.
+chosen. With any of the last four, **Listen** and **Pray aloud** read it on
+the Our Father bead, after announcing the mystery, and in **Full screen** it
+appears in the panel beside the picture on that bead. Bible references in
+brackets in the classic meditations are left out when they are read aloud.
+The opening and closing prayers still show their list of prayers.
 
-The meditations and offerings were written for this site, so they can be
-used and edited freely.
+The meditations, offerings and reflections were written for this site, so
+they can be used and edited freely; the classic meditations are in the
+public domain.
 
 
 Reading the passages

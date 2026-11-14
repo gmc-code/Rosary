@@ -74,9 +74,11 @@ Options
                      the top) or none  [current]
     :under:          what is shown under the beads: steps (the ten scripture
                      steps), meditation (a short meditation on the mystery
-                     and a prayer) or offering (an offering of the decade in
-                     the manner of St Louis de Montfort); the texts are in
-                     rosary_meditations.py  [steps]
+                     and a prayer), offering (an offering of the decade in
+                     the manner of St Louis de Montfort), classic (a classic
+                     meditation from The Rosary, 1915; rosary_classic.py) or
+                     modern (a modern reflection with a question); the
+                     others are in rosary_meditations.py  [steps]
     :read:           what Listen / Pray aloud read for each Hail Mary: step
                      (the one-line summary), both (summary then scripture)
                      or scripture  [step]
@@ -100,7 +102,8 @@ from sphinx.util.docutils import SphinxDirective
 
 from .rosary_data import CLOSING, DAY_NAMES, OPENING, ORDINALS, PRAYERS, SET_ORDER, SETS
 from .rosary_icons import extra_icon, icon
-from .rosary_meditations import MEDITATIONS, OFFERINGS
+from .rosary_classic import CLASSIC, SOURCE as CLASSIC_SOURCE
+from .rosary_meditations import MEDITATIONS, MODERN, OFFERINGS
 from .rosary_scripture import TEXT, TRANSLATION, TRANSLATION_SHORT
 
 logger = logging.getLogger(__name__)
@@ -140,7 +143,7 @@ def days_text(days):
     return names[0] if len(names) == 1 else ' and '.join(names)
 
 
-UNDER = ('steps', 'meditation', 'offering')     # what is shown under the beads
+UNDER = ('steps', 'meditation', 'offering', 'classic', 'modern')   # what is shown under the beads
 LAYOUTS = ('auto', 'desktop', 'ipad', 'iphone')
 # layouts from earlier versions, mapped to the nearest new one
 OLD_LAYOUTS = {'phone': 'ipad', 'large': 'ipad', 'side': 'desktop', 'compact': 'iphone'}
@@ -210,12 +213,7 @@ class RosaryDirective(SphinxDirective):
         m = data['mysteries'][index]
         ordinal = '%s %s Mystery' % (ORDINALS[index], data['name'])
         refs = ''.join(self._ref_html(r, c, version, captions, scripture) for r, c in m['refs'])
-        med_text, med_prayer = MEDITATIONS[key][index]
-        meditation = ('<div class="rosary-meditation"><p class="rosary-meditation-label">Meditation</p>'
-                      '<p class="rosary-meditation-text">%s</p>'
-                      '<p class="rosary-meditation-prayer">%s</p></div>' % (_esc(med_text), _esc(med_prayer)))
-        meditation += ('<div class="rosary-offering"><p class="rosary-meditation-label">Offering of the decade</p>'
-                       '<p class="rosary-offering-text">%s</p></div>' % _esc(OFFERINGS[key][index]))
+        meditation = self._under_html(key, index)
         decade = ('<div class="rosary-decade" aria-label="Beads of the decade"></div>'
                   '<div class="rosary-controls"></div>'
                   '<div class="rosary-now" aria-live="polite"></div>') if beads else ''
@@ -234,6 +232,40 @@ class RosaryDirective(SphinxDirective):
                 icon(key, index, _esc(m['title'])) + self._photo_html(key, index, m['title']),
                 _esc(ordinal), _esc(m['title']), _esc(m['fruit']),
                 self._credit_html(key, index), decade, refs, meditation))
+
+    def _under_html(self, key, index):
+        """The alternatives to the ten steps: a meditation, a Montfort-style offering,
+        a classic (1915) meditation and a modern reflection.  CSS shows the one chosen
+        under "Under the beads"; rosary.js reads the parts marked rosary-say aloud."""
+        def box(kind, label, inner):
+            return ('<div class="rosary-under-box rosary-%s"><p class="rosary-meditation-label">%s</p>%s</div>'
+                    % (kind, label, inner))
+        med_text, med_prayer = MEDITATIONS[key][index]
+        med_inner = ('<p class="rosary-meditation-text rosary-say">%s</p>'
+                     '<p class="rosary-meditation-prayer rosary-say">%s</p>' % (_esc(med_text), _esc(med_prayer)))
+        out = box('meditation', 'Meditation', med_inner)
+        out += box('offering', 'Offering of the decade',
+                   '<p class="rosary-offering-text rosary-say">%s</p>' % _esc(OFFERINGS[key][index]))
+        if key in CLASSIC:
+            title, paras, invocation = CLASSIC[key][index]
+            out += box('classic', 'Classic meditation (1915)',
+                       '<p class="rosary-classic-title rosary-say">%s</p>%s'
+                       '<p class="rosary-meditation-prayer rosary-say">%s</p>'
+                       '<p class="rosary-classic-source">%s</p>' % (
+                           _esc(title),
+                           ''.join('<p class="rosary-meditation-text rosary-say">%s</p>' % _esc(p) for p in paras),
+                           _esc(invocation), _esc(CLASSIC_SOURCE)))
+        else:
+            out += box('classic', 'Classic meditation',
+                       '<p class="rosary-classic-note">The 1915 book of classic meditations was written before '
+                       'the Luminous Mysteries were added in 2002, so this mystery\u2019s meditation is shown '
+                       'instead.</p>' + med_inner)
+        text, question = MODERN[key][index]
+        out += box('modern', 'Reflection',
+                   '<p class="rosary-meditation-text rosary-modern-text rosary-say">%s</p>'
+                   '<p class="rosary-modern-question"><strong>To think about:</strong> '
+                   '<span class="rosary-say">%s</span></p>' % (_esc(text), _esc(question)))
+        return out
 
     def _set_html(self, key, version, captions, scripture, beads, only=None, hidden=False):
         data = SETS[key]
@@ -636,7 +668,7 @@ def setup(app):
     app.add_config_value('rosary_default_nav_icons', 'classic', 'env')   # same, classic, stained, gold, photo...
     app.add_config_value('rosary_default_layout', 'auto', 'env')         # auto, desktop, ipad, iphone
     app.add_config_value('rosary_default_pictures', True, 'env')         # False to start with the pictures hidden
-    app.add_config_value('rosary_default_under', 'steps', 'env')         # steps, meditation, offering (under the beads)
+    app.add_config_value('rosary_default_under', 'steps', 'env')         # steps, meditation, offering, classic, modern
     app.add_config_value('rosary_default_verses', 'current', 'env')      # all, current, none
     app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture
     app.add_config_value('rosary_default_extra_prayers', 'on', 'env')    # off, on, full

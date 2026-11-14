@@ -441,14 +441,16 @@
                 var undLabel = el('label', 'rosary-audio-field', 'Under the beads ');
                 var undSelect = el('select', 'rosary-select');
                 [['steps', 'The ten steps'], ['meditation', 'A meditation'],
-                 ['offering', 'A Montfort-style offering']].forEach(function (v) {
+                 ['offering', 'A Montfort-style offering'], ['classic', 'A classic meditation (1915)'],
+                 ['modern', 'A modern reflection']].forEach(function (v) {
                     var o = el('option', '', v[1]);
                     o.value = v[0];
                     undSelect.appendChild(o);
                 });
                 var savedUnder = store('rosary-under');
-                if (['steps', 'meditation', 'offering'].indexOf(savedUnder) !== -1) block.setAttribute('data-under', savedUnder);
-                undSelect.value = ['meditation', 'offering'].indexOf(block.getAttribute('data-under')) !== -1
+                var UNDER = ['steps', 'meditation', 'offering', 'classic', 'modern'];
+                if (UNDER.indexOf(savedUnder) !== -1) block.setAttribute('data-under', savedUnder);
+                undSelect.value = UNDER.indexOf(block.getAttribute('data-under')) !== -1
                     ? block.getAttribute('data-under') : 'steps';
                 undSelect.addEventListener('change', function () {
                     block.setAttribute('data-under', undSelect.value);
@@ -1077,18 +1079,22 @@
             }
 
             /* what is read aloud for the current bead */
-            // the mystery's meditation or Montfort-style offering, when "Under the
-            // beads" is set to one of them: shown and read on the Our Father bead
+            // what is chosen under "Under the beads" instead of the ten steps (a
+            // meditation, offering, classic meditation or modern reflection): its
+            // parts marked rosary-say are shown and read on the Our Father bead
             function meditation() {
                 var under = block.getAttribute('data-under');
-                if (under === 'offering') {
-                    var o = mystery.querySelector('.rosary-offering-text');
-                    return o ? { text: o.textContent, prayer: '' } : null;
-                }
-                if (under !== 'meditation') return null;
-                var t = mystery.querySelector('.rosary-meditation-text');
-                var pr = mystery.querySelector('.rosary-meditation-prayer');
-                return t ? { text: t.textContent, prayer: pr ? pr.textContent : '' } : null;
+                if (!under || under === 'steps') return null;
+                var box = mystery.querySelector('.rosary-under-box.rosary-' + under);
+                if (!box) return null;
+                var parts = Array.prototype.map.call(box.querySelectorAll('.rosary-say'), function (e) {
+                    return e.textContent;
+                });
+                // read aloud without the bracketed references, e.g. "(St. Mark, XIV, 36.)"
+                parts.spoken = parts.map(function (t) {
+                    return t.replace(/\s*\([^()]*\d[^()]*\)\.?/g, '').replace(/\s+([.,;:!?])/g, '$1');
+                });
+                return parts.length ? parts : null;
             }
 
             function beadTexts() {
@@ -1096,7 +1102,7 @@
                 if (pos === 0) {
                     var med = meditation();
                     return [ordinal + '. ' + title + '. The fruit of the mystery: ' + fruit + '.']
-                        .concat(med ? [med.text, med.prayer].filter(Boolean) : [])
+                        .concat(med ? med.spoken : [])
                         .concat([p && prayers['our-father'] ? prayers['our-father'][1] : '']);
                 }
                 if (pos >= 1 && pos <= 10) {
@@ -1160,10 +1166,7 @@
                     line.appendChild(document.createTextNode(' – fruit: ' + fruit));
                     // the meditation, in the panel only in full screen (it is under the beads otherwise)
                     var md = meditation();
-                    if (md) {
-                        extra.push(el('p', 'rosary-now-meditation', md.text));
-                        if (md.prayer) extra.push(el('p', 'rosary-now-meditation rosary-now-meditation-prayer', md.prayer));
-                    }
+                    if (md) md.forEach(function (t) { extra.push(el('p', 'rosary-now-meditation', t)); });
                     if (state.showPrayers) extra.push(prayer('our-father'));
                 } else if (pos <= 10) {
                     var li = items[pos - 1];
