@@ -38,7 +38,7 @@ Options
                      rosary_image_sets, e.g. photo-sg  [photo-sg]
     :images:         folder of pictures for this rosary, instead of the site's
                      rosary_images folder (default /_static/rosary-images,
-                     which holds the traditional paintings); "none" to turn
+                     which holds the masterpieces); "none" to turn
                      pictures off.  Pictures are named joyful-1.png ...
                      glorious-5.png, opening and closing (.png, .jpg, .jpeg,
                      .webp, .gif or .svg); any that are missing use the drawn
@@ -366,11 +366,12 @@ class RosaryDirective(SphinxDirective):
             return [('photo', 'Pictures', folder, True)]
         sets = self.config.rosary_image_sets
         if sets is None:
-            sets = [('photo', 'Traditional paintings', self.config.rosary_images),
-                    ('sg', 'Stained glass windows', '/_static/rosary-images-sg'),
+            # in the order the Pictures menu lists them
+            sets = [('sg', 'Stained glass windows', '/_static/rosary-images-sg'),
                     ('cubism', 'Cubism', '/_static/rosary-images-cubism'),
+                    ('trad', 'Renaissance style', '/_static/rosary-images-trad'),
                     ('modaus', 'Modern Australian', '/_static/rosary-images-mod-aus'),
-                    ('trad', 'Renaissance style', '/_static/rosary-images-trad')]
+                    ('photo', 'Masterpieces', self.config.rosary_images)]
         out = []
         for entry in sets:
             key, label, folder = entry[0], entry[1], entry[2]
@@ -451,7 +452,9 @@ class RosaryDirective(SphinxDirective):
             found = self._scan_folder(key, label, folder, explicit)
             if found:
                 self.photosets.append(found)
-        self.photos = self.photosets[0]['photos'] if self.photosets else {}
+        # the main folder (key photo, the masterpieces) if there is one, else the first
+        main = [ps for ps in self.photosets if ps['key'] == 'photo'] or self.photosets
+        self.photos = main[0]['photos'] if main else {}
 
     def _photo(self, key, index):
         """True when the first (default) picture folder has this mystery."""
@@ -681,14 +684,14 @@ def setup(app):
     app.add_config_value('rosary_web_app', True, 'html')
     app.add_config_value('rosary_web_app_title', '', 'html')
     app.connect('build-finished', _web_app_tags)
-    # folder of traditional paintings offered on every rosary ("" to turn off)
+    # folder of public-domain masterpieces offered on every rosary ("" to turn off)
     app.add_config_value('rosary_images', '/_static/rosary-images', 'env')
     # every picture folder offered in the Pictures menu: [(key, label, folder), ...]
-    # None = Traditional paintings (rosary_images), Stained glass windows
-    # (/_static/rosary-images-sg), Cubism (/_static/rosary-images-cubism),
-    # Modern Australian (/_static/rosary-images-mod-aus) and Renaissance style
-    # (/_static/rosary-images-trad); the Pictures menu
-    # lists them last-first, above the drawn styles; folders that are missing or empty are skipped
+    # None = Stained glass windows (/_static/rosary-images-sg), Cubism
+    # (/_static/rosary-images-cubism), Renaissance style
+    # (/_static/rosary-images-trad), Modern Australian
+    # (/_static/rosary-images-mod-aus) and Masterpieces (rosary_images); the
+    # Pictures menu lists them in this order, above the drawn styles; folders that are missing or empty are skipped
     app.add_config_value('rosary_image_sets', None, 'env')
     # site-wide starting choices; a page's directive options and each reader's
     # own menu choices take over from these
