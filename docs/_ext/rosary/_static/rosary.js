@@ -416,6 +416,25 @@
                 if (block.rosaryWiden) block.rosaryWiden();
             });
 
+            /* each mystery's virtue under its name in the mystery picker */
+            var viLabel = null;
+            if (block.querySelector('.rosary-nav-fruit')) {
+                viLabel = el('label', 'rosary-audio-field rosary-prayers-field');
+                viLabel.title = 'Show each mystery\u2019s virtue (the fruit of the mystery) under its name in the mystery picker';
+                var viBox = el('input');
+                viBox.type = 'checkbox';
+                var savedVirtues = store('rosary-virtues');
+                if (savedVirtues === '1' || savedVirtues === '0') block.setAttribute('data-virtues', savedVirtues === '1' ? 'on' : 'off');
+                viBox.checked = block.getAttribute('data-virtues') !== 'off';
+                viLabel.appendChild(viBox);
+                viLabel.appendChild(document.createTextNode(' Show virtues'));
+                bar.appendChild(viLabel);
+                viBox.addEventListener('change', function () {
+                    block.setAttribute('data-virtues', viBox.checked ? 'on' : 'off');
+                    store('rosary-virtues', viBox.checked ? '1' : '0');
+                });
+            }
+
             /* scripture under the steps: all, the current step only, or none */
             if (block.querySelector('.rosary-verse')) {
                 var verLabel = el('label', 'rosary-audio-field', 'Scripture verses ');
@@ -682,7 +701,7 @@
                 if (checks.children.length) g.appendChild(checks);
                 groups.appendChild(g);
             };
-            addGroup('🖼 Pictures', [picLabel, navLabel, layLabel, spLabel]);
+            addGroup('🖼 Pictures', [picLabel, navLabel, layLabel, spLabel, viLabel]);
             addGroup('✝ Prayers', [exLabel, undLabel, verLabel, prLabel, faLabel]);
             addGroup('🔊 Reading aloud', [voiceLabel, readLabel, rateLabel, titlesLabel]);
             // anything not placed above stays, in a final group

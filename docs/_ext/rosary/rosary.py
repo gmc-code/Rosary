@@ -15,7 +15,7 @@ scripture references, one for each Hail Mary of the decade.
 
 Options
     Options that match a menu in the reader's Options panel (icons, nav-icons,
-    layout, pictures, under, verses, read, extra-prayers, fatima) set this page's starting
+    layout, pictures, virtues, under, verses, read, extra-prayers, fatima) set this page's starting
     choice.  When one is left out, the site's starting choice from conf.py is
     used; those are built in (see setup() at the end of this file) and are
     shown in [brackets] below.  A reader's own choices, saved in their
@@ -69,6 +69,8 @@ Options
                      and the ten steps beside it) or iphone (the picture on
                      top, with smaller buttons and the details below)  [auto]
     :pictures:       yes or no: show the main picture of each mystery  [yes]
+    :virtues:        yes or no: show each mystery's virtue (fruit) under its
+                     name in the mystery picker  [yes]
     :verses:         where the scripture is shown: all (under each step),
                      current (only the step being prayed, in the panel at
                      the top) or none  [current]
@@ -176,6 +178,7 @@ class RosaryDirective(SphinxDirective):
         'no-picker': directives.flag,
         'layout': lambda a: _layout(directives.choice(a, LAYOUTS + tuple(OLD_LAYOUTS))),
         'pictures': lambda a: directives.choice(a, ('yes', 'no')),
+        'virtues': lambda a: directives.choice(a, ('yes', 'no')),
         'verses': lambda a: directives.choice(a, ('all', 'current', 'none')),
         'read': lambda a: directives.choice(a, ('step', 'both', 'scripture')),
         'nav-icons': directives.unchanged,
@@ -273,11 +276,13 @@ class RosaryDirective(SphinxDirective):
         nav = ''
         if not only:
             nav = '<div class="rosary-nav" role="group" aria-label="Choose a mystery">%s</div>' % ''.join(
-                '<button type="button" class="rosary-nav-btn%s" data-index="%d"%s>%s<span>%d. %s</span></button>' % (
+                '<button type="button" class="rosary-nav-btn%s" data-index="%d"%s>%s<span>%d. %s</span>'
+                '<small class="rosary-nav-fruit">%s</small></button>' % (
                     ' rosary-has-photo' if self._photo(key, i) else '',
                     i, ' aria-current="true"' if i == 0 else '',
                     icon(key, i, '') + self._photo_html(key, i, ''), i + 1,
-                    _esc(data['mysteries'][i]['title'].replace('The ', '', 1)))
+                    _esc(data['mysteries'][i]['title'].replace('The ', '', 1)),
+                    _esc(data['mysteries'][i]['fruit']))
                 for i in range(5))
             if beads:
                 extra_btn = ('<button type="button" class="rosary-nav-btn rosary-extra%s" data-index="%d">'
@@ -580,12 +585,17 @@ class RosaryDirective(SphinxDirective):
             pictures = self.options['pictures'] == 'yes'
         else:
             pictures = bool(self.config.rosary_default_pictures)
+        if 'virtues' in self.options:
+            virtues = self.options['virtues'] == 'yes'
+        else:
+            virtues = bool(self.config.rosary_default_virtues)
         html_output = (
             '<div class="rosary-block" data-icons="%s" data-photoset="%s" data-layout-choice="%s" '
-            'data-layout="%s" data-pictures="%s" data-under="%s" data-verses="%s" data-extra="%s" data-config="%s"%s>%s%s%s%s</div>'
+            'data-layout="%s" data-pictures="%s" data-virtues="%s" data-under="%s" data-verses="%s" data-extra="%s" data-config="%s"%s>%s%s%s%s</div>'
             % (data_icons, photoset, layout,
                # without JavaScript, "auto" shows the iPad layout (it adapts to narrow screens)
                'ipad' if layout == 'auto' else layout, 'on' if pictures else 'off',
+               'on' if virtues else 'off',
                self.options.get('under') or (self.config.rosary_default_under
                                              if self.config.rosary_default_under in UNDER else 'steps'),
                self.options.get('verses') or self.config.rosary_default_verses, config['extra'],
@@ -668,6 +678,7 @@ def setup(app):
     app.add_config_value('rosary_default_nav_icons', 'classic', 'env')   # same, classic, stained, gold, photo...
     app.add_config_value('rosary_default_layout', 'auto', 'env')         # auto, desktop, ipad, iphone
     app.add_config_value('rosary_default_pictures', True, 'env')         # False to start with the pictures hidden
+    app.add_config_value('rosary_default_virtues', True, 'env')          # False to hide the virtues in the picker
     app.add_config_value('rosary_default_under', 'steps', 'env')         # steps, meditation, offering, classic, modern
     app.add_config_value('rosary_default_verses', 'current', 'env')      # all, current, none
     app.add_config_value('rosary_default_read', 'step', 'env')           # step, both, scripture

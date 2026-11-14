@@ -15,7 +15,9 @@ Choosing the mysteries
 * **Tabs.** On a page with all four sets, click a tab to change set. The set
   for today has a gold *Today* label, and the page opens on it.
 * **Mystery picker.** Under the set's heading, click one of the five
-  pictures to choose a mystery. **Opening prayers** and **Closing prayers**
+  pictures to choose a mystery. Under each name is its virtue, the *fruit of
+  the mystery* (e.g. *Humility*), so the whole set's virtues can be seen at
+  a glance. Untick **Show virtues** (under **Options**) to hide them. **Opening prayers** and **Closing prayers**
   sit at each end of the row when they are switched on.
 
 .. list-table::
@@ -143,8 +145,8 @@ The top row holds the four sets (hover over one to see its days), then:
   three groups, side by side on a wide screen and one above another on a
   phone:
 
-  * **Pictures:** **Pictures**, **Mystery picker**, **Layout** and **Show
-    pictures**.
+  * **Pictures:** **Pictures**, **Mystery picker**, **Layout**, **Show
+    pictures** and **Show virtues**.
   * **Prayers:** **Opening & closing**, **Under the beads**, **Scripture
     verses**, **Show the prayers** and **Fatima prayer**.
   * **Reading aloud:** **Voice**, **Read aloud**, **Speed** and **Read prayer

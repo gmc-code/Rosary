@@ -171,6 +171,10 @@ Options
        the ten steps under the beads, or instead the mystery's meditation,
        Montfort-style offering, classic (1915) meditation or modern
        reflection.
+   * - ``:virtues:``
+     - ``yes`` or ``no``: show each mystery's virtue (its fruit) under its
+       name in the mystery picker. Readers can change it with the **Show
+       virtues** checkbox.
    * - ``:pictures:``
      - ``yes`` or ``no``: show the main picture of each mystery. Readers can
        change it with the **Show pictures** checkbox.
@@ -380,6 +384,7 @@ choices for every rosary on the site are built into ``rosary.py``, so
     rosary_default_nav_icons = "classic"     # same, classic, stained, gold, photo, photo-sg
     rosary_default_layout = "auto"           # auto, desktop, ipad, iphone
     rosary_default_pictures = True           # False to start with the pictures hidden
+    rosary_default_virtues = True            # False to hide the virtues in the mystery picker
     rosary_default_under = "steps"           # steps, meditation, offering, classic, modern
     rosary_default_verses = "current"        # all, current, none
     rosary_default_read = "step"             # step, both, scripture
@@ -424,7 +429,7 @@ the window is resized. Each layout's styles in ``rosary.css`` are keyed off
 ``data-layout``, and **Show pictures** sets ``data-pictures="off"``.
 
 Each reader's choices are saved in ``localStorage``: ``rosary-icons``,
-``rosary-nav-icons``, ``rosary-layout``, ``rosary-pictures``, ``rosary-under``,
+``rosary-nav-icons``, ``rosary-layout``, ``rosary-pictures``, ``rosary-virtues``, ``rosary-under``,
 ``rosary-verses``,
 ``rosary-extra``, ``rosary-prayers``, ``rosary-fatima``, ``rosary-read``,
 ``rosary-read-titles``, ``rosary-voice``, ``rosary-rate``,

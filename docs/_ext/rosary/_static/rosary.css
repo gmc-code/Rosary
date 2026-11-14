@@ -1367,3 +1367,23 @@ html.dark .rosary-under-chip { color: #f2f2f2; }
 }
 .rosary-presenting .rosary-under-wrap { display: none !important; }
 @media print { .rosary-under-switch { display: none !important; } }
+
+/* the mystery picker: each mystery's virtue (fruit) under its name */
+.rosary-nav-fruit {
+    display: block;
+    margin-top: 0.1em;
+    font-size: 0.86em;
+    font-style: italic;
+    line-height: 1.15;
+    color: var(--r-muted);
+}
+.rosary-nav-btn[aria-current="true"] .rosary-nav-fruit { color: var(--r-c); }
+html.dark .rosary-nav-fruit { color: #a9b0bb; }
+@media (max-width: 560px) {
+    .rosary-nav-fruit { display: none; }
+}
+@media screen {
+    .rosary-block[data-layout="iphone"] .rosary-nav-fruit { display: block; font-size: 0.9em; }
+}
+.rosary-menus-hidden .rosary-nav-fruit,
+.rosary-block[data-virtues="off"] .rosary-nav-fruit { display: none !important; }
