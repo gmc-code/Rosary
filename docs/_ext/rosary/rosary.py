@@ -34,16 +34,17 @@ Options
     :no-scripture:   leave out the verse text under each reference
     :no-audio:       leave out the read-aloud buttons and options
                      Recorded voices: each folder in rosary_recordings
-                     (default /_static/prayers/natasha and /_static/prayers/william)
-                     becomes a choice in the Voice menu.  Files are named
-                     after the prayer (Our Father.mp3, Hail Mary.mp3, Glory
-                     Be.mp3, Fatima Prayer.mp3, The Apostles' Creed.mp3, The
-                     Sign Of The Cross.mp3, Pray for us.mp3, The Rosary
-                     Prayer.mp3, Hail Holy Queen.mp3, ...; .mp3, .m4a, .ogg or
-                     .wav).  The mystery announcements can be recorded too
-                     (First Joyful Mystery.mp3 ... Fifth Glorious
+                     (default /_static/audio/natasha and /_static/audio/william)
+                     becomes a tick box under Voices in Options.  In each voice
+                     folder: prayers/ (named after the prayer: Our
+                     Father.mp3, Hail Mary.mp3, Fatima Prayer.mp3, The
+                     Apostles' Creed.mp3, ...; .mp3, .m4a, .ogg or .wav),
+                     mysteries/ (First Joyful Mystery.mp3 ... Fifth Glorious
                      Mystery.mp3, saying "First Joyful Mystery. The
-                     Annunciation. The fruit of the mystery: Humility.").
+                     Annunciation. The fruit of the mystery: Humility.") and
+                     steps/ (joyful-1-01.mp3 ... glorious-5-10.mp3, the step
+                     for each Hail Mary).  The files may also sit loose in
+                     the voice folder.  make_edge_audio.py records them all.
                      Anything without a recording, such as the scripture,
                      is read by the browser's voice.
     :icons:          picture style: classic, stained, gold, photo (the first
@@ -148,8 +149,8 @@ RECORDING_NAMES = {
     'st-michael': ['St Michael', 'Saint Michael', 'Prayer to Saint Michael'],
     'memorare': ['Memorare'],
 }
-DEFAULT_RECORDINGS = [('natasha', 'Natasha (Australian)', '/_static/prayers/natasha'),
-                      ('william', 'William (Australian)', '/_static/prayers/william')]
+DEFAULT_RECORDINGS = [('natasha', 'Natasha (Australian)', '/_static/audio/natasha'),
+                      ('william', 'William (Australian)', '/_static/audio/william')]
 
 
 def _audio_stem(name):
@@ -515,7 +516,15 @@ class RosaryDirective(SphinxDirective):
         return found_set
 
     def _find_recordings(self):
-        """Each recorded-voice folder -> [key, label, {prayer key: url}]."""
+        """Each recorded-voice folder -> [key, label, {prayer key: url}, steps].
+
+        A voice folder holds its recordings directly, or in the subfolders
+        prayers/ (Our Father.mp3 ...), mysteries/ (First Joyful Mystery.mp3
+        ...) and steps/ (joyful-1-01.mp3 ... glorious-5-10.mp3, the short
+        step read for each Hail Mary).  The 200 steps are not listed one by
+        one: steps is {base: url of the steps folder, sets: [set order],
+        mask: '1'/'0' for each step in order, joyful-1-01 first}.
+        """
         self.recordings = []
         sets = self.config.rosary_recordings
         if sets is None:
@@ -529,10 +538,14 @@ class RosaryDirective(SphinxDirective):
                 continue
             self.env.note_dependency(abs_path)
             files = {}
-            for name in os.listdir(abs_path):
-                stem, ext = os.path.splitext(name)
-                if ext.lower() in AUDIO_EXTS:
-                    files.setdefault(_audio_stem(stem), name)
+            for sub in ('', 'prayers', 'mysteries'):
+                sub_path = os.path.join(abs_path, sub)
+                if not os.path.isdir(sub_path):
+                    continue
+                for name in sorted(os.listdir(sub_path)):
+                    stem, ext = os.path.splitext(name)
+                    if ext.lower() in AUDIO_EXTS:
+                        files.setdefault(_audio_stem(stem), (Path(sub) / name).as_posix())
             found = {}
             # the prayers, then the mystery announcements ("First Joyful
             # Mystery.mp3" or "joyful-1.mp3", key joyful-1)
@@ -551,8 +564,23 @@ class RosaryDirective(SphinxDirective):
                         images.add(src_rel)
                         found[pkey] = '../' * depth + quote(src_rel)
                         break
-            if found:
-                self.recordings.append([key, label, found])
+            steps = None
+            steps_path = os.path.join(abs_path, 'steps')
+            if os.path.isdir(steps_path):
+                have = set(os.listdir(steps_path))
+                mask = []
+                for skey in SET_ORDER:
+                    for i in range(len(SETS[skey]['mysteries'])):
+                        for j in range(10):
+                            name = '%s-%d-%02d.mp3' % (skey, i + 1, j + 1)
+                            mask.append('1' if name in have else '0')
+                            if name in have:
+                                images.add((Path(rel) / 'steps' / name).as_posix())
+                if '1' in mask:
+                    steps = {'base': '../' * depth + quote((Path(rel) / 'steps').as_posix()) + '/',
+                             'sets': list(SET_ORDER), 'mask': ''.join(mask)}
+            if found or steps:
+                self.recordings.append([key, label, found, steps])
 
     def _find_photos(self):
         """Every picture folder that has pictures, first one first."""
@@ -825,12 +853,13 @@ def setup(app):
     # Pictures menu lists them in this order, above the drawn styles; folders that are missing or empty are skipped
     app.add_config_value('rosary_image_sets', None, 'env')
     # recorded voices offered in the Voice menu: [(key, label, folder), ...]
-    # None = Natasha /_static/prayers/natasha and William
-    # /_static/prayers/william; [] to use only the browser's voices
+    # None = Natasha /_static/audio/natasha and William
+    # /_static/audio/william; [] to use only the browser's voices
     app.add_config_value('rosary_recordings', None, 'env')
-    # the voice a reader starts with: the key of a recording (female, male),
-    # "random" for a different recorded voice for each prayer, or "browser"
-    # for the browser's own voice
+    # the voices ticked when a reader first comes: a recording's key
+    # ("natasha"), several ("natasha,ava": a different one for each prayer)
+    # or "random" for all of them.  Readers tick their own under Options.
+    # Whatever has no recording (the scripture) is read by the browser's voice.
     app.add_config_value('rosary_default_voice', 'female', 'env')
     # site-wide starting choices; a page's directive options and each reader's
     # own menu choices take over from these

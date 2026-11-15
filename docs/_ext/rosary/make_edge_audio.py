@@ -1,49 +1,44 @@
-"""Record the Rosary prayers with Microsoft Edge's neural voices (edge-tts).
+"""Record the Rosary with Microsoft Edge's neural voices (edge-tts).
 
-Makes one .mp3 per prayer in rosary_data.PRAYERS, named after the prayer
-(Our Father.mp3, Hail Mary.mp3, ...), and one per mystery announcement
-(First Joyful Mystery.mp3 ... Fifth Glorious Mystery.mp3, saying "First
-Joyful Mystery. The Annunciation. The fruit of the mystery: Humility."),
-so the rosary directive finds them, in
-a folder per voice under docs/_static/prayers:
+For each voice in VOICES it makes, under docs/_static/audio/<voice>/:
 
-    docs/_static/prayers/natasha/   en-AU-NatashaNeural   (Australian, female)
-    docs/_static/prayers/william/   en-AU-WilliamMultilingualNeural (Australian, male)
-    VOICES = [
-        'en-CA-LiamNeural',
-        'en-US-AndrewNeural',
-        'en-US-SteffanNeural',
-        'en-US-EricNeural',
-        'en-US-EmmaMultilingualNeural',
-        'en-US-AvaNeural',
-    ]
+    prayers/     the 11 prayers         Our Father.mp3, Hail Mary.mp3, ...
+    mysteries/   the 20 announcements   First Joyful Mystery.mp3 ...
+                 ("First Joyful Mystery. The Annunciation. The fruit of the
+                 mystery: Humility.")
+    steps/       the 200 steps, one     joyful-1-01.mp3 ... glorious-5-10.mp3
+                 for each Hail Mary     (joyful-1-03 = Joyful set, first
+                                        mystery, third Hail Mary)
 
+and a recorded.json listing the words each file says.  If you change the
+wording in rosary_data.py, the next run records just the files whose words
+changed.  Files already recorded are left alone.
 
-Each folder is listed in rosary_recordings in conf.py, so it shows up in the
-Voice menu.  The recordings are made once on your own PC (edge-tts needs the
-internet) and committed with the site; Read the Docs does not need edge-tts.
+Each voice folder is listed in rosary_recordings in conf.py, so it shows up
+in the Voice menu.  The recordings are made once on your own PC (edge-tts
+needs the internet) and committed with the site; Read the Docs does not need
+edge-tts.
 
 Setup (once):
     pip install edge-tts
 
-Run from the docs folder:
-    python _ext/rosary/make_edge_audio.py              # both voices, new files only
-    python _ext/rosary/make_edge_audio.py --force      # record everything again
-    python _ext/rosary/make_edge_audio.py --list       # English voices to choose from
+Set RECORD and ONLY below and run it, or from the docs folder:
+    python _ext/rosary/make_edge_audio.py                    # what RECORD says
+    python _ext/rosary/make_edge_audio.py --record steps     # the 200 steps
+    python _ext/rosary/make_edge_audio.py --record all
+    python _ext/rosary/make_edge_audio.py --only hail-mary joyful-1-03
+    python _ext/rosary/make_edge_audio.py --force            # record again anyway
+    python _ext/rosary/make_edge_audio.py --list             # English voices
     python _ext/rosary/make_edge_audio.py --voice en-GB-SoniaNeural:sonia
-    python _ext/rosary/make_edge_audio.py --rate -15%  # slower (default -10%)
-    python _ext/rosary/make_edge_audio.py --only hail-mary glory-be
-    python _ext/rosary/make_edge_audio.py --only joyful-1      # one mystery
-    (or list them in ONLY = [...] below; these are always recorded again)
-    python _ext/rosary/make_edge_audio.py --record mysteries   # the 20 announcements
-    python _ext/rosary/make_edge_audio.py --record prayers     # the prayers only
-    (or set RECORD = 'prayers' / 'mysteries' / 'both' below and just run it)
+    python _ext/rosary/make_edge_audio.py --rate -15%        # slower (default -10%)
 """
 
 import argparse
 import asyncio
 import importlib.util
+import json
 import re
+import shutil
 import sys
 from pathlib import Path
 
@@ -52,25 +47,31 @@ try:
 except ImportError:
     sys.exit('edge-tts is not installed.  Run:  pip install edge-tts')
 
-HERE = Path(__file__).resolve().parent            # docs/_ext/rosary
-STATIC = HERE.parent.parent / '_static' / 'prayers'   # docs/_static/prayers
+HERE = Path(__file__).resolve().parent              # docs/_ext/rosary
+STATIC = HERE.parent.parent / '_static'             # docs/_static
+AUDIO = STATIC / 'audio'                            # docs/_static/audio
+# where recordings used to be kept: moved into audio/ when the script runs
+OLD_FOLDERS = [STATIC / 'prayers']
 
-# voice name -> folder under docs/_static/prayers.  Microsoft renames voices now and
-# then; see https://github.com/microsoft/edge-tts/issues/5
-# What to record when the script is run with no options:
+# ---------------------------------------------------------------- settings
+
+# What to record (files already made are skipped):
 #   'prayers'    the 11 prayers (Our Father, Hail Mary, ...)
 #   'mysteries'  the 20 mystery announcements (First Joyful Mystery. ...)
-#   'both'       all of them
-RECORD = 'mysteries'
-ONLY = ['hail-mary', 'hail-holy-queen', 'rosary-prayer']
-# Record just these, again (replacing the files that are there), e.g.
-#   ONLY = ['creed', 'hail-mary']
-#   ONLY = ["The Apostles' Creed", 'Hail Mary', 'joyful-1']
-# Use a prayer's key or its title (any capitals), or a mystery such as
-# joyful-1 ... glorious-5.  Leave it empty, ONLY = [], to use RECORD instead.
-# ONLY = []
+#   'steps'      the 200 steps, one for each Hail Mary
+#   'all'        all of them
+# or a list, e.g. ['prayers', 'mysteries']
+RECORD = 'steps'
 
-# voice name -> folder under docs/_static/prayers
+# Record just these, again (replacing the files that are there), e.g.
+#   ONLY = ['hail-mary', 'hail-holy-queen', 'rosary-prayer']
+#   ONLY = ["The Apostles' Creed", 'joyful-1', 'joyful-1-03']
+# A prayer's key or title (any capitals), a mystery (joyful-1 or First
+# Joyful Mystery) or a step (joyful-1-03).  Empty, ONLY = [], uses RECORD.
+ONLY = []
+
+# voice name -> folder under docs/_static/audio.  Microsoft renames voices
+# now and then: run with --list to see the current names.
 VOICES = {
     'en-AU-NatashaNeural': 'natasha',
     'en-AU-WilliamMultilingualNeural': 'william',
@@ -81,8 +82,6 @@ VOICES = {
     'en-US-EmmaMultilingualNeural': 'emma',
     'en-US-AvaNeural': 'ava',
 }
-FALLBACK = {}
-
 
 # Words read differently from how they are written, so the voice says them
 # well.  The text on the page is not changed, only what is spoken.
@@ -91,6 +90,15 @@ SAY_AS = {
     'Pontius Pilate': 'Ponshus Pilate',
     'blessed': 'blessid',       # two syllables, BLESS-id, not "blest"
 }
+
+# prayer file names that differ from the prayer's title
+FILE_NAMES = {
+    'fatima': 'Fatima Prayer',
+}
+
+KINDS = ('prayers', 'mysteries', 'steps')
+
+# ----------------------------------------------------------------- the words
 
 
 def load_data():
@@ -101,38 +109,27 @@ def load_data():
     return mod
 
 
-def load_prayers():
-    return load_data().PRAYERS
+def safe_name(name):
+    """A title as a safe Windows file name ('Hail, Holy Queen' stays)."""
+    return re.sub(r'[\\/:*?"<>|]', '', name).strip() + '.mp3'
 
 
-def load_items(prayers_too=True, mysteries_too=True):
-    """Everything to record: {key: (title, words)}.  The mysteries are
-    announced the way the site says them, e.g. "First Joyful Mystery. The
-    Annunciation. The fruit of the mystery: Humility." (key joyful-1, file
-    First Joyful Mystery.mp3)."""
+def load_items():
+    """Everything that can be recorded: {key: (kind, file name, title, words)}."""
     data = load_data()
     items = {}
-    if prayers_too:
-        items.update(data.PRAYERS)
-    if mysteries_too:
-        for skey in data.SET_ORDER:
-            for i, m in enumerate(data.SETS[skey]['mysteries']):
-                ordinal = '%s %s Mystery' % (data.ORDINALS[i], data.SETS[skey]['name'])
-                items['%s-%d' % (skey, i + 1)] = (
-                    ordinal, '%s. %s. The fruit of the mystery: %s.' % (ordinal, m['title'], m['fruit']))
+    for key, (title, words) in data.PRAYERS.items():
+        items[key] = ('prayers', safe_name(FILE_NAMES.get(key, title)), title, words)
+    for skey in data.SET_ORDER:
+        for i, m in enumerate(data.SETS[skey]['mysteries']):
+            ordinal = '%s %s Mystery' % (data.ORDINALS[i], data.SETS[skey]['name'])
+            mkey = '%s-%d' % (skey, i + 1)
+            items[mkey] = ('mysteries', safe_name(ordinal), ordinal,
+                           '%s. %s. The fruit of the mystery: %s.' % (ordinal, m['title'], m['fruit']))
+            for j, (ref, caption) in enumerate(m['refs']):
+                step = '%s-%02d' % (mkey, j + 1)
+                items[step] = ('steps', step + '.mp3', '%s, step %d' % (ordinal, j + 1), caption)
     return items
-
-
-# file names that differ from the prayer's title (matching your own recordings)
-FILE_NAMES = {
-    'fatima': 'Fatima Prayer',
-}
-
-
-def file_name(title, key=None):
-    """A prayer's file name, safe for Windows ('Hail, Holy Queen' stays)."""
-    name = FILE_NAMES.get(key, title)
-    return re.sub(r'[\\/:*?"<>|]', '', name).strip() + '.mp3'
 
 
 def _squash(name):
@@ -149,6 +146,68 @@ def spoken(text):
     return text
 
 
+def find_only(only, items):
+    lookup = {}
+    for k, (kind, fname, title, _w) in items.items():
+        lookup[k.lower()] = k
+        lookup[_squash(title)] = k
+        lookup[_squash(fname[:-4])] = k
+    keys, unknown = [], []
+    for item in only:
+        k = lookup.get(str(item).lower()) or lookup.get(_squash(str(item)))
+        (keys if k else unknown).append(k or item)
+    if unknown:
+        sys.exit('Not found: ' + ', '.join(map(str, unknown)) +
+                 '\nUse a prayer key (' + ', '.join(k for k, v in items.items() if v[0] == 'prayers') +
+                 '), a mystery (joyful-1) or a step (joyful-1-03).')
+    return keys
+
+
+# ------------------------------------------------------------ files on disk
+
+
+def move_old_files(folder, items):
+    """Recordings from the old layout (_static/prayers/<voice>/Hail Mary.mp3)
+    move into audio/<voice>/prayers or mysteries."""
+    by_name = {fname.lower(): kind for kind, fname, _t, _w in items.values()}
+    by_name['o my jesus.mp3'] = 'prayers'
+    for old_root in OLD_FOLDERS:
+        old = old_root / folder
+        if not old.is_dir():
+            continue
+        for f in sorted(old.iterdir()):
+            kind = by_name.get(f.name.lower())
+            if not f.is_file() or not kind:
+                continue
+            dest = AUDIO / folder / kind / f.name
+            if f.name.lower() == 'o my jesus.mp3':
+                dest = AUDIO / folder / kind / safe_name(FILE_NAMES['fatima'])
+            if dest.exists():
+                continue
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.move(str(f), str(dest))
+            print(f'  moved   {old_root.name}/{folder}/{f.name} -> audio/{folder}/{kind}/')
+        if not any(old.iterdir()):
+            old.rmdir()
+        if old_root.is_dir() and not any(old_root.iterdir()):
+            old_root.rmdir()
+
+
+def load_manifest(folder):
+    path = AUDIO / folder / 'recorded.json'
+    try:
+        return json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return {}
+
+
+def save_manifest(folder, manifest):
+    path = AUDIO / folder / 'recorded.json'
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(dict(sorted(manifest.items())), indent=1, ensure_ascii=False),
+                    encoding='utf-8')
+
+
 async def english_voices():
     voices = await edge_tts.list_voices()
     return sorted((v for v in voices if v['Locale'].startswith('en-')),
@@ -161,20 +220,21 @@ async def record(text, voice, rate, out_path):
     tmp.replace(out_path)
 
 
+# ------------------------------------------------------------------- main
+
+
 async def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
+    ap.add_argument('--record', nargs='+', choices=KINDS + ('all',),
+                    help='what to record (default: RECORD at the top of the script)')
+    ap.add_argument('--only', nargs='+', metavar='KEY',
+                    help='record just these again, e.g. hail-mary joyful-1 joyful-1-03')
+    ap.add_argument('--force', action='store_true', help='record again even if the file exists')
     ap.add_argument('--voice', action='append', metavar='NAME:FOLDER',
-                    help='a voice and its folder under _static/prayers (may repeat); '
+                    help='a voice and its folder under _static/audio (may repeat); '
                          'default: the voices in VOICES')
     ap.add_argument('--rate', default='-10%',
                     help='speaking speed, e.g. -10%% (a little slower, the default), +0%%, -20%%')
-    ap.add_argument('--only', nargs='+', metavar='KEY',
-                    help='record only these prayers (keys such as hail-mary glory-be)')
-    ap.add_argument('--force', action='store_true', help='record again even if the file exists')
-    ap.add_argument('--record', choices=('prayers', 'mysteries', 'both'), default=RECORD,
-                    help=f'what to record (default {RECORD!r}, set by RECORD at the top)')
-    ap.add_argument('--no-mysteries', action='store_true', help='same as --record prayers')
-    ap.add_argument('--mysteries-only', action='store_true', help='same as --record mysteries')
     ap.add_argument('--list', action='store_true', help='list the English voices and stop')
     args = ap.parse_args()
 
@@ -186,14 +246,6 @@ async def main():
         return
 
     chosen = dict(VOICES)
-    for name in list(chosen):
-        if name not in names and name in FALLBACK:
-            locale, gender = FALLBACK[name]
-            alts = [v['ShortName'] for v in voices
-                    if v['Locale'] == locale and v['Gender'] == gender]
-            if alts:
-                print(f'{name} is not available; using {alts[0]} instead.')
-                chosen[alts[0]] = chosen.pop(name)
     if args.voice:
         chosen = {}
         for item in args.voice:
@@ -203,65 +255,55 @@ async def main():
         if name not in names:
             sys.exit(f'No voice called {name}.  Run with --list to see the English voices.')
 
-    what = args.record
-    if args.no_mysteries:
-        what = 'prayers'
-    if args.mysteries_only:
-        what = 'mysteries'
-    if RECORD not in ('prayers', 'mysteries', 'both'):
-        sys.exit(f"RECORD = {RECORD!r} at the top of the script: use 'prayers', 'mysteries' or 'both'.")
-    print(f'Recording: {what}')
-    prayers = load_items(prayers_too=what != 'mysteries', mysteries_too=what != 'prayers')
+    items = load_items()
     only = args.only or ONLY
     if only:
-        # every prayer and mystery, found by key or by title
-        everything = load_items()
-        lookup = {}
-        for k, (title, _w) in everything.items():
-            lookup[k.lower()] = k
-            lookup[_squash(title)] = k
-            lookup[_squash(file_name(title, k)[:-4])] = k
-        keys, unknown = [], []
-        for item in only:
-            k = lookup.get(item.lower()) or lookup.get(_squash(item))
-            (keys if k else unknown).append(k or item)
-        if unknown:
-            sys.exit('Not found: ' + ', '.join(unknown) + '\nKeys: ' + ', '.join(everything))
-        prayers = everything
-        args.force = True            # ONLY means record these again
+        keys = find_only(only, items)
+        force = True                         # ONLY means record these again
         print('Recording only: ' + ', '.join(keys))
     else:
-        keys = list(prayers)
+        what = args.record or RECORD
+        what = [what] if isinstance(what, str) else list(what)
+        bad = [w for w in what if w not in KINDS + ('all',)]
+        if bad:
+            sys.exit(f"RECORD can be 'prayers', 'mysteries', 'steps' or 'all' (not {bad[0]!r}).")
+        kinds = KINDS if 'all' in what else tuple(what)
+        keys = [k for k, v in items.items() if v[0] in kinds]
+        force = args.force
+        print('Recording: ' + ', '.join(kinds))
 
     made = skipped = 0
     for name, folder in chosen.items():
-        out_dir = STATIC / folder
-        out_dir.mkdir(parents=True, exist_ok=True)
-        print(f'\n{name}  ->  {out_dir}')
-        for key in keys:
-            title, text = prayers[key]
-            out = out_dir / file_name(title, key)
-            old_out = out_dir / file_name(title)       # named after the title before
-            if old_out != out and old_out.exists():
-                if out.exists():
-                    old_out.unlink()
-                else:
-                    old_out.rename(out)
-                print(f'  renamed {old_out.name} -> {out.name}')
-            if out.exists() and not args.force:
-                print(f'  (have)  {out.name}')
-                skipped += 1
-                continue
-            for attempt in (1, 2, 3):
-                try:
-                    await record(spoken(text), name, args.rate, out)
-                    break
-                except Exception as e:          # the service sometimes drops a request
-                    if attempt == 3:
-                        sys.exit(f'  Could not record {title}: {e}')
-                    await asyncio.sleep(2 * attempt)
-            print(f'  made    {out.name}')
-            made += 1
+        print(f'\n{name}  ->  {AUDIO / folder}')
+        move_old_files(folder, items)
+        manifest = load_manifest(folder)
+        try:
+            for key in keys:
+                kind, fname, title, words = items[key]
+                out = AUDIO / folder / kind / fname
+                rel = f'{kind}/{fname}'
+                said = spoken(words)
+                if out.exists() and not force:
+                    if rel not in manifest:
+                        manifest[rel] = said         # made before the list was kept
+                    if manifest[rel] == said:
+                        skipped += 1
+                        continue
+                    print(f'  (words changed) {rel}')
+                out.parent.mkdir(parents=True, exist_ok=True)
+                for attempt in (1, 2, 3, 4):
+                    try:
+                        await record(said, name, args.rate, out)
+                        break
+                    except Exception as e:      # the service sometimes drops a request
+                        if attempt == 4:
+                            sys.exit(f'  Could not record {title}: {e}')
+                        await asyncio.sleep(2 * attempt)
+                manifest[rel] = said
+                print(f'  made    {rel}')
+                made += 1
+        finally:
+            save_manifest(folder, manifest)      # even if stopped part way
     print(f'\nDone: {made} recorded, {skipped} already there.  '
           'Rebuild the docs (make clean html) to hear them.')
 

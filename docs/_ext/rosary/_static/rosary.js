@@ -15,7 +15,7 @@
 
     var SPEECH = ('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window);
     var STORE_VOICE = 'rosary-voice';
-    var STORE_REC = 'rosary-recording';     // female, male ... or 'browser'
+    var STORE_REC = 'rosary-recording';     // the ticked recorded voices: natasha,ava ...
     // the parts of the rosary that can be read aloud: [key, tick box, tip]
     var SAY_PARTS = [
         ['mystery', 'Mystery and fruit', 'Announce each mystery and its fruit on the Our Father bead'],
@@ -127,28 +127,39 @@
         voice: null,
         rate: 0.9,
         recording: null,    // key of the recorded voice in use, or null for the browser voice
-        clips: {}           // recording key -> {prayer key: url}
+        pool: [],           // the ticked recorded voices: one, or several taking turns at random
+        clips: {},          // recording key -> {prayer key: url}
+        steps: {}           // recording key -> {base, sets, mask}: its recorded steps
     };
     var PRAYER_KEYS = {};   // a prayer's words -> its key (our-father, hail-mary ...)
     var player = null;      // one audio element, reused (iPhone allows it after the first tap)
 
     function normText(t) { return String(t).replace(/\s+/g, ' ').trim(); }
     var lastRandom = null;  // the recorded voice the random choice used last
-    function clipFor(text) {
-        var key = PRAYER_KEYS[normText(text)];
-        if (!key || !speech.recording) return null;
-        if (speech.recording === 'random') {
-            // a different recorded voice for each prayer: any voice that has this
-            // one, but not the same voice twice in a row when there is a choice
-            var have = Object.keys(speech.clips).filter(function (r) { return speech.clips[r][key]; });
-            if (!have.length) return null;
-            var pick = have.length > 1 ? have.filter(function (r) { return r !== lastRandom; }) : have;
-            lastRandom = pick[Math.floor(Math.random() * pick.length)];
-            return speech.clips[lastRandom][key];
-        }
-        var clips = speech.clips[speech.recording];
-        return clips && clips[key] ? clips[key] : null;
+    /* the url of a voice's recording of key (a prayer, joyful-1, or a step
+     * such as joyful-1-03), or null if that voice has none */
+    function clipOf(rec, key) {
+        var clips = speech.clips[rec];
+        if (clips && clips[key]) return clips[key];
+        var st = speech.steps[rec];
+        var m = st && /^([a-z]+)-(\d+)-(\d+)$/.exec(key);
+        if (!m) return null;
+        var si = st.sets.indexOf(m[1]);
+        var at = si * 50 + (Number(m[2]) - 1) * 10 + (Number(m[3]) - 1);
+        return si >= 0 && st.mask.charAt(at) === '1' ? st.base + key + '.mp3' : null;
     }
+    function clipFor(text, key) {
+        key = key || PRAYER_KEYS[normText(text)];
+        if (!key || !speech.pool.length) return null;
+        // one ticked voice: that voice.  Several: a different one for each prayer,
+        // from those that have this recording, not the same one twice in a row
+        var have = speech.pool.filter(function (r) { return clipOf(r, key); });
+        if (!have.length) return null;
+        var pick = have.length > 1 ? have.filter(function (r) { return r !== lastRandom; }) : have;
+        lastRandom = pick[Math.floor(Math.random() * pick.length)];
+        return clipOf(lastRandom, key);
+    }
+    var voiceSyncs = [];    // keep the voice tick boxes of every rosary on the page in step
 
     function englishVoices() {
         if (!SPEECH) return [];
@@ -249,8 +260,11 @@
             Array.prototype.splice.apply(items, [at === undefined ? items.length : at, 0].concat(chunks));
         }
         texts.forEach(function (t) {
+            // a text, or {text, key} when its recording is known by position (the steps)
+            var key = null;
+            if (t && typeof t === 'object') { key = t.key; t = t.text; }
             if (!t) return;
-            var clip = clipFor(t);
+            var clip = clipFor(t, key);
             if (clip) items.push({ clip: clip, words: t });
             else addSpoken(t);
         });
@@ -328,7 +342,10 @@
         try { prayers = JSON.parse(block.getAttribute('data-prayers') || '{}'); } catch (e) { prayers = {}; }
         Object.keys(prayers).forEach(function (k) { PRAYER_KEYS[normText(prayers[k][1])] = k; });
         var recs = config.recordings || [];
-        recs.forEach(function (r) { speech.clips[r[0]] = r[2]; });
+        recs.forEach(function (r) {
+            speech.clips[r[0]] = r[2] || {};
+            if (r[3]) speech.steps[r[0]] = r[3];
+        });
         var state = {
             showPrayers: !!config.prayers,
             auto: false,            // praying aloud, bead after bead
@@ -927,9 +944,8 @@
         block.rosaryWiden = widen;
         if (audio) {
             bar.appendChild(el('span', 'rosary-audio-icon', '🔊'));
-            var voiceLabel = el('label', 'rosary-audio-field', 'Voice ');
-            var voiceSelect = el('select', 'rosary-select');
-            voiceLabel.appendChild(voiceSelect);
+            // Voices: a tick box for each recorded voice
+            var voiceLabel = recs.length ? el('div', 'rosary-audio-field rosary-under-field rosary-voice-field') : null;
             // Read aloud: a tick box for each part
             var readLabel = el('div', 'rosary-audio-field rosary-under-field rosary-say-field');
             readLabel.appendChild(el('span', 'rosary-under-field-title', 'Read aloud'));
@@ -981,79 +997,72 @@
             rateSelect.value = String(speech.rate);
             if (!rateSelect.value) rateSelect.value = '0.9';
             rateLabel.appendChild(rateSelect);
-            bar.appendChild(voiceLabel);
+            if (voiceLabel) bar.appendChild(voiceLabel);
             bar.appendChild(readLabel);
             if (titlesLabel) bar.appendChild(titlesLabel);
             bar.appendChild(rateLabel);
 
-            // the recorded voice to start with: the reader's own choice, else the site default
-            var savedRec = store(STORE_REC);
-            var canRandom = recs.length > 1;
-            if (savedRec === 'browser') speech.recording = null;
-            else if (savedRec === 'random' && canRandom) speech.recording = 'random';
-            else if (savedRec && speech.clips[savedRec]) speech.recording = savedRec;
-            else if (config.voice === 'browser' && SPEECH) speech.recording = null;
-            else if (config.voice === 'random' && canRandom) speech.recording = 'random';
-            else if (speech.clips[config.voice]) speech.recording = config.voice;
-            else speech.recording = recs.length ? recs[0][0] : null;
-
-            var fillVoices = function () {
-                var voices = englishVoices();
-                if (!voices.length && !recs.length) return;
-                if (voices.length) {
-                    speech.voice = speech.voice && voices.indexOf(speech.voice) !== -1 ? speech.voice : bestVoice(voices);
-                }
-                voiceSelect.textContent = '';
-                if (recs.length) {
-                    var recGroup = el('optgroup');
-                    recGroup.label = 'Recorded prayers';
-                    if (canRandom) {
-                        var ro = el('option', '', 'Random voice (changes each prayer)');
-                        ro.value = 'rec:random';
-                        if (speech.recording === 'random') ro.selected = true;
-                        recGroup.appendChild(ro);
-                    }
-                    recs.forEach(function (r) {
-                        var o = el('option', '', r[1]);
-                        o.value = 'rec:' + r[0];
-                        if (speech.recording === r[0]) o.selected = true;
-                        recGroup.appendChild(o);
-                    });
-                    voiceSelect.appendChild(recGroup);
-                }
-                var parent = voiceSelect;
-                if (recs.length && voices.length) {
-                    parent = el('optgroup');
-                    parent.label = 'Browser voices';
-                    voiceSelect.appendChild(parent);
-                }
-                voices.forEach(function (v) {
-                    var o = el('option', '', v.name.replace(/^Microsoft /, '').replace(/ - English.*$/, '') + ' (' + v.lang + ')');
-                    o.value = v.name;
-                    if (!speech.recording && v === speech.voice) o.selected = true;
-                    parent.appendChild(o);
-                });
+            // the voices to start with: the reader's own choice, else the site default
+            // (rosary_default_voice: a voice, several "natasha,ava", or "random" for all)
+            var recKeys = recs.map(function (r) { return r[0]; });
+            var pickFrom = function (v) {
+                v = String(v || '');
+                if (v === 'random' || v === 'all') return recKeys.slice();
+                return v.split(',').map(function (x) { return x.trim(); })
+                    .filter(function (x) { return recKeys.indexOf(x) !== -1; });
             };
-            fillVoices();
-            if (SPEECH && window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged', fillVoices);
-            voiceSelect.title = 'A recorded voice prays the prayers (and announces the mysteries, if recorded); the scripture is read by the browser voice';
-            voiceSelect.addEventListener('change', function () {
-                var value = voiceSelect.value;
-                if (value.indexOf('rec:') === 0) {
-                    speech.recording = value.slice(4);
-                    store(STORE_REC, speech.recording);
-                } else {
-                    speech.recording = null;
-                    store(STORE_REC, 'browser');
-                    var voices = englishVoices();
-                    for (var i = 0; i < voices.length; i++) if (voices[i].name === value) speech.voice = voices[i];
-                    store(STORE_VOICE, value);
-                }
-                document.querySelectorAll('.rosary-block .rosary-select[data-kind="voice"]').forEach(function (s) {
-                    if (s !== voiceSelect) s.value = value;
+            speech.pool = pickFrom(store(STORE_REC));
+            if (!speech.pool.length) speech.pool = pickFrom(config.voice);
+            if (!speech.pool.length) speech.pool = recKeys.slice(0, 1);
+
+            // the browser's voice reads what has no recording (the scripture ...):
+            // the best English voice, chosen without asking
+            var pickBrowserVoice = function () {
+                var voices = englishVoices();
+                if (voices.length) speech.voice = bestVoice(voices);
+            };
+            pickBrowserVoice();
+            if (SPEECH && window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged', pickBrowserVoice);
+
+            if (voiceLabel) {
+                voiceLabel.appendChild(el('span', 'rosary-under-field-title', 'Voices'));
+                voiceLabel.title = 'Tick one voice, or several to hear a different one for each prayer. ' +
+                    'The scripture is read by the browser\u2019s own voice.';
+                var voiceBox = el('div', 'rosary-under-checks');
+                var voiceInputs = {};
+                var saveVoices = function (pool) {
+                    speech.pool = pool;
+                    store(STORE_REC, pool.join(','));
+                    voiceSyncs.forEach(function (f) { f(); });
+                };
+                recs.forEach(function (r) {
+                    var lab = el('label', 'rosary-under-check');
+                    var cb = el('input');
+                    cb.type = 'checkbox';
+                    cb.addEventListener('change', function () {
+                        var pool = recKeys.filter(function (k) { return voiceInputs[k].checked; });
+                        if (!pool.length) { cb.checked = true; return; }   // keep at least one voice
+                        saveVoices(pool);
+                    });
+                    voiceInputs[r[0]] = cb;
+                    lab.appendChild(cb);
+                    lab.appendChild(document.createTextNode(' ' + r[1]));
+                    voiceBox.appendChild(lab);
                 });
-            });
-            voiceSelect.setAttribute('data-kind', 'voice');
+                if (recs.length > 1) {
+                    var voiceQuick = el('div', 'rosary-under-quick');
+                    var allV = button('rosary-under-quick-btn', 'All', 'Tick every voice: a different one for each prayer');
+                    allV.addEventListener('click', function () { saveVoices(recKeys.slice()); });
+                    voiceQuick.appendChild(allV);
+                    voiceBox.appendChild(voiceQuick);
+                }
+                voiceLabel.appendChild(voiceBox);
+                var syncVoices = function () {
+                    recKeys.forEach(function (k) { voiceInputs[k].checked = speech.pool.indexOf(k) !== -1; });
+                };
+                voiceSyncs.push(syncVoices);
+                syncVoices();
+            }
             rateSelect.addEventListener('change', function () {
                 speech.rate = parseFloat(rateSelect.value) || 0.9;
                 store(STORE_RATE, rateSelect.value);
@@ -1440,8 +1449,10 @@
             // recorded voice with "First Joyful Mystery.mp3" plays that file
             var announce = ordinal + '. ' + title + '. The fruit of the mystery: ' + fruit + '.';
             var setEl = mystery.closest('.rosary-set');
-            if (setEl) PRAYER_KEYS[normText(announce)] = setEl.getAttribute('data-set') + '-' +
-                (Number(mystery.getAttribute('data-index')) + 1);
+            var mysteryKey = setEl ? setEl.getAttribute('data-set') + '-' +
+                (Number(mystery.getAttribute('data-index')) + 1) : '';
+            if (mysteryKey) PRAYER_KEYS[normText(announce)] = mysteryKey;
+            var stepBase = mysteryKey + '-';    // + 01 ... 10: joyful-1-03 is its third step
             var beads = [];
             var pos = -1;
 
@@ -1591,7 +1602,8 @@
                     var cap = li ? li.getAttribute('data-cap') : '';
                     var verse = li ? li.getAttribute('data-text') : '';
                     var read = [];
-                    if (say.step && cap) read.push(cap + (say.scripture && verse ? '.' : ''));
+                    if (say.step && cap) read.push({ text: cap + (say.scripture && verse ? '.' : ''),
+                                                     key: stepBase + (pos < 10 ? '0' : '') + pos });
                     if (say.scripture && verse) read.push(verse);
                     return read.concat([words('hail-mary')]);
                 }
