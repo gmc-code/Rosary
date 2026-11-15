@@ -691,6 +691,7 @@ class RosaryDirective(SphinxDirective):
                       else bool(self.config.rosary_default_fatima),
             'readTitles': bool(self.config.rosary_default_read_titles),
             'voice': str(self.config.rosary_default_voice or 'female'),
+            'voiceChange': str(self.config.rosary_default_voice_change or 'prayer'),
             'hideTitle': 'hide-title' in self.options,
         }
         if config['audio']:
@@ -861,6 +862,9 @@ def setup(app):
     # or "random" for all of them.  Readers tick their own under Options.
     # Whatever has no recording (the scripture) is read by the browser's voice.
     app.add_config_value('rosary_default_voice', 'female', 'env')
+    # with several voices ticked, how often the voice changes to start with:
+    # "prayer" (every prayer), "mystery" (every mystery, i.e. decade) or "set"
+    app.add_config_value('rosary_default_voice_change', 'prayer', 'env')
     # site-wide starting choices; a page's directive options and each reader's
     # own menu choices take over from these
     app.add_config_value('rosary_default_icons', 'photo-sg', 'env')      # classic, stained, gold, photo, photo-sg, photo-cubism, photo-trad

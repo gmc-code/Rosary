@@ -1598,3 +1598,7 @@ html.dark .rosary-audio-group-label { background: rgba(255, 255, 255, 0.08); col
 /* the Under the beads pop-up beside the beads: never wider than the screen */
 .rosary-under-panel { max-width: min(22em, calc(100vw - 2em)); }
 .rosary-under-panel .rosary-under-check { white-space: normal; align-items: flex-start; }
+/* Voices: how often the voice changes (shown when several voices are ticked) */
+.rosary-voice-change { display: flex; flex-direction: column; gap: 0.15em; margin-top: 0.5em; min-width: 0; align-self: stretch; width: 100%; }
+.rosary-voice-change[hidden] { display: none; }
+.rosary-voice-change .rosary-select { width: 100%; max-width: none; min-width: 0; padding: 0.3em 0.35em; text-overflow: ellipsis; }

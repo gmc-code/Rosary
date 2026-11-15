@@ -128,6 +128,9 @@
         rate: 0.9,
         recording: null,    // key of the recorded voice in use, or null for the browser voice
         pool: [],           // the ticked recorded voices: one, or several taking turns at random
+        change: 'prayer',   // with several voices, a new voice for each prayer, mystery or set
+        context: '',        // what is being prayed: joyful-1 (a mystery) or joyful-opening ...
+        assigned: {},       // mystery or set -> the voice chosen for it
         clips: {},          // recording key -> {prayer key: url}
         steps: {}           // recording key -> {base, sets, mask}: its recorded steps
     };
@@ -148,15 +151,35 @@
         var at = si * 50 + (Number(m[2]) - 1) * 10 + (Number(m[3]) - 1);
         return si >= 0 && st.mask.charAt(at) === '1' ? st.base + key + '.mp3' : null;
     }
+    function randomFrom(list, avoid) {
+        var pick = list.length > 1 ? list.filter(function (r) { return r !== avoid; }) : list;
+        return pick[Math.floor(Math.random() * pick.length)];
+    }
+    /* the mystery or set the voice stays the same for (null: a new voice each prayer) */
+    function voiceUnit() {
+        if (speech.change === 'prayer' || !speech.context) return null;
+        return speech.change === 'set' ? speech.context.split('-')[0] : speech.context;
+    }
     function clipFor(text, key) {
         key = key || PRAYER_KEYS[normText(text)];
         if (!key || !speech.pool.length) return null;
-        // one ticked voice: that voice.  Several: a different one for each prayer,
-        // from those that have this recording, not the same one twice in a row
+        // one ticked voice: that voice.  Several: a voice chosen at random for
+        // each prayer, each mystery or each set (speech.change), from those that
+        // have this recording, and not the same one twice in a row
         var have = speech.pool.filter(function (r) { return clipOf(r, key); });
         if (!have.length) return null;
-        var pick = have.length > 1 ? have.filter(function (r) { return r !== lastRandom; }) : have;
-        lastRandom = pick[Math.floor(Math.random() * pick.length)];
+        var unit = voiceUnit();
+        if (unit) {
+            var kept = speech.assigned[unit];
+            if (kept && have.indexOf(kept) !== -1) return clipOf(kept, key);
+            if (kept && speech.pool.indexOf(kept) !== -1) {
+                // the chosen voice has no recording of this one: another, just for it
+                return clipOf(randomFrom(have, kept), key);
+            }
+            speech.assigned[unit] = lastRandom = randomFrom(have, lastRandom);
+            return clipOf(lastRandom, key);
+        }
+        lastRandom = randomFrom(have, lastRandom);
         return clipOf(lastRandom, key);
     }
     var voiceSyncs = [];    // keep the voice tick boxes of every rosary on the page in step
@@ -1080,6 +1103,7 @@
                 var lastTicked = null;      // the voice ticked most recently: what One keeps
                 var saveVoices = function (pool) {
                     speech.pool = pool;
+                    speech.assigned = {};
                     store(STORE_REC, pool.join(','));
                     voiceSyncs.forEach(function (f) { f(); });
                 };
@@ -1113,8 +1137,37 @@
                     voiceBox.appendChild(voiceQuick);
                 }
                 voiceLabel.appendChild(voiceBox);
+                // with several voices ticked: how often the voice changes
+                var changeLabel = null, changeSelect = null;
+                if (recs.length > 1) {
+                    changeLabel = el('label', 'rosary-voice-change', 'Change voice ');
+                    changeLabel.title = 'With several voices ticked, how often a new voice (chosen at random) takes over. ' +
+                        'Each mystery is one decade.';
+                    changeSelect = el('select', 'rosary-select');
+                    changeSelect.setAttribute('data-kind', 'voice-change');
+                    [['prayer', 'Every prayer'], ['mystery', 'Every mystery (decade)'],
+                     ['set', 'Every set of mysteries']].forEach(function (c) {
+                        var o = el('option', '', c[1]);
+                        o.value = c[0];
+                        changeSelect.appendChild(o);
+                    });
+                    var savedChange = store('rosary-voice-change') || config.voiceChange;
+                    if (['prayer', 'mystery', 'set'].indexOf(savedChange) !== -1) speech.change = savedChange;
+                    changeSelect.addEventListener('change', function () {
+                        speech.change = changeSelect.value;
+                        speech.assigned = {};
+                        store('rosary-voice-change', speech.change);
+                        voiceSyncs.forEach(function (f) { f(); });
+                    });
+                    changeLabel.appendChild(changeSelect);
+                    voiceLabel.appendChild(changeLabel);
+                }
                 var syncVoices = function () {
                     recKeys.forEach(function (k) { voiceInputs[k].checked = speech.pool.indexOf(k) !== -1; });
+                    if (changeSelect) {
+                        changeSelect.value = speech.change;
+                        changeLabel.hidden = speech.pool.length < 2;   // only matters with several voices
+                    }
                 };
                 voiceSyncs.push(syncVoices);
                 syncVoices();
@@ -1336,6 +1389,9 @@
         /* ---------------- the opening or closing prayers: one bead per prayer */
         function initPrayers(card, onFinish) {
             var LISTEN_ONE = LBL.listenPrayer, LISTEN_ALL = LBL.allPrayers;
+            var cardSet = card.closest('.rosary-set');
+            var cardKey = (cardSet ? cardSet.getAttribute('data-set') : 'rosary') + '-' +
+                (card.getAttribute('data-kind') || 'prayers');   // joyful-opening, for the voice
             var decade = card.querySelector('.rosary-decade');
             var controls = card.querySelector('.rosary-controls');
             var now = card.querySelector('.rosary-now');
@@ -1440,6 +1496,7 @@
                 // the prayer's name (and intention), and its words, each with its own tick box
                 var intent = li.getAttribute('data-intent');
                 var title = state.say.names ? li.getAttribute('data-name') + (intent ? ', ' + intent : '') + '.' : '';
+                speech.context = cardKey;
                 speak([title, state.say.opening ? li.getAttribute('data-text') : ''], function () {
                     if (!state.auto) { state.speaking = null; refreshAll(); }
                     if (done) done();
@@ -1673,6 +1730,7 @@
             function speakBead(done) {
                 state.speaking = mystery;
                 refreshAll();
+                speech.context = mysteryKey;
                 speak(beadTexts(), function () {
                     if (!state.auto) { state.speaking = null; refreshAll(); }
                     if (done) done();
