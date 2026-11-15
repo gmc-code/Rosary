@@ -946,10 +946,16 @@
             bar.appendChild(el('span', 'rosary-audio-icon', '🔊'));
             // Voices: a tick box for each recorded voice
             var voiceLabel = recs.length ? el('div', 'rosary-audio-field rosary-under-field rosary-voice-field') : null;
-            // Read aloud: a tick box for each part
+            // Read aloud: a tick box for each part.  The recorded parts sit with the
+            // voices; what only the browser's voice can read (the scripture, the
+            // meditations and the prayer names) has its own section and voice menu.
+            var TTS_KEYS = ['scripture', 'meditation', 'names'];
             var readLabel = el('div', 'rosary-audio-field rosary-under-field rosary-say-field');
             readLabel.appendChild(el('span', 'rosary-under-field-title', 'Read aloud'));
+            var ttsLabel = SPEECH ? el('div', 'rosary-audio-field rosary-under-field rosary-say-field') : null;
+            if (ttsLabel) ttsLabel.appendChild(el('span', 'rosary-under-field-title', 'Read aloud'));
             var sayBox = el('div', 'rosary-under-checks');
+            var ttsBox = el('div', 'rosary-under-checks');
             var sayInputs = {};
             var hasCards = !!block.querySelector('.rosary-prayers-card');
             var hasMed = !!block.querySelector('.rosary-under-box');
@@ -963,6 +969,8 @@
                 var k = part[0];
                 if ((k === 'opening' || k === 'names') && !hasCards) return;
                 if (k === 'meditation' && !hasMed) return;
+                var tts = TTS_KEYS.indexOf(k) !== -1;
+                if (tts && !ttsLabel) return;
                 var lab = el('label', 'rosary-under-check');
                 lab.title = part[2];
                 var cb = el('input');
@@ -972,19 +980,39 @@
                 sayInputs[k] = cb;
                 lab.appendChild(cb);
                 lab.appendChild(document.createTextNode(' ' + part[1]));
-                sayBox.appendChild(lab);
+                (tts ? ttsBox : sayBox).appendChild(lab);
             });
-            var sayQuick = el('div', 'rosary-under-quick');
-            [['All', true, 'Read every part aloud'], ['None', false, 'Untick everything']].forEach(function (q) {
-                var qb = button('rosary-under-quick-btn', q[0], q[2]);
-                qb.addEventListener('click', function () {
-                    Object.keys(sayInputs).forEach(function (k) { sayInputs[k].checked = q[1]; state.say[k] = q[1]; });
-                    saveSay();
+            // All / None for each box, ticking only that box's parts
+            [[sayBox, false], [ttsBox, true]].forEach(function (pair) {
+                var box = pair[0], tts = pair[1];
+                var keys = Object.keys(sayInputs).filter(function (k) { return (TTS_KEYS.indexOf(k) !== -1) === tts; });
+                if (keys.length < 2) return;
+                var quick = el('div', 'rosary-under-quick');
+                [['All', true, 'Tick all of these'], ['None', false, 'Untick all of these']].forEach(function (q) {
+                    var qb = button('rosary-under-quick-btn', q[0], q[2]);
+                    qb.addEventListener('click', function () {
+                        keys.forEach(function (k) { sayInputs[k].checked = q[1]; state.say[k] = q[1]; });
+                        saveSay();
+                    });
+                    quick.appendChild(qb);
                 });
-                sayQuick.appendChild(qb);
+                box.appendChild(quick);
             });
-            sayBox.appendChild(sayQuick);
             readLabel.appendChild(sayBox);
+            if (ttsLabel) {
+                if (ttsBox.children.length) ttsLabel.appendChild(ttsBox);
+                else ttsLabel = null;
+            }
+            // the browser's own voice, for the parts with no recording
+            var ttsVoiceLabel = SPEECH ? el('label', 'rosary-audio-field', 'Voice ') : null;
+            var ttsSelect = null;
+            if (ttsVoiceLabel) {
+                ttsSelect = el('select', 'rosary-select');
+                ttsSelect.setAttribute('data-kind', 'tts-voice');
+                ttsSelect.title = 'The voice that reads the scripture, the meditations and the prayer names ' +
+                    '(the voices on offer depend on the device and browser)';
+                ttsVoiceLabel.appendChild(ttsSelect);
+            }
             var titlesLabel = null;
             var rateLabel = el('label', 'rosary-audio-field', 'Speed ');
             var rateSelect = el('select', 'rosary-select');
@@ -999,6 +1027,8 @@
             rateLabel.appendChild(rateSelect);
             if (voiceLabel) bar.appendChild(voiceLabel);
             bar.appendChild(readLabel);
+            if (ttsVoiceLabel) bar.appendChild(ttsVoiceLabel);
+            if (ttsLabel) bar.appendChild(ttsLabel);
             if (titlesLabel) bar.appendChild(titlesLabel);
             bar.appendChild(rateLabel);
 
@@ -1019,8 +1049,25 @@
             // the best English voice, chosen without asking
             var pickBrowserVoice = function () {
                 var voices = englishVoices();
-                if (voices.length) speech.voice = bestVoice(voices);
+                if (!voices.length) return;
+                if (!speech.voice || voices.indexOf(speech.voice) === -1) speech.voice = bestVoice(voices);
+                if (!ttsSelect) return;
+                ttsSelect.textContent = '';
+                voices.forEach(function (v) {
+                    var o = el('option', '', v.name.replace(/^Microsoft /, '').replace(/ - English.*$/, '') + ' (' + v.lang + ')');
+                    o.value = v.name;
+                    if (v === speech.voice) o.selected = true;
+                    ttsSelect.appendChild(o);
+                });
             };
+            if (ttsSelect) ttsSelect.addEventListener('change', function () {
+                var voices = englishVoices();
+                for (var i = 0; i < voices.length; i++) if (voices[i].name === ttsSelect.value) speech.voice = voices[i];
+                store(STORE_VOICE, ttsSelect.value);
+                document.querySelectorAll('.rosary-block .rosary-select[data-kind="tts-voice"]').forEach(function (sel) {
+                    if (sel !== ttsSelect) sel.value = ttsSelect.value;
+                });
+            });
             pickBrowserVoice();
             if (SPEECH && window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged', pickBrowserVoice);
 
@@ -1094,6 +1141,7 @@
             addGroup('🖼 Pictures', [picLabel, navLabel, layLabel, spLabel, viLabel]);
             addGroup('✝ Prayers', [undLabel, verLabel, prLabel, faLabel, exLabel, michaelLabel, memorareLabel]);
             addGroup('🔊 Reading aloud', [voiceLabel, readLabel, rateLabel, titlesLabel]);
+            addGroup('🗣 Computer voice', [ttsVoiceLabel, ttsLabel]);
             // anything not placed above stays, in a final group
             var rest = Array.prototype.slice.call(bar.children);
             if (rest.length) addGroup('Other', rest);
