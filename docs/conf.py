@@ -84,14 +84,14 @@ rosary_web_app_title = "Rosary"
 # Recorded voices for the Voice menu: (key, label, folder of prayer mp3s).
 # The folders are made by _ext/rosary/make_edge_audio.py (edge-tts).
 rosary_recordings = [
-    ("natasha", "Natasha (Australian)", "/_static/prayers/natasha"),
-    ("william", "William (Australian)", "/_static/prayers/william"),
-    ("liam", "Liam (Canadian)", "/_static/prayers/liam"),
-    ("andrew", "Andrew (US)", "/_static/prayers/andrew"),
-    ("steffan", "Steffan (US)", "/_static/prayers/steffan"),
-    ("eric", "Eric (US)", "/_static/prayers/eric"),
-    ("emma", "Emma (US)", "/_static/prayers/emma"),
-    ("ava", "Ava (US)", "/_static/prayers/ava"),
+    ("natasha", "Natasha (Australian)", "/_static/audio/natasha"),
+    ("william", "William (Australian)", "/_static/audio/william"),
+    ("liam", "Liam (Canadian)", "/_static/audio/liam"),
+    ("andrew", "Andrew (US)", "/_static/audio/andrew"),
+    ("steffan", "Steffan (US)", "/_static/audio/steffan"),
+    ("eric", "Eric (US)", "/_static/audio/eric"),
+    ("emma", "Emma (US)", "/_static/audio/emma"),
+    ("ava", "Ava (US)", "/_static/audio/ava"),
 ]
 
 # Add any paths that contain custom static files (such as style sheets) here,
