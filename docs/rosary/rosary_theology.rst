@@ -1,6 +1,6 @@
-===========================
-The theology of the Rosary
-===========================
+===============================
+A short theology of the Rosary
+===============================
 
 The Rosary is a prayer *with* Mary, but it is really *about* Jesus. As we say
 the prayers, we think about the great moments of his life, death and rising.

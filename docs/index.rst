@@ -20,10 +20,11 @@ with the opening and closing prayers.
     :caption: Rosary:
 
     rosary/rosary.rst
-    rosary/marian_prayers.rst
+    rosary/rosary_steps.rst
     rosary/rosary_history.rst
     rosary/rosary_theology.rst
     rosary/mary_theology.rst
+    rosary/marian_prayers.rst
 
 
 .. toctree::

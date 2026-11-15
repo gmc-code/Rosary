@@ -184,7 +184,42 @@
         return out;
     }
 
+    /* Keep the sound output awake while reading aloud.  Between the browser
+     * voice and a recording the output would go idle, and many speakers and
+     * headsets (Bluetooth especially) then fade the next sound in, so the
+     * first second of a recorded prayer was very soft.  A looping, far too
+     * quiet to hear (about -70 dB) hiss keeps it open; it is paused again
+     * 20 seconds after reading stops. */
+    var keepAwake = { ctx: null, timer: null };
+    function wakeAudio() {
+        try {
+            clearTimeout(keepAwake.timer);
+            if (!keepAwake.ctx) {
+                var AC = window.AudioContext || window.webkitAudioContext;
+                if (!AC) return;
+                var ctx = new AC();
+                var buf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
+                var data = buf.getChannelData(0);
+                for (var n = 0; n < data.length; n++) data[n] = (Math.random() * 2 - 1) * 0.0003;
+                var src = ctx.createBufferSource();
+                src.buffer = buf;
+                src.loop = true;
+                src.connect(ctx.destination);
+                src.start(0);
+                keepAwake.ctx = ctx;
+            }
+            if (keepAwake.ctx.state === 'suspended') keepAwake.ctx.resume();
+        } catch (e) { /* no Web Audio: carry on without it */ }
+    }
+    function restAudio() {
+        clearTimeout(keepAwake.timer);
+        keepAwake.timer = setTimeout(function () {
+            try { if (keepAwake.ctx && keepAwake.ctx.state === 'running') keepAwake.ctx.suspend(); } catch (e) { /* ignore */ }
+        }, 20000);
+    }
+
     function stopSpeech() {
+        restAudio();
         speech.token++;
         speech.queue = [];
         if (SPEECH) window.speechSynthesis.cancel();
@@ -208,10 +243,12 @@
             if (clip) items.push({ clip: clip, words: t });
             else addSpoken(t);
         });
+        // keep the sound output awake when the browser voice and recordings take turns
+        if (items.some(function (it) { return it.clip; })) wakeAudio();
         var i = 0;
         function next() {
             if (token !== speech.token) return;
-            if (i >= items.length) { if (done) done(); return; }
+            if (i >= items.length) { restAudio(); if (done) done(); return; }
             var item = items[i++];
             if (item.clip) {
                 // after the browser voice, wait until it has really stopped: it
