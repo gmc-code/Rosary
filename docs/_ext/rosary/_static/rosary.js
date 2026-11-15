@@ -133,11 +133,21 @@
     var player = null;      // one audio element, reused (iPhone allows it after the first tap)
 
     function normText(t) { return String(t).replace(/\s+/g, ' ').trim(); }
+    var lastRandom = null;  // the recorded voice the random choice used last
     function clipFor(text) {
-        var clips = speech.recording && speech.clips[speech.recording];
-        if (!clips) return null;
         var key = PRAYER_KEYS[normText(text)];
-        return key && clips[key] ? clips[key] : null;
+        if (!key || !speech.recording) return null;
+        if (speech.recording === 'random') {
+            // a different recorded voice for each prayer: any voice that has this
+            // one, but not the same voice twice in a row when there is a choice
+            var have = Object.keys(speech.clips).filter(function (r) { return speech.clips[r][key]; });
+            if (!have.length) return null;
+            var pick = have.length > 1 ? have.filter(function (r) { return r !== lastRandom; }) : have;
+            lastRandom = pick[Math.floor(Math.random() * pick.length)];
+            return speech.clips[lastRandom][key];
+        }
+        var clips = speech.clips[speech.recording];
+        return clips && clips[key] ? clips[key] : null;
     }
 
     function englishVoices() {
@@ -978,9 +988,12 @@
 
             // the recorded voice to start with: the reader's own choice, else the site default
             var savedRec = store(STORE_REC);
+            var canRandom = recs.length > 1;
             if (savedRec === 'browser') speech.recording = null;
+            else if (savedRec === 'random' && canRandom) speech.recording = 'random';
             else if (savedRec && speech.clips[savedRec]) speech.recording = savedRec;
             else if (config.voice === 'browser' && SPEECH) speech.recording = null;
+            else if (config.voice === 'random' && canRandom) speech.recording = 'random';
             else if (speech.clips[config.voice]) speech.recording = config.voice;
             else speech.recording = recs.length ? recs[0][0] : null;
 
@@ -994,6 +1007,12 @@
                 if (recs.length) {
                     var recGroup = el('optgroup');
                     recGroup.label = 'Recorded prayers';
+                    if (canRandom) {
+                        var ro = el('option', '', 'Random voice (changes each prayer)');
+                        ro.value = 'rec:random';
+                        if (speech.recording === 'random') ro.selected = true;
+                        recGroup.appendChild(ro);
+                    }
                     recs.forEach(function (r) {
                         var o = el('option', '', r[1]);
                         o.value = 'rec:' + r[0];
@@ -1017,7 +1036,7 @@
             };
             fillVoices();
             if (SPEECH && window.speechSynthesis.addEventListener) window.speechSynthesis.addEventListener('voiceschanged', fillVoices);
-            voiceSelect.title = 'A recorded voice prays the prayers; the mystery titles and scripture are read by the browser voice';
+            voiceSelect.title = 'A recorded voice prays the prayers (and announces the mysteries, if recorded); the scripture is read by the browser voice';
             voiceSelect.addEventListener('change', function () {
                 var value = voiceSelect.value;
                 if (value.indexOf('rec:') === 0) {
@@ -1417,6 +1436,12 @@
             var title = mystery.querySelector('.rosary-mystery-title').textContent;
             var ordinal = mystery.querySelector('.rosary-num').textContent;
             var fruit = mystery.querySelector('.rosary-fruit strong').textContent;
+            // the spoken announcement, and its recording's key (joyful-1 ...), so a
+            // recorded voice with "First Joyful Mystery.mp3" plays that file
+            var announce = ordinal + '. ' + title + '. The fruit of the mystery: ' + fruit + '.';
+            var setEl = mystery.closest('.rosary-set');
+            if (setEl) PRAYER_KEYS[normText(announce)] = setEl.getAttribute('data-set') + '-' +
+                (Number(mystery.getAttribute('data-index')) + 1);
             var beads = [];
             var pos = -1;
 
@@ -1557,7 +1582,7 @@
                 function words(key) { return say[key] && prayers[key] ? prayers[key][1] : ''; }
                 if (pos === 0) {
                     var med = say.meditation ? meditation() : null;
-                    return [say.mystery ? ordinal + '. ' + title + '. The fruit of the mystery: ' + fruit + '.' : '']
+                    return [say.mystery ? announce : '']
                         .concat(med ? med.spoken : [])
                         .concat([words('our-father')]);
                 }

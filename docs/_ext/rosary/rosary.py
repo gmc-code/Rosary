@@ -40,8 +40,12 @@ Options
                      Be.mp3, Fatima Prayer.mp3, The Apostles' Creed.mp3, The
                      Sign Of The Cross.mp3, Pray for us.mp3, The Rosary
                      Prayer.mp3, Hail Holy Queen.mp3, ...; .mp3, .m4a, .ogg or
-                     .wav).  A prayer with no recording, the mystery titles and
-                     the scripture are read by the browser's voice.
+                     .wav).  The mystery announcements can be recorded too
+                     (First Joyful Mystery.mp3 ... Fifth Glorious
+                     Mystery.mp3, saying "First Joyful Mystery. The
+                     Annunciation. The fruit of the mystery: Humility.").
+                     Anything without a recording, such as the scripture,
+                     is read by the browser's voice.
     :icons:          picture style: classic, stained, gold, photo (the first
                      picture folder) or photo-<key> for another folder in
                      rosary_image_sets, e.g. photo-sg  [photo-sg]
@@ -530,8 +534,15 @@ class RosaryDirective(SphinxDirective):
                 if ext.lower() in AUDIO_EXTS:
                     files.setdefault(_audio_stem(stem), name)
             found = {}
-            for pkey, (title, _text) in PRAYERS.items():
-                names = [pkey, title] + RECORDING_NAMES.get(pkey, [])
+            # the prayers, then the mystery announcements ("First Joyful
+            # Mystery.mp3" or "joyful-1.mp3", key joyful-1)
+            wanted = [(pkey, [pkey, title] + RECORDING_NAMES.get(pkey, []))
+                      for pkey, (title, _text) in PRAYERS.items()]
+            for skey in SET_ORDER:
+                for i in range(len(SETS[skey]['mysteries'])):
+                    mkey = '%s-%d' % (skey, i + 1)
+                    wanted.append((mkey, [mkey, '%s %s Mystery' % (ORDINALS[i], SETS[skey]['name'])]))
+            for pkey, names in wanted:
                 for n in names:
                     stem = _audio_stem(n)
                     match = files.get(stem) or files.get('the' + stem)
@@ -817,8 +828,9 @@ def setup(app):
     # None = Recorded (female) /_static/female_voice and Recorded (male)
     # /_static/male_voice; [] to use only the browser's voices
     app.add_config_value('rosary_recordings', None, 'env')
-    # the voice a reader starts with: the key of a recording (female, male) or
-    # "browser" for the browser's own voice
+    # the voice a reader starts with: the key of a recording (female, male),
+    # "random" for a different recorded voice for each prayer, or "browser"
+    # for the browser's own voice
     app.add_config_value('rosary_default_voice', 'female', 'env')
     # site-wide starting choices; a page's directive options and each reader's
     # own menu choices take over from these
