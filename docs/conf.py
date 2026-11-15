@@ -81,6 +81,22 @@ html_title = "Rosary"
 
 rosary_web_app_title = "Rosary"
 
+# Recorded voices for the Voice menu: (key, label, folder of prayer mp3s).
+# A folder that does not exist yet is simply left out of the menu.
+# The edge_ folders are made by _ext/rosary/make_edge_audio.py (edge-tts).
+rosary_recordings = [
+    ("female", "Recorded (female)", "/_static/female_voice"),
+    ("male", "Recorded (male)", "/_static/male_voice"),
+    ("natasha", "Natasha (Australian)", "/_static/edge_natasha"),
+    ("william", "William (Australian)", "/_static/edge_william"),
+    ("liam", "Liam (Canadian)", "/_static/edge_liam"),
+    ("andrew", "Andrew (US)", "/_static/edge_andrew"),
+    ("steffan", "Steffan (US)", "/_static/edge_steffan"),
+    ("eric", "Eric (US)", "/_static/edge_eric"),
+    ("emma", "Emma (US)", "/_static/edge_emma"),
+    ("ava", "Ava (US)", "/_static/edge_ava"),
+]
+
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".

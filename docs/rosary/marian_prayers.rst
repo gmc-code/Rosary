@@ -3,11 +3,35 @@ Marian prayers
 ===============
 
 Other well-known prayers to and about Mary, beyond those in the opening and
-closing prayers of the Rosary (the Hail, Holy Queen and the Memorare are there).
+closing prayers of the Rosary (the Hail, Holy Queen is there, and the Memorare
+can be added to them as well).
 All the English texts are traditional or translated for this site, and the
 Latin texts are centuries old, so all of them are free to use and print.
 
 In the call-and-response prayers, ℣ is said by the leader and ℟ by everyone.
+
+
+The Memorare
+============
+
+A short prayer asking Mary's help, with great trust. It has often been
+attributed to St Bernard of Clairvaux (12th century), and was made popular by
+Fr Claude Bernard, a French priest of the 1600s who prayed it with prisoners
+and the poor. It is one of the best-loved prayers to Mary, and short enough to
+learn by heart. It can also be prayed in the closing prayers of the Rosary:
+tick **The Memorare** under **Options**.
+
+| Remember, O most gracious Virgin Mary,
+| that never was it known
+| that anyone who fled to thy protection,
+| implored thy help, or sought thine intercession
+| was left unaided.
+| Inspired by this confidence,
+| I fly unto thee, O Virgin of virgins, my Mother.
+| To thee do I come, before thee I stand, sinful and sorrowful.
+| O Mother of the Word Incarnate,
+| despise not my petitions,
+| but in thy mercy hear and answer me. Amen.
 
 
 The Angelus
@@ -115,6 +139,7 @@ added by Pope Francis in 2020.
 
 .. list-table::
    :header-rows: 1
+   :class: half-width
    :widths: 60 40
 
    * - Leader

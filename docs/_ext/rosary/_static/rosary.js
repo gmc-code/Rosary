@@ -187,9 +187,10 @@
     /* Keep the sound output awake while reading aloud.  Between the browser
      * voice and a recording the output would go idle, and many speakers and
      * headsets (Bluetooth especially) then fade the next sound in, so the
-     * first second of a recorded prayer was very soft.  A looping, far too
-     * quiet to hear (about -70 dB) hiss keeps it open; it is paused again
-     * 20 seconds after reading stops. */
+     * first second of a recorded prayer was very soft.  A looping signal at
+     * the level of a single bit (about -90 dB, far below hearing even with
+     * the volume up) keeps it open; it is paused again 5 seconds after
+     * reading stops.  (It was -70 dB noise, which could be heard as a hiss.) */
     var keepAwake = { ctx: null, timer: null };
     function wakeAudio() {
         try {
@@ -200,7 +201,7 @@
                 var ctx = new AC();
                 var buf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
                 var data = buf.getChannelData(0);
-                for (var n = 0; n < data.length; n++) data[n] = (Math.random() * 2 - 1) * 0.0003;
+                for (var n = 0; n < data.length; n++) data[n] = (Math.random() * 2 - 1) * 0.00003;
                 var src = ctx.createBufferSource();
                 src.buffer = buf;
                 src.loop = true;
@@ -215,7 +216,7 @@
         clearTimeout(keepAwake.timer);
         keepAwake.timer = setTimeout(function () {
             try { if (keepAwake.ctx && keepAwake.ctx.state === 'running') keepAwake.ctx.suspend(); } catch (e) { /* ignore */ }
-        }, 20000);
+        }, 5000);
     }
 
     function stopSpeech() {

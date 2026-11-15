@@ -308,3 +308,14 @@ table.docutils.plain td {
     font-size: 1.15em !important;
     line-height: 1.5 !important;
 }
+
+
+/* Half-width tables: add  :class: half-width  to a list-table.
+ * Shibuya puts every table in a full-width bordered box (.table-wrapper),
+ * so a table's own :width: leaves the box full width; this narrows the box.
+ * Full width again on phones. */
+.yue .table-wrapper:has(> table.half-width) { width: 50%; }
+.yue .table-wrapper > table.half-width { width: 100% !important; }
+@media (max-width: 700px) {
+    .yue .table-wrapper:has(> table.half-width) { width: 100%; }
+}

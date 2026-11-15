@@ -21,6 +21,7 @@ with the opening and closing prayers.
 
     rosary/rosary.rst
     rosary/rosary_steps.rst
+    rosary/rosary_mysteries.rst
     rosary/rosary_history.rst
     rosary/rosary_theology.rst
     rosary/mary_theology.rst
