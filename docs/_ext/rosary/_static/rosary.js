@@ -214,6 +214,37 @@
             if (i >= items.length) { if (done) done(); return; }
             var item = items[i++];
             if (item.clip) {
+                // after the browser voice, wait until it has really stopped: it
+                // reports "finished" a moment before the sound ends, and the
+                // recording starting then cut off the end of the words
+                var afterVoice = i > 1 && !items[i - 2].clip;
+                if (afterVoice) whenQuiet(function () { playClip(item); });
+                else playClip(item);
+                return;
+            }
+            var u = new window.SpeechSynthesisUtterance(item.text);
+            if (speech.voice) { u.voice = speech.voice; u.lang = speech.voice.lang; } else { u.lang = 'en-AU'; }
+            u.rate = speech.rate;
+            u.onend = function () { setTimeout(next, 120); };
+            u.onerror = function () { setTimeout(next, 120); };
+            speech.queue.push(u);
+            window.speechSynthesis.speak(u);
+        }
+        function whenQuiet(then) {
+            var started = Date.now(), quietSince = 0;
+            (function check() {
+                if (token !== speech.token) return;
+                var busy = SPEECH && (window.speechSynthesis.speaking || window.speechSynthesis.pending);
+                if (busy && Date.now() - started < 5000) { quietSince = 0; setTimeout(check, 80); return; }
+                if (!quietSince) quietSince = Date.now();
+                // quiet for a little while (the last of the sound is still playing)
+                if (Date.now() - quietSince < 800) { setTimeout(check, 80); return; }
+                then();
+            })();
+        }
+        function playClip(item) {
+            if (token !== speech.token) return;
+            {
                 if (!player) { player = new Audio(); player.preload = 'auto'; }
                 var a = player, over = false;
                 var finish = function (failed) {
@@ -233,15 +264,7 @@
                 a.playbackRate = rate;
                 var played = a.play();
                 if (played && played.catch) played.catch(function () { finish(true); });
-                return;
             }
-            var u = new window.SpeechSynthesisUtterance(item.text);
-            if (speech.voice) { u.voice = speech.voice; u.lang = speech.voice.lang; } else { u.lang = 'en-AU'; }
-            u.rate = speech.rate;
-            u.onend = function () { setTimeout(next, 120); };
-            u.onerror = function () { setTimeout(next, 120); };
-            speech.queue.push(u);
-            window.speechSynthesis.speak(u);
         }
         next();
     }
