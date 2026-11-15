@@ -1077,6 +1077,7 @@
                     'The scripture is read by the browser\u2019s own voice.';
                 var voiceBox = el('div', 'rosary-under-checks');
                 var voiceInputs = {};
+                var lastTicked = null;      // the voice ticked most recently: what One keeps
                 var saveVoices = function (pool) {
                     speech.pool = pool;
                     store(STORE_REC, pool.join(','));
@@ -1087,6 +1088,7 @@
                     var cb = el('input');
                     cb.type = 'checkbox';
                     cb.addEventListener('change', function () {
+                        if (cb.checked) lastTicked = r[0];
                         var pool = recKeys.filter(function (k) { return voiceInputs[k].checked; });
                         if (!pool.length) { cb.checked = true; return; }   // keep at least one voice
                         saveVoices(pool);
@@ -1101,6 +1103,13 @@
                     var allV = button('rosary-under-quick-btn', 'All', 'Tick every voice: a different one for each prayer');
                     allV.addEventListener('click', function () { saveVoices(recKeys.slice()); });
                     voiceQuick.appendChild(allV);
+                    var oneV = button('rosary-under-quick-btn', 'One',
+                        'Keep just one voice: the one you ticked last (or the first ticked)');
+                    oneV.addEventListener('click', function () {
+                        var keep = speech.pool.indexOf(lastTicked) !== -1 ? lastTicked : speech.pool[0] || recKeys[0];
+                        saveVoices([keep]);
+                    });
+                    voiceQuick.appendChild(oneV);
                     voiceBox.appendChild(voiceQuick);
                 }
                 voiceLabel.appendChild(voiceBox);
