@@ -84,9 +84,9 @@ rosary_web_app_title = "Rosary"
 # Recorded voices for the Voice menu: (key, label, folder of prayer mp3s).
 # The folders are made by _ext/rosary/make_edge_audio.py (edge-tts).
 rosary_recordings = [
-    ("natasha", "Natasha (Australian)", "/_static/audio/natasha"),
-    ("william", "William (Australian)", "/_static/audio/william"),
-    ("liam", "Liam (Canadian)", "/_static/audio/liam"),
+    ("natasha", "Natasha (AUS)", "/_static/audio/natasha"),
+    ("william", "William (AUS)", "/_static/audio/william"),
+    ("liam", "Liam (CA)", "/_static/audio/liam"),
     ("andrew", "Andrew (US)", "/_static/audio/andrew"),
     ("steffan", "Steffan (US)", "/_static/audio/steffan"),
     ("eric", "Eric (US)", "/_static/audio/eric"),
