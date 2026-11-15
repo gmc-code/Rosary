@@ -1571,3 +1571,30 @@ html.dark .rosary-audio-group-label { background: rgba(255, 255, 255, 0.08); col
     .rosary-gallery-item { break-inside: avoid; }
     .rosary-gallery-item img { box-shadow: none; }
 }
+
+/* Options panel: keep every label inside its box ------------------------- */
+/* groups never narrower than the screen allows (phones) */
+.rosary-opt-groups { grid-template-columns: repeat(auto-fit, minmax(min(100%, 16em), 1fr)); }
+.rosary-opt-group, .rosary-opt-selects, .rosary-opt-selects > .rosary-audio-field { min-width: 0; }
+.rosary-opt-group { overflow-wrap: anywhere; }
+/* tick-box lists (Under the beads, Voices, Read aloud): as many columns as
+   fit, each label wrapping onto a second line rather than running out */
+.rosary-under-field .rosary-under-checks {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 10.5em), 1fr));
+    width: 100%;
+}
+.rosary-under-field .rosary-under-check {
+    align-items: flex-start;
+    white-space: normal;
+    min-width: 0;
+    line-height: 1.25;
+}
+.rosary-under-check input { flex-shrink: 0; margin-top: 0.15em; }
+/* the single tick boxes under a group (Show pictures, Fatima prayer ...) */
+.rosary-opt-checks > .rosary-audio-field { align-items: flex-start; min-width: 0; }
+.rosary-opt-checks > .rosary-audio-field input { flex-shrink: 0; margin-top: 0.15em; }
+/* drop-downs shrink with their box; long voice names are cut off with … */
+.rosary-opt-selects .rosary-select { min-width: 0; text-overflow: ellipsis; }
+/* the Under the beads pop-up beside the beads: never wider than the screen */
+.rosary-under-panel { max-width: min(22em, calc(100vw - 2em)); }
+.rosary-under-panel .rosary-under-check { white-space: normal; align-items: flex-start; }

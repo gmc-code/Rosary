@@ -149,8 +149,8 @@ RECORDING_NAMES = {
     'st-michael': ['St Michael', 'Saint Michael', 'Prayer to Saint Michael'],
     'memorare': ['Memorare'],
 }
-DEFAULT_RECORDINGS = [('natasha', 'Natasha (Australian)', '/_static/audio/natasha'),
-                      ('william', 'William (Australian)', '/_static/audio/william')]
+DEFAULT_RECORDINGS = [('natasha', 'Natasha (AUS)', '/_static/audio/natasha'),
+                      ('william', 'William (AUS)', '/_static/audio/william')]
 
 
 def _audio_stem(name):
