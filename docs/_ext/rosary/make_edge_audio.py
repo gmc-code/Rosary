@@ -5,10 +5,10 @@ Makes one .mp3 per prayer in rosary_data.PRAYERS, named after the prayer
 (First Joyful Mystery.mp3 ... Fifth Glorious Mystery.mp3, saying "First
 Joyful Mystery. The Annunciation. The fruit of the mystery: Humility."),
 so the rosary directive finds them, in
-a folder per voice under docs/_static:
+a folder per voice under docs/_static/prayers:
 
-    docs/_static/edge_natasha/   en-AU-NatashaNeural   (Australian, female)
-    docs/_static/edge_william/   en-AU-WilliamMultilingualNeural (Australian, male)
+    docs/_static/prayers/natasha/   en-AU-NatashaNeural   (Australian, female)
+    docs/_static/prayers/william/   en-AU-WilliamMultilingualNeural (Australian, male)
     VOICES = [
         'en-CA-LiamNeural',
         'en-US-AndrewNeural',
@@ -30,7 +30,7 @@ Run from the docs folder:
     python _ext/rosary/make_edge_audio.py              # both voices, new files only
     python _ext/rosary/make_edge_audio.py --force      # record everything again
     python _ext/rosary/make_edge_audio.py --list       # English voices to choose from
-    python _ext/rosary/make_edge_audio.py --voice en-GB-SoniaNeural:edge_sonia
+    python _ext/rosary/make_edge_audio.py --voice en-GB-SoniaNeural:sonia
     python _ext/rosary/make_edge_audio.py --rate -15%  # slower (default -10%)
     python _ext/rosary/make_edge_audio.py --only hail-mary glory-be
     python _ext/rosary/make_edge_audio.py --only joyful-1      # one mystery
@@ -53,9 +53,9 @@ except ImportError:
     sys.exit('edge-tts is not installed.  Run:  pip install edge-tts')
 
 HERE = Path(__file__).resolve().parent            # docs/_ext/rosary
-STATIC = HERE.parent.parent / '_static'           # docs/_static
+STATIC = HERE.parent.parent / '_static' / 'prayers'   # docs/_static/prayers
 
-# voice name -> folder under docs/_static.  Microsoft renames voices now and
+# voice name -> folder under docs/_static/prayers.  Microsoft renames voices now and
 # then; see https://github.com/microsoft/edge-tts/issues/5
 # What to record when the script is run with no options:
 #   'prayers'    the 11 prayers (Our Father, Hail Mary, ...)
@@ -70,16 +70,16 @@ ONLY = ['hail-mary', 'hail-holy-queen', 'rosary-prayer']
 # joyful-1 ... glorious-5.  Leave it empty, ONLY = [], to use RECORD instead.
 # ONLY = []
 
-# voice name -> folder under docs/_static
+# voice name -> folder under docs/_static/prayers
 VOICES = {
-    'en-AU-NatashaNeural': 'edge_natasha',
-    'en-AU-WilliamMultilingualNeural': 'edge_william',
-    'en-CA-LiamNeural': 'edge_liam',
-    'en-US-AndrewNeural': 'edge_andrew',
-    'en-US-SteffanNeural': 'edge_steffan',
-    'en-US-EricNeural': 'edge_eric',
-    'en-US-EmmaMultilingualNeural': 'edge_emma',
-    'en-US-AvaNeural': 'edge_ava',
+    'en-AU-NatashaNeural': 'natasha',
+    'en-AU-WilliamMultilingualNeural': 'william',
+    'en-CA-LiamNeural': 'liam',
+    'en-US-AndrewNeural': 'andrew',
+    'en-US-SteffanNeural': 'steffan',
+    'en-US-EricNeural': 'eric',
+    'en-US-EmmaMultilingualNeural': 'emma',
+    'en-US-AvaNeural': 'ava',
 }
 FALLBACK = {}
 
@@ -164,7 +164,7 @@ async def record(text, voice, rate, out_path):
 async def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('--voice', action='append', metavar='NAME:FOLDER',
-                    help='a voice and its folder under _static (may repeat); '
+                    help='a voice and its folder under _static/prayers (may repeat); '
                          'default: the voices in VOICES')
     ap.add_argument('--rate', default='-10%',
                     help='speaking speed, e.g. -10%% (a little slower, the default), +0%%, -20%%')
@@ -198,7 +198,7 @@ async def main():
         chosen = {}
         for item in args.voice:
             name, _, folder = item.partition(':')
-            chosen[name] = folder or 'edge_' + name.split('-')[-1].replace('Neural', '').lower()
+            chosen[name] = folder or name.split('-')[-1].replace('Neural', '').lower()
     for name in chosen:
         if name not in names:
             sys.exit(f'No voice called {name}.  Run with --list to see the English voices.')

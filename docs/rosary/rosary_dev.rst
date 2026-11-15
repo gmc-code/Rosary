@@ -307,18 +307,18 @@ Every rosary offers the pictures in the site's picture folder as
 
 .. code-block:: python
 
-    rosary_images = "/_static/rosary-images"   # "" for no pictures
+    rosary_images = "/_static/images/masterpieces"   # "" for no pictures
 
 It holds 20 public-domain paintings (see
 :doc:`masterpieces </rosary/rosary_artworks>`).
 
-A second folder, ``/_static/rosary-images-sg``, is offered as **Stained
+A second folder, ``/_static/images/stained-glass``, is offered as **Stained
 glass windows**, for photographs of stained-glass windows. It works the same
 way: pictures named ``joyful-1.jpg`` ... ``glorious-5.jpg``, an optional
 ``credits.txt`` and an optional ``full`` folder. Its pictures are
 perspective-corrected photographs saved as ``.webp``. A third folder,
-``/_static/rosary-images-cubism``, is offered as **Cubism**, and a fourth,
-``/_static/rosary-images-trad``, as **Renaissance style**, in the same way. Each folder becomes its own
+``/_static/images/cubism``, is offered as **Cubism**, and a fourth,
+``/_static/images/renaissance``, as **Renaissance style**, in the same way. Each folder becomes its own
 entry in the **Pictures** menu, in this order: Stained glass windows, Cubism,
 Renaissance style, Masterpieces, then the drawn styles (the
 **Mystery picker** menu uses the same order under **Same as pictures**); a folder that is missing or empty is left
@@ -333,11 +333,11 @@ defaults):
 .. code-block:: python
 
     rosary_image_sets = [
-        ("sg", "Stained glass windows", "/_static/rosary-images-sg"),
-        ("cubism", "Cubism", "/_static/rosary-images-cubism"),
-        ("trad", "Renaissance style", "/_static/rosary-images-trad"),
-        ("photo", "Masterpieces", "/_static/rosary-images"),
-        ("icons", "Eastern icons", "/_static/rosary-images_icons"),
+        ("sg", "Stained glass windows", "/_static/images/stained-glass"),
+        ("cubism", "Cubism", "/_static/images/cubism"),
+        ("trad", "Renaissance style", "/_static/images/renaissance"),
+        ("photo", "Masterpieces", "/_static/images/masterpieces"),
+        ("icons", "Eastern icons", "/_static/images/icons"),
     ]
 
 A page can open on one with ``:icons: photo-sg`` (or ``photo-icons``). A ``full`` folder
@@ -361,7 +361,7 @@ the ``docs`` folder; otherwise it is from the page's own folder.
 .. code-block:: rst
 
     .. rosary::
-        :images: /_static/rosary-images
+        :images: /_static/images/masterpieces
 
 Any picture that is missing uses the drawn icon. An optional ``credits.txt``
 in the folder adds a caption under each mystery's title, one line per

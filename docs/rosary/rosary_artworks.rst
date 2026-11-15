@@ -11,7 +11,7 @@ the public domain, and Wikimedia Commons has free photographs of them.
 Using the paintings
 ===================
 
-The paintings are already in ``docs\_static\rosary-images``, cropped to
+The paintings are already in ``docs\_static\images\masterpieces``, cropped to
 squares around the main figures, with the whole paintings in its ``full``
 folder. Every rosary on the site offers them: choose **Masterpieces**
 from the **Pictures** menu. The artist, title and gallery appear
@@ -30,7 +30,7 @@ To change a painting, replace its file (e.g. ``joyful-1.jpg``, square, about
 refresh the page with Ctrl+F5.
 
 The site starts on **Stained glass windows**, the photographs in
-``docs\_static\rosary-images-sg``. They are named the same way
+``docs\_static\images\stained-glass``. They are named the same way
 (``joyful-1.webp`` ... ``glorious-5.webp``, ``opening.webp``,
 ``closing.webp``).
 

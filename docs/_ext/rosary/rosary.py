@@ -34,7 +34,7 @@ Options
     :no-scripture:   leave out the verse text under each reference
     :no-audio:       leave out the read-aloud buttons and options
                      Recorded voices: each folder in rosary_recordings
-                     (default /_static/female_voice and /_static/male_voice)
+                     (default /_static/prayers/natasha and /_static/prayers/william)
                      becomes a choice in the Voice menu.  Files are named
                      after the prayer (Our Father.mp3, Hail Mary.mp3, Glory
                      Be.mp3, Fatima Prayer.mp3, The Apostles' Creed.mp3, The
@@ -50,7 +50,7 @@ Options
                      picture folder) or photo-<key> for another folder in
                      rosary_image_sets, e.g. photo-sg  [photo-sg]
     :images:         folder of pictures for this rosary, instead of the site's
-                     rosary_images folder (default /_static/rosary-images,
+                     rosary_images folder (default /_static/images/masterpieces,
                      which holds the masterpieces); "none" to turn
                      pictures off.  Pictures are named joyful-1.png ...
                      glorious-5.png, opening and closing (.png, .jpg, .jpeg,
@@ -148,8 +148,8 @@ RECORDING_NAMES = {
     'st-michael': ['St Michael', 'Saint Michael', 'Prayer to Saint Michael'],
     'memorare': ['Memorare'],
 }
-DEFAULT_RECORDINGS = [('female', 'Recorded (female)', '/_static/female_voice'),
-                      ('male', 'Recorded (male)', '/_static/male_voice')]
+DEFAULT_RECORDINGS = [('natasha', 'Natasha (Australian)', '/_static/prayers/natasha'),
+                      ('william', 'William (Australian)', '/_static/prayers/william')]
 
 
 def _audio_stem(name):
@@ -437,9 +437,9 @@ class RosaryDirective(SphinxDirective):
         sets = self.config.rosary_image_sets
         if sets is None:
             # in the order the Pictures menu lists them
-            sets = [('sg', 'Stained glass windows', '/_static/rosary-images-sg'),
-                    ('cubism', 'Cubism', '/_static/rosary-images-cubism'),
-                    ('trad', 'Renaissance style', '/_static/rosary-images-trad'),
+            sets = [('sg', 'Stained glass windows', '/_static/images/stained-glass'),
+                    ('cubism', 'Cubism', '/_static/images/cubism'),
+                    ('trad', 'Renaissance style', '/_static/images/renaissance'),
                     ('photo', 'Masterpieces', self.config.rosary_images)]
         out = []
         for entry in sets:
@@ -817,16 +817,16 @@ def setup(app):
     app.add_config_value('rosary_web_app_title', '', 'html')
     app.connect('build-finished', _web_app_tags)
     # folder of public-domain masterpieces offered on every rosary ("" to turn off)
-    app.add_config_value('rosary_images', '/_static/rosary-images', 'env')
+    app.add_config_value('rosary_images', '/_static/images/masterpieces', 'env')
     # every picture folder offered in the Pictures menu: [(key, label, folder), ...]
-    # None = Stained glass windows (/_static/rosary-images-sg), Cubism
-    # (/_static/rosary-images-cubism), Renaissance style
-    # (/_static/rosary-images-trad) and Masterpieces (rosary_images); the
+    # None = Stained glass windows (/_static/images/stained-glass), Cubism
+    # (/_static/images/cubism), Renaissance style
+    # (/_static/images/renaissance) and Masterpieces (rosary_images); the
     # Pictures menu lists them in this order, above the drawn styles; folders that are missing or empty are skipped
     app.add_config_value('rosary_image_sets', None, 'env')
     # recorded voices offered in the Voice menu: [(key, label, folder), ...]
-    # None = Recorded (female) /_static/female_voice and Recorded (male)
-    # /_static/male_voice; [] to use only the browser's voices
+    # None = Natasha /_static/prayers/natasha and William
+    # /_static/prayers/william; [] to use only the browser's voices
     app.add_config_value('rosary_recordings', None, 'env')
     # the voice a reader starts with: the key of a recording (female, male),
     # "random" for a different recorded voice for each prayer, or "browser"
